@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animal Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="animalButtons">LOADING... <!--animal buttons (lion, rabbit, deer, rat...) will be loaded here--></div>
+    <div id="colorButtons">
+        <button class="color-button" style="background: linear-gradient(to right, #4facfe, #00f2fe);" data-color="blue">Blue</button>
+        <!-- button class="color-button" style="background: linear-gradient(to right, #4ffcae, #00fef2);" data-color="green">Green</button -->
+        <button class="color-button" style="background: linear-gradient(to right, #f7971e, #ffd200);" data-color="yellow">Yellow</button>
+        <button class="color-button" style="background: linear-gradient(to right, #bc4e9c, #f80759);" data-color="pink">Pink</button>
+    </div>
+    <button id="showAnimal">Show Me My Animal</button>
+    <div class="result-all">
+        <div id="animalDisplay" class="result-image"></div>
+        <p id="animalSaying" class="result-saying"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
