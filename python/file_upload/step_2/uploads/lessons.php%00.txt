@@ -1,0 +1,32 @@
+File Upload - prevent: verify, trust boundaries
+When a user upload a file we have to make sure the file doesn't damage the application.
+
+
+plot:
+A content management system for recipes
+
+* complete the api post method for uploading a recipe and save it on the disk (step 1)
+* a benign user will put the file we expected but a malicious user might put other files
+  for example, an aspx or php web page with functionality of her choice.
+  she might guess where the upload folder is, and use the web page for malicious activity
+  to protect the application and the server we have to make sure that the users will upload only files types that we allow
+  make sure you check the extension carefully.
+  For example, if we check in our code that the file name contains ".txt",
+  an attacker might attempt to upload a file named as "webshell.txt.php" (step  2)
+* make sure you check not only the file extension but also the mime type.
+  it might take more trouble for the attacker to make it work without the proper extension, but
+  we can never know what other vulnerabilities might help her to change the file extension after the upload (step 3 )
+* Now, please develop a form that gets the image as well as some details about the user.
+  make sure you repeat the same validations.
+  also, a naughty user might attempt to put the recipe on a folder you didn't expect.
+  how could you avoid this situation? (step 4)
+
+
+
+
+
+
+
+
+
+

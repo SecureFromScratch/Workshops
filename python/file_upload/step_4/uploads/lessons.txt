@@ -1,0 +1,15 @@
+we can never know what other vulnerabilities might help her to change the file extension after the upload (step 3 )
+* Now, please develop a form that gets the image as well as some details about the user.
+  make sure you repeat the same validations.
+  also, a naughty user might attempt to put the recipe on a folder you didn't expect.
+  how could you avoid this situation? (step 4)
+
+
+
+
+
+
+
+
+
+
