@@ -27,3 +27,7 @@ We value your feedback and contributions:
 
 If you would like to support us financially, we would greatly appreciate it.
 
+## Secure From Scratch Web Site 
+
+https://www.securefromscratch.com
+
