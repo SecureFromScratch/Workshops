@@ -1,0 +1,13 @@
+take input from file
+ 
+ simple sample: 
+ cat input.txt | ./test.sh 
+
+ for out script:
+  cat answers.txt | ./quiz.sh 
+
+  now backspace:
+  write in a file:
+  AAAAAAAAFirstNane LastName
+  2
+  with hexeditor replace to 08 instead of 41

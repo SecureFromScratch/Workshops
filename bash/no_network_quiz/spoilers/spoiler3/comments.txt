@@ -1,0 +1,6 @@
+checking : line 92-93
+exploiting  with ᛬
+
+
+colon alternative character unicode for copy
+https://www.compart.com/en/unicode/U+16EC
