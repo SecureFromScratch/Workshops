@@ -1,0 +1,86 @@
+body {
+    position: relative;
+}
+
+.button-container {
+    display: inline-block; /* Align containers side by side */
+    text-align: center; /* Center the button and label */
+    margin: 5px;
+	border: 2px solid transparent;
+}
+
+.color-button {
+    color: white;
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.animal-name {
+    display: block; /* Ensure the label takes its own line */
+    color: black; /* Text color */
+    text-shadow: none; /* No text shadow */
+}
+
+#animalButtons button {
+    width: 6em; /* Set width of buttons */
+    height: 6em; /* Set height of buttons */
+    margin-bottom: 5px; /* Space between button and label */
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background-size: cover; /* Ensure background images cover the button area */
+    background-position: center;
+    border-radius: 5px;
+}
+
+.color-button, #animalButtons button {
+    width: 6em; /* Set width of buttons */
+    height: 8em; /* Increased height to make space for text below the image */
+    color: black; /* Text color changed to black */
+    margin: 5px;
+    padding: 10px 10px 30px; /* Increase padding at the bottom to push text down */
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;
+    justify-content: flex-end; /* Align text to the bottom */
+    background-size: cover; /* Ensure background images cover the button area */
+    background-position: center 10%; /* Adjust background position */
+    border-radius: 5px;
+	border: 4px solid transparent;
+}
+
+#animalButtons button span {
+    text-shadow: none; /* Remove text shadow */
+    display: block; /* Ensure the span takes the full width for centering */
+    margin-top: auto; /* Push the text to the bottom of the button */
+}
+
+#animalDisplay img {
+    max-width: 100%;
+    height: auto;
+}
+
+.result-all {
+    position: absolute;
+	width: 50%; /* Set width of buttons */
+    height: 50%; /* Increased height to make space for text below the image */
+    top: 0px;
+    right: 0px;
+    display: inline;
+}
+
+.result-saying {
+    position: absolute;
+    display: inline;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    font-size: 3.5vw;
+    margin: 0.4vw 1.5vw 0 1.5vw;
+}
+
+.selected {
+    border-color: #000; /* Black border for selected buttons */
+}
