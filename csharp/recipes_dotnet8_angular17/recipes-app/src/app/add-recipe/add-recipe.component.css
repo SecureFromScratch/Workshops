@@ -1,0 +1,73 @@
+/* Container styling */
+.container {
+    padding: 20px; /* Adds padding inside the container */
+    background-color: #f7f7f7; /* Light background color */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    max-width: 600px; /* Limit container width */
+    margin: 20px auto; /* Center the container */
+  }
+
+  
+  
+  .component-title {
+    font-size: 1.5em; /* Larger font size for the title */
+    font-weight: bold; /* Bold text */
+    text-align: center; /* Center-align the title */
+    color: #333; /* Dark text color */
+    margin-bottom: 20px; /* Space between the title and other elements */
+  }
+  
+  .success-message {
+    font-size: 1em; /* Standard font size for success message */
+    color: #28a745; /* Green color for success */
+    text-align: center; /* Center-align the message */
+    margin-top: 10px; /* Add spacing above the message */
+  }
+  
+  
+  /* Input styling */
+  .container input[type="text"],
+  .container textarea {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding inside inputs */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1em; /* Consistent font size */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); /* Inner shadow */
+    margin-bottom: 10px; /* Spacing between inputs */
+  }
+  
+  /* Textarea specific styling */
+  .container textarea {
+    height: 100px; /* Fixed height for textarea */
+  }
+  
+  /* Button styling */
+  .container input[type="button"] {
+    padding: 10px 20px; /* Padding for button */
+    background-color: #28a745; /* Green color */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1em; /* Consistent font size */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  
+  /* Button hover effect */
+  .container input[type="button"]:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 600px) {
+    .container {
+      padding: 15px; /* Reduced padding */
+    }
+  
+    .container input[type="button"] {
+      padding: 8px 16px; /* Reduced padding for button */
+    }
+  }
+  

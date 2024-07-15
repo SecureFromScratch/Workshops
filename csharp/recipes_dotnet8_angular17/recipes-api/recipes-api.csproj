@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>recipes_api</RootNamespace>
+    <UserSecretsId>dbd37171-7b1b-44d7-bd5f-4a7135cc5399</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="NewFolder\**" />
+    <Compile Remove="wwwroot\NewFolder\**" />
+    <Content Remove="NewFolder\**" />
+    <Content Remove="wwwroot\NewFolder\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
+    <None Remove="NewFolder\**" />
+    <None Remove="wwwroot\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\AntiForgeryController.cs" />
+    <Compile Remove="Spoliers\CSRF - protection\Program.cs" />
+    <Compile Remove="Spoliers\DataLayer\RecipeDataLayer.cs" />
+    <Compile Remove="Spoliers\FileUpload\RecipesController - Copy.cs" />
+    <Compile Remove="Spoliers\FileUpload\RecipesController.cs" />
+    <Compile Remove="Spoliers\Originals\Program.cs" />
+    <Compile Remove="Spoliers\Originals\RecipesController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Spoliers\CSRF - protection\" />
+    <Folder Include="Spoliers\DataLayer\" />
+    <Folder Include="Spoliers\FileUpload\" />
+    <Folder Include="Spoliers\Originals\" />
+  </ItemGroup>
+
+</Project>

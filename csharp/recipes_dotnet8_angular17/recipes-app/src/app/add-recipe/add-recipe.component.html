@@ -1,0 +1,30 @@
+<div class="container">  
+    <!-- Title indicating the component's purpose -->
+    <h2 class="component-title">Add a New Recipe</h2> <!-- Add a title for the component -->
+      
+    <div>
+        <input type="text" [(ngModel)]="recipe.name" placeholder="Recipe Name" />        
+    </div>
+    <div>    
+        <editor apiKey="550vhfqch7fpacmeflpv0sj0lcsm4j7zlensn17omo6824yb"
+        [(ngModel)]="recipe.instructions"
+        [init]="{            
+            height: 500,
+            menubar: false,
+            plugins: 'link image code',
+            toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | code'
+        }"
+        ></editor>
+    </div>
+    <div>
+        <input type="file" (change)="onFileChange($event)" accept="image/*" #fileInput />
+    </div>
+    <div>
+        <input type="button" (click)="addRecipe()" value="Add Recipe" />
+    </div>
+
+    <!-- Success message display -->
+    <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+    
+
+</div>

@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="filter">
+        <label for="filter">Filter Recipes:</label>
+        <div class="filter-input-wrapper"> <!-- Wrapper for input with icon -->
+            <input type="text" id="filter" 
+                   (change)="onFilterChange($event)" 
+                   placeholder="Enter a recipe name..." />
+            <i class="fa fa-search"></i> <!-- Add an icon for filtering -->
+        </div>
+    </div>
+
+    <!--img [src]="getImageUrl(recipe)" [alt]="recipe?.name" /-->            
+    
+    <!--div class="Instructions"   [innerHTML]="recipe?.instructions"></div-->              
+    <ul class="recipes">
+      <li class="recipe-item" *ngFor="let recipe of getFilteredRecipes()">
+        <div class="recipe">
+          <div class="recipe-details">            
+            <img *ngIf="recipe.base64Image" [src]="'data:image/jpeg;base64,' + recipe.base64Image" alt="{{ recipe.name }}" />
+            <div class="recipe-info">
+              <div class="Name">{{ recipe?.name }}</div>
+              <div class="Instructions"   [innerHTML]="getSanitizedContent(recipe?.instructions)"></div>              
+            </div>
+          </div>          
+        </div>
+      </li>
+    </ul>
+</div>

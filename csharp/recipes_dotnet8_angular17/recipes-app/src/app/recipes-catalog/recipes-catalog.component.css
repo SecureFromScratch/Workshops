@@ -1,0 +1,82 @@
+/* Container styling */
+.container {
+    padding: 20px; /* Adds padding inside the container */
+    background-color: #f9f9f9; /* Light background color */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    max-width: 800px; /* Maximum width for the container */
+    margin: 20px auto; /* Center the container */
+  }
+  
+  /* Filter input styling */
+  .container .filter input[type="text"] {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding for input */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); /* Inner shadow */
+    margin-bottom: 20px; /* Space between filter and recipes */
+  }
+  
+  /* Recipe list styling */
+  .recipes {
+    list-style: none; /* No list style */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+  }
+  
+  /* Recipe item styling */
+  .recipe-item {
+    border-bottom: 1px solid #ddd; /* Border between recipes */
+    padding: 10px 0; /* Padding for recipe items */
+  }
+  
+  /* Recipe structure */
+  .recipe {
+    display: flex; /* Horizontal layout */
+    align-items: flex-start; /* Align items to the top */
+  }
+  
+  /* Recipe image styling */
+  .recipe-details img {
+    width: 80px; /* Fixed width */
+    height: 80px; /* Fixed height */
+    border-radius: 10px; /* Rounded corners */
+    margin-right: 15px; /* Space between image and info */
+  }
+  
+  /* Recipe information */
+  .recipe-info {
+    display: flex; /* Use flex layout */
+    flex-direction: column; /* Vertical direction */
+  }
+  
+  /* Recipe name styling */
+  .recipe-info .Name {
+    font-size: 1.2em; /* Font size for recipe name */
+    font-weight: bold; /* Bold font */
+    color: #333; /* Dark text color */
+    margin-bottom: 5px; /* Space below the name */
+  }
+  
+  /* Recipe instructions styling */
+  .recipe-info .Instructions {
+    font-size: 1em; /* Standard font size */
+    color: #666; /* Slightly lighter text */
+    line-height: 1.5; /* Line height for readability */
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 600px) {
+    .recipe {
+      flex-direction: column; /* Vertical layout on small screens */
+    }
+  
+    .recipe-details img {
+      width: 60px; /* Smaller image size */
+      height: 60px; /* Smaller image height */
+      margin-bottom: 10px; /* Space between image and info */
+    }
+  }
+  

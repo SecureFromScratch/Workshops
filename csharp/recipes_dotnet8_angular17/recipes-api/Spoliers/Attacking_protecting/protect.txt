@@ -1,0 +1,247 @@
+﻿slide 54
+=========================================================================================
+ CookieOptions options = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(1),
+                HttpOnly = true,
+                //Secure = true
+            };
+
+            Response.Cookies.Append("user", "JohnDoe", options);
+
+
+slide 56
+=========================================================================================
+recipes-catalog.component.html:
+<div class="Instructions"   [innerHTML]="recipe?.instructions"></div>              
+
+slide 72 - add header and cors
+=========================================================================================
+// header
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN"; // The header where the CSRF token is expected
+});
+
+// cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200") // Allow Angular development server
+               .AllowAnyMethod()  // Allow all HTTP methods (GET, POST, etc.)
+               .AllowAnyHeader()  // Allow all headers               
+               .AllowCredentials(); // Allow cookies or other credentials
+    });
+});
+
+
+slide 73 - use the csrf middleware
+=========================================================================================
+app.UseAuthorization();
+app.UseStaticFiles(); 
+app.UseRouting();
+app.UseCors("AllowAngularApp");
+// Middleware to generate CSRF tokens
+app.Use((context, next) =>
+{
+    if (context.Request.Method == HttpMethods.Get)
+    {
+        // Generate the anti-forgery token and store it in a cookie
+        var antiforgery = context.RequestServices.GetService<IAntiforgery>();
+        var tokens = antiforgery?.GetAndStoreTokens(context);
+        
+        context.Response.Cookies.Append("X-XSRF-TOKEN", tokens.RequestToken, new CookieOptions
+
+        {
+            HttpOnly = false, // Allow client-side access
+            Secure = true, // Change to true if using HTTPS
+            SameSite = SameSiteMode.Strict
+        });
+    }
+    return next();
+});
+
+// Middleware to validate CSRF tokens for state-changing methods
+app.Use((context, next) =>
+{
+    if (context.Request.Method is "POST" or "PUT" or "DELETE")
+    {
+        var antiforgery = context.RequestServices.GetService<IAntiforgery>();
+        antiforgery?.ValidateRequestAsync(context).GetAwaiter().GetResult();
+    }
+    return next();
+});
+
+app.MapControllers();
+
+app.Run();
+
+
+slide 74 - angular interceptor & don't forget to inject
+=========================================================================================
+interceptor:
+
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class CsrfInterceptor implements HttpInterceptor {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // Get the CSRF token from a cookie
+    const csrfToken = this.getCookie('X-XSRF-TOKEN');
+
+    if (csrfToken) {
+      // Clone the request to add the CSRF token to the header
+      const csrfReq = req.clone({
+        headers: req.headers.set('X-XSRF-TOKEN', csrfToken),
+        withCredentials: true
+      });
+      return next.handle(csrfReq);
+    }
+
+    return next.handle(req);
+  }
+
+  // Utility function to get a cookie by name
+  private getCookie(name: string): string | null {
+    const matches = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+    return matches ? matches[2] : null;
+  }
+}
+dependency injection (app.module.ts):
+
+exports: [RouterModule],
+  providers: [    
+    provideAnimationsAsync(), 
+    CookieService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CsrfInterceptor,
+      multi: true,
+    },
+  ],
+  
+
+slide 85 - 87 - Restrict File Upload
+=========================================================================================
+  var allowedExtensions = new[] { ".jpeg", ".png" };
+
+                // Validate extension
+                var extension = Path.GetExtension(model.Image.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(extension))
+                {
+                    return BadRequest("Bad Request");
+                }
+
+                // Validate MIME type
+                if (!ValidateFileSignature(model.Image, allowedExtensions))
+                {
+                    return BadRequest("Bad Request");
+                }
+
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                string uniqueFileName = Guid.NewGuid().ToString() + extension;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                if (!filePath.StartsWith(Path.GetFullPath(uploadsFolder)))
+                {
+                    return BadRequest("Bad Request");
+                }
+
+                if (model.Image.Length > 0)
+                {   
+                    const long maxAllowedFileSize = 5 * 1024 * 1024; // 5 MB
+                    
+
+                    if (model.Image.Length > maxAllowedFileSize)
+                    {
+                        return BadRequest("File size exceeds the maximum limit of 5 MB.");
+                    }
+                    else
+                    {
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await model.Image.CopyToAsync(stream);
+
+                        }
+                    }
+                }
+
+checking the mime type:
+// Mime type validation 
+        private static readonly Dictionary<string, List<byte[]>> FileSignatures = new Dictionary<string, List<byte[]>>
+        {
+            { ".jpeg", new List<byte[]>
+                {
+                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 },
+                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE2 },
+                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE3 }
+                }
+            },
+
+            { ".png", new List<byte[]>
+                {
+                    new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }
+                }
+            }
+        };
+        public static bool ValidateFileSignature(IFormFile file, string[] expectedExtensions)
+        {
+            bool result = false;
+
+            if (file == null || file.Length == 0)
+                return result;
+
+            for (int i=0;i<expectedExtensions.Length & !result;  i++) {            
+                if (FileSignatures.ContainsKey(expectedExtensions[i]))
+                {
+                    using var reader = new BinaryReader(file.OpenReadStream());
+                    var signatures = FileSignatures[expectedExtensions[i]];
+                    var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
+
+                    result =  signatures.Any(signature => headerBytes.Take(signature.Length).SequenceEqual(signature));
+                }
+            }
+            return result;
+        }
+
+
+slides 107-108 - SSRF
+=========================================================================================
+
+if (!Utils.IsAllowedUrl(recipe.ImageUrl))
+                        return StatusCode(500, "An error occurred while saving the recipes.");
+
+slides 115 - SQL
+=========================================================================================
+ public async Task AddRecipe(Recipe recipe)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    string sql = $"INSERT INTO Recipes (Name, Instructions, ImagePath) VALUES (@Name, @Instructions, @ImagePath) ";
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", recipe.Name);
+                        command.Parameters.AddWithValue("@Instructions", recipe.Instructions);
+                        command.Parameters.AddWithValue("@ImagePath", recipe.ImagePath);
+
+                        await connection.OpenAsync();
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }

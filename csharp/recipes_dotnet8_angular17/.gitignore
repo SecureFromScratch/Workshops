@@ -1,0 +1,125 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+nugets/
+
+# Angular specific
+.angular/
+coverage/
+dist/
+build/
+!src/assets/images/**/* # Keep images in version control
+.sass-cache/
+.sass-cache
+.sass-cache/*
+
+# IDE specific
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Miscellaneous
+*.log
+*.lock
+*.map
+*.tsbuildinfo
+*.sass-cache
+.sass-cache/
+connect.lock
+coverage/
+libpeerconnection.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+testem.log
+typings/
+tscache/
+.vscode/
+.tmp/
+*.tmp
+
+# Compiled output
+out-tsc/
+out-tsc-e2e/
+
+# Angular serverless
+serverless/
+.serverless/
+
+# Compiled TypeScript
+*.tsbuildinfo
+
+# Debug files
+*.log
+
+# Dependency directories
+node_modules/
+
+# Environment Variables
+.env
+.env.*.local
+
+# Local App Secrets
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temp files
+tmp
+temp
+
+# Compiled Output
+dist/
+build/
+bundles/
+min/
+target/
+bin/
+obj/
+
+# JetBrains IDEs
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Rider for .NET
+.idea/
+.idea.*
+.idea/*
+
+# Visual Studio Code
+.vscode/
+.vscode/*
+
+# User-specific files
+*.swp
+*~
+.project
+.idea/
+*.tmproj
+*.vscode
