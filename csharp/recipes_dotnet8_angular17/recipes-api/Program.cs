@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.Extensions.Configuration;
+
+using recipes_api;
 using recipes_api.data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.Listen(System.Net.IPAddress.Parse("127.0.0.1"), 5187); // First IP
-    serverOptions.Listen(System.Net.IPAddress.Parse("192.168.1.131"), 5187); // Second IP
+    string? myDeviceIP = builder.Configuration["MyDeviceIP"];
+    if (myDeviceIP != null)
+    {
+        serverOptions.Listen(System.Net.IPAddress.Parse(myDeviceIP), 5187); // Second IP
+    }
+    else
+    {
+        serverOptions.Listen(System.Net.IPAddress.Parse("192.168.1.187"), 5187); // random IP just to cause an error loading up
+
+    }
     // Add more IPs as needed
 });
 

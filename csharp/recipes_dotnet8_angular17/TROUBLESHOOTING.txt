@@ -1,0 +1,14 @@
+.NET
+* Server won't load due to network binding problem
+  - You need to put your local IP (v4) in appsettings.json (in the MyDeviceIp field).
+    You can use ipconfig to find out your ip.v4.
+* localdb attachment does not work
+  - try installing sqlexpress 2019 (IMPORTANT: Visual Studio 2022 *requires* sqlexpress *2019*)
+  - localdb doesn't like relative paths. 
+    In "appsettings.json", try using an absolute path to recipes-api\\data\\recipes.mdf
+    i.e. C:\\Users\\yariv\\source\\repos\\Workshops\\csharp\\recipes_dotnet8_angular17\\recipes-api\\data\\recipes.mdf
+
+Angular
+* tinymce doesn't work
+  - tinemce requires a license. look for apikey in the html files. You will see an apikey.
+    Register with tinymce cloud for an apikey and update it.
