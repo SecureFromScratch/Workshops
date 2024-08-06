@@ -7,6 +7,18 @@
   - localdb doesn't like relative paths. 
     In "appsettings.json", try using an absolute path to recipes-api\\data\\recipes.mdf
     i.e. C:\\Users\\yariv\\source\\repos\\Workshops\\csharp\\recipes_dotnet8_angular17\\recipes-api\\data\\recipes.mdf
+  - If you have Windows11, it might be due to this problem:
+    https://learn.microsoft.com/en-us/troubleshoot/sql/database-engine/database-file-operations/troubleshoot-os-4kb-disk-sector-size
+    Only fix that worked for me was setting the regedit attribute that's in the article (CAREFUL!)
+    to revert sector size behavior back to windows10 and setting the database connection string to
+    work with sqlexpress instead of localdb:
+    ----------------------------------
+    "ConnectionStrings": {
+      "DefaultConnection": "Data Source=localhost\\sqlexpress;Initial Catalog=Recipes;Integrated Security=True;Trust Server Certificate=True"
+    },
+    ----------------------------------
+    NOTE: You will need to attach the database at recipes-api/data/recipes_2.mdf to sql server
+    Do not attach recipes-api/data/recipes.mdf - it will probably not work.
 
 Angular
 * tinymce doesn't work
