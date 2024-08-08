@@ -20,7 +20,7 @@ slide 72 - add header and cors
 // header
 builder.Services.AddAntiforgery(options =>
 {
-    options.HeaderName = "X-CSRF-TOKEN"; // The header where the CSRF token is expected
+    options.HeaderName = "X-XSRF-TOKEN"; // The header where the CSRF token is expected
 });
 
 // cors
