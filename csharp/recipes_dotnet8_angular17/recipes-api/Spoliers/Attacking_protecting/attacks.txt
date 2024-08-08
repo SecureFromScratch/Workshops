@@ -41,11 +41,10 @@ Files\CSRFPoC.html
 
 slide 91 - Payload for add recipes
 =========================================================================================
-
 [
     {
-        "Name": "Carrot Cake",
-        "Instructions": "Mix ingredients and bake.",
+        "Name": "Chocolate Cake",
+        "Instructions": "Mix ingredients and bake. ut on nice plate. Add chocolate syrup",
         "ImageUrl": "https://live.staticflickr.com/47/148164470_24b709ed61.jpg"
     }
 ]
