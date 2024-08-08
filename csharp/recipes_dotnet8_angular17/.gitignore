@@ -123,3 +123,4 @@ obj/
 .idea/
 *.tmproj
 *.vscode
+*.bak
