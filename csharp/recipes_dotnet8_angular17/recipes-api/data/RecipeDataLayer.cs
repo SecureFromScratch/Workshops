@@ -74,7 +74,7 @@ namespace recipes_api.data
             {
                 await connection.OpenAsync();
                                
-                var command = new SqlCommand("SELECT Name, Instructions, ImagePath FROM Recipes WHERE Deleted is null or Deleted=0", connection);
+                var command = new SqlCommand("SELECT Name, Instructions, ImagePath FROM Recipes WHERE Deleted is null or Deleted=0 ORDER BY Id DESC", connection);
                 using (var reader = await command.ExecuteReaderAsync())
                 {
                     while (await reader.ReadAsync())
