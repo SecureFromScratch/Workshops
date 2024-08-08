@@ -422,3 +422,6 @@ generated/
 .idea/*/dataSourcesHistory.xml
 .idea/*/webTools.xml
 
+/csharp/recipes_dotnet8_angular17/recipes-api/wwwroot/images/no_malcious_sample.svg
+/csharp/recipes_dotnet8_angular17/recipes-api/wwwroot/images/sample.svg
+/csharp/recipes_dotnet8_angular17/recipes-api/wwwroot/images/sample1.svg
