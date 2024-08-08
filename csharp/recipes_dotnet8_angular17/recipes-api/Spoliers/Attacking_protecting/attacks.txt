@@ -44,9 +44,9 @@ slide 91 - Payload for add recipes
 getting a file from the api
 [
     {
-        "Name": "Carrot Cake",
-        "Instructions": "Mix ingredients and bake.",
-        "ImageUrl": "http://localhost:5187/images/../../secret/secret.txt"
+        "Name": "Chocolate Cake",
+        "Instructions": "Mix ingredients and bake. Pt on nice plate. Add chocolate syrop",
+        "ImageUrl": "https://live.staticflickr.com/47/148164470_24b709ed61.jpg"
     }
 ]
 

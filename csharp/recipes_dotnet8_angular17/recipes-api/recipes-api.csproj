@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\AntiForgeryController.cs" />
+    <Compile Remove="Spoliers\Attacking_protecting\Snippets\AntiForgery.cs" />
+    <Compile Remove="Spoliers\Attacking_protecting\Snippets\CookieAppend.cs" />
     <Compile Remove="Spoliers\CSRF - protection\Program.cs" />
     <Compile Remove="Spoliers\DataLayer\RecipeDataLayer.cs" />
     <Compile Remove="Spoliers\FileUpload\RecipesController - Copy.cs" />
@@ -39,6 +41,11 @@
     <Folder Include="Spoliers\DataLayer\" />
     <Folder Include="Spoliers\FileUpload\" />
     <Folder Include="Spoliers\Originals\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Spoliers\Attacking_protecting\Snippets\AntiForgery.cs" />
+    <None Include="Spoliers\Attacking_protecting\Snippets\CookieAppend.cs" />
   </ItemGroup>
 
 </Project>
