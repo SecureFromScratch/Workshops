@@ -220,8 +220,8 @@ namespace recipes_api.Controllers
 
                     string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images"); // File save location
 
-                    if (!Utils.IsAllowedUrl(recipe.ImageUrl))
-                        return StatusCode(500, "An error occurred while saving the recipes.");
+                    //if (!Utils.IsAllowedUrl(recipe.ImageUrl))
+                    //    return StatusCode(500, "An error occurred while saving the recipes.");
                     recipe.ImagePath = await Utils.DownloadImageAsync(recipe.ImageUrl, uploadsFolder);
                                        
 
