@@ -23,7 +23,7 @@ We value your feedback and contributions:
 - **Feedback:** Please share your feedback with us. It helps us improve the quality of our labs.
 - **Contributions:** If you want to contribute a lab, please let us know. Send an email to [securefromscratch@gmail.com](mailto:securefromscratch@gmail.com).
 
-## Support Us
+## Support Us :)
 
 If you would like to support us financially, we would greatly appreciate it.
 
