@@ -3,7 +3,7 @@ import os
 
 QUESTION_FILEPATH = "question.txt"
 ANSWERS_FILEPATH = "answers.txt"
-TEACHER_NAME = "teacher"
+TEACHER_NAME = "the teacher"
 OUTPUT_FORMAT = "{}: {}"
 
 
@@ -69,6 +69,7 @@ def quiz_student(student_name):
     right_or_wrong = ("Right" if shuffled_answers[answer_number_starting_at_1 - 1] == question_and_answers.correct_answer
                       else "Wrong")
     add_answer_to_answers_file(student_name, right_or_wrong)
+    print("Thank you for answering")
 
 
 def is_teacher(_name):
@@ -108,8 +109,9 @@ if __name__ == '__main__':
     user_name = ask_for_name()
     hello_user(user_name)
 
-    if not is_teacher(user_name):
+    if is_teacher(user_name):
+        print("ANSWERS:")
+        print_answer_results()
+    else:
         quiz_student(user_name)
 
-    print("Thank you for answering")
-    print_answer_results()
