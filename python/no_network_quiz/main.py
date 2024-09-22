@@ -101,8 +101,12 @@ def ask_for_answer_number(minimum_allowed, maximum_allowed):
 
 
 def ask_for_name():
-    name = input("Hello, what is your name?\n")
-    return name
+    while True:
+        name = input("Hello, what is your name?\n")
+        if not " " in name:
+            print("Your full name, please")
+            continue            
+        return name
 
 
 if __name__ == '__main__':
