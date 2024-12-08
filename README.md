@@ -1,6 +1,6 @@
 # Secure From Scratch Workshops
 
-Welcome to the Secure From Scratch Workshops repository! This repository contains a variety of secure coding labs designed to help you learn and practice secure coding practices.
+Welcome to the Secure From Scratch Workshops repository! This repository contains a variety of secure coding labs designed to help you learn and practice secure coding practices
 
 ## Contents
 
