@@ -1,0 +1,154 @@
+/* Tag items */
+.tag-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background-color: #fff;
+    font-size: 0.9em;
+    cursor: pointer;
+    position: relative; /* Needed for the floating elements */
+    white-space: nowrap; /* Prevent text wrapping */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+  
+.tag-item:hover {
+    background-color: #f0f0f0;
+}
+  
+/* Vote popup */
+.vote-popup {
+    position: absolute;
+    top: calc(100% - 2px); /* Aligns the popup slightly overlapping under the tag */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+}
+  
+/* No border for emojis */
+.vote-popup span {
+    font-size: 1.2em;
+    cursor: pointer;
+}
+  
+/* New tag button */
+.new-tag-item {
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    font-size: 0.9em;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    color: #555;
+    position: relative;
+}
+ 
+.new-tag-item:hover {
+    background-color: #e0e0e0;
+}
+  
+/* New tag input panel */
+.new-tag-panel {
+    position: absolute;
+    top: calc(100% - 2px);
+    right: 0;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+}
+  
+/* Input styling in the new tag panel */
+.new-tag-panel input {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 0.9em;
+}
+  
+/* Add button in the new tag panel */
+.new-tag-panel button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+  
+.new-tag-panel button:hover {
+    background-color: #0056b3;
+}
+
+/* All tags option */
+.all-tag-item {
+    padding: 5px 10px;
+    background-color: #e8e8e8;
+    border-radius: 20px;
+    font-size: 0.9em;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    color: #333;
+    position: relative;
+}
+  
+.all-tag-item:hover {
+    background-color: #d6d6d6;
+}
+  
+/* Vote popup */
+.vote-popup {
+    position: absolute;
+    top: calc(100% - 2px); /* Aligns the popup slightly overlapping under the tag */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+}
+  
+/* Emoji styling (no border) */
+.vote-popup span {
+    font-size: 1.2em;
+    cursor: pointer;
+}
+  
+.vote-indicator {
+    position: absolute;
+    bottom: -10px; /* Extrude by 50% of the emoji height */
+    right: -10px; /* Extrude by 50% of the emoji width */
+    font-size: 0.9em;
+    /*background-color: #fff;*/
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /*padding: 2px;*/
+    z-index: 10;
+}
+  
+/* Specific styles for thumbs up and thumbs down */
+.thumbs-up {
+    background-color: green;
+}
+  
+.thumbs-down {
+    background-color: red;
+}

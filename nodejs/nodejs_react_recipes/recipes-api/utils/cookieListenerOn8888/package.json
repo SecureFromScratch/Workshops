@@ -1,0 +1,19 @@
+{
+    "name": "Cookie Extraction Listener",
+    "version": "1.0.0",
+    "description": "Listens for cookies sent from unsuspecting clients",
+    "type": "module",
+    "imports": {
+        "*.json": "./"
+    },
+    "main": "cookieListener.js",
+    "scripts": {
+        "start": "node cookieListener.js",
+        "dev": "nodemon cookieListener.js"
+    },
+    "dependencies": {
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    }
+}

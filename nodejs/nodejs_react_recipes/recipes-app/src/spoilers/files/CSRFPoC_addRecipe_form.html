@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Win A Prize!!!</title>
+</head>
+<body>
+  <div class="addrecipe-container">
+    <h2 class="addrecipe-component-title">You Could Be a Winner!!!</h2>
+
+	<!-- !!!!!!!!!!!!!!!!!! Set this ip to the ip of the app's server !!!!!!!!!!!!!!!! -->
+    <form id="addRecipeForm" action="http://192.168.56.1:5173/api/addRecipe" method="POST" enctype="multipart/form-data">
+      <!-- Recipe Name (Hidden Field) -->
+      <input type="hidden" id="name" name="name" value="Mud Pie">
+
+      <!-- Instructions (Hidden Field) -->
+      <input type="hidden" id="instructions" name="instructions" value="Mix mud and water. Shape into pie form. Let it dry.">
+
+      <!-- Image (Hidden Field with Placeholder Value) -->
+      <input type="hidden" id="image" name="image" value="placeholder-mud-pie.jpg">
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit" class="addrecipe-button">Click Here to Find Out!</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

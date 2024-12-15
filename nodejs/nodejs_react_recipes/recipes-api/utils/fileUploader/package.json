@@ -1,0 +1,20 @@
+{
+    "name": "file upload hack",
+    "version": "1.0.0",
+    "description": "Uses path traversal to overwrite a file on the server",
+    "type": "module",
+    "imports": {
+        "*.json": "./"
+    },
+    "main": "fileUploader.js",
+    "scripts": {
+        "start": "node fileUploader.js",
+        "dev": "nodemon fileUploader.js"
+    },
+    "dependencies": {
+        "axios": "^1.7.9"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    }
+}

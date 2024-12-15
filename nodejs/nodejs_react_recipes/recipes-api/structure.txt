@@ -1,0 +1,13 @@
+recipes-server/
+├── controllers/
+│   └── recipesController.js
+├── models/
+│   └── recipeModel.js
+├── routes/
+│   └── recipeRoutes.js
+├── storage/
+│   └── dbSeeder.js
+├── assets/
+│   └── images/   
+├── server.js
+├── package.json

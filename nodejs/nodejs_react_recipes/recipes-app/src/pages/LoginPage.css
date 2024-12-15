@@ -1,0 +1,103 @@
+/* Full-page layout */
+.login-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/9/9a/Angel_food_cake_-_Birthday_cake_%28cropped%29.jpg')
+      no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+  
+/* Login container styling */
+.login-container {
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+  
+/* Title styling */
+.login-title {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+  
+/* Input styling */
+.login-input {
+    width: 280px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #333;
+}
+  
+/* Button styling */
+.login-button {
+    width: 60%;
+    padding: 10px;
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.login-button:hover {
+    background-color: #d32f2f;
+}
+  
+.register-button {
+    width: 35%;
+    padding: 10px;
+    background-color: #e33225;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 5%;
+}
+  
+.register-button:hover {
+    background-color: #d32f2f;
+}
+/* Error message styling */
+.login-error {
+    color: #ffcccb;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+  
+/* Footer styling */
+.login-footer {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #fff;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners */
+    width: fit-content;
+    align-self: center;
+}
+    
+.login-footer a {
+    color: #ffd700;
+    text-decoration: none;
+}
+  
+.login-footer a:hover {
+    text-decoration: underline;
+}
+  

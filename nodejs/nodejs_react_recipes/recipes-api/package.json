@@ -1,0 +1,38 @@
+{
+    "name": "recipes-server",
+    "version": "1.0.0",
+    "description": "A recipes server built with Express.js and MongoDB",
+    "type": "module",
+    "imports": {
+        "*.json": "./"
+    },
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    },
+    "dependencies": {
+        "axios": "^1.7.9",
+        "body-parser": "^1.20.2",
+        "busboy": "^1.6.0",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "csrf-csrf": "^3.1.0",
+        "express": "^4.18.2",
+        "file-type": "^19.6.0",
+        "mongoose": "^7.3.4",
+        "multer": "^1.4.5-lts.1",
+        "swagger-ui-express": "^5.0.1",
+        "uuid": "^11.0.3",
+        "winston": "^3.17.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1",
+        "swagger-autogen": "^2.23.7"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "author": "Your Name",
+    "license": "MIT"
+}
