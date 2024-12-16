@@ -9,6 +9,12 @@ import path from 'path';
 import { randomUUID } from 'crypto';
 import { promises as fs } from 'fs';
 
+export default function registerRoutes(router) { 
+  router.get('/api/recipes', sessionVerifier, getAllRecipes);
+  router.post('/api/addRecipe', sessionVerifier, upload.single('image'), addRecipeFileVerificationWrapper);
+  router.post('/api/addRecipeWithUrl', sessionVerifier, addRecipeWithImageUrl);
+}
+
 async function generateUniqueName(directory, filename) {
   while (true) {
     const uniqueName = randomUUID() + '_' + filename;
@@ -44,10 +50,4 @@ async function addRecipeFileVerificationWrapper(req, res) {
   file.originalname = path.relative(storeFolder, savePath);
 
   return await addRecipe(req, res);
-}
-
-export default function registerRoutes(router) { 
-    router.get('/api/recipes', sessionVerifier, getAllRecipes);
-    router.post('/api/addRecipe', sessionVerifier, upload.single('image'), addRecipeFileVerificationWrapper);
-    router.post('/api/addRecipeWithUrl', sessionVerifier, addRecipeWithImageUrl);
 }
