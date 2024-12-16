@@ -1,7 +1,7 @@
 import multer from 'multer';
 import path from 'path';
 import sessionVerifier from '../middleware/sessionVerifier.js'; 
-import { getAllRecipes, addRecipe, addRecipeWithImageUrl, addRecipeWithImageUrl } from '../controllers/recipesController.js';
+import { getAllRecipes, addRecipe, addRecipeWithImageUrl } from '../controllers/recipesController.js';
 
 // File upload configuration
 const storage = multer.diskStorage({
