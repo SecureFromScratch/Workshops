@@ -8,7 +8,7 @@ const defaultRegisteredUsers = [
   { username: 'Tamar' },
   { username: 'Shira', isSubscribed: true },
   { username: 'Yael' },
-  { username: '~~~InternalNetwork', isSubscribed: true },
+  { username: 'InternalNetwork', isSubscribed: true },
 ];
 
 const defaultRecipes = [
