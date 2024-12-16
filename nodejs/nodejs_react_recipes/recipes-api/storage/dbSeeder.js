@@ -2,13 +2,13 @@ import Recipe from '../models/recipeModel.js';
 import RegisteredUser from '../models/registeredUserModel.js';
 
 const defaultRegisteredUsers = [
-  { username: '~~~InternalNetwork', isSubscribed: true },
   { username: 'Avi' },
   { username: 'Eitan' },
   { username: 'Noam', isSubscribed: true },
   { username: 'Tamar' },
   { username: 'Shira', isSubscribed: true },
   { username: 'Yael' },
+  { username: '~~~InternalNetwork', isSubscribed: true },
 ];
 
 const defaultRecipes = [
