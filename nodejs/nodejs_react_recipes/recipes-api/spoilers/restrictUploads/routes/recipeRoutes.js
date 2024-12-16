@@ -24,8 +24,9 @@ async function generateUniqueName(directory, filename) {
 async function addRecipeFileVerificationWrapper(req, res) {
   const file = req.file;
   if (!file) {
-    return res.status(400).send('No file uploaded!');
+    return await addRecipe(req, res); // still allow recipes without any file
   }
+
   const fileBuffer = file.buffer; // Complete file content in memory
   const actualFileType = await fileTypeFromBuffer(fileBuffer);
   if (!actualFileType) {
@@ -37,8 +38,11 @@ async function addRecipeFileVerificationWrapper(req, res) {
     throw new Error('File content does not match expected MIME type!');
   }
   
-  const savePath = await generateUniqueName(path.join(process.cwd(), 'assets/images'), file.originalname);
+  const storeFolder = path.join(process.cwd(), 'assets/images');
+  const savePath = await generateUniqueName(storeFolder, file.originalname);
   await fs.writeFile(savePath, file.buffer);
+  
+  file.filename = path.relative(storeFolder, savePath);
 
   return await addRecipe(req, res);
 }

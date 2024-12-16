@@ -5,7 +5,7 @@ import getLocalIp from './getLocalIp.js'
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import recipeRoutes from './spoilers/restrictUploads/routes/recipeRoutes.js';
+import recipeRoutes from './routes/recipeRoutes.js';
 import sessionRoutes from './routes/sessionRoutes.js';
 //import couponRoutes from './routes/couponRoutes.js';
 import tagRoutes from './routes/tagRoutes.js'
@@ -13,6 +13,11 @@ import internalRoutes from './routes/internalRoutes.js';
 import seedDefaultRecipes from './storage/dbSeeder.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerFile from './swagger-output.json' assert { type: 'json' };
+import { MongoMemoryServer } from 'mongodb-memory-server';
+
+// This will create an new instance of "MongoMemoryServer" and automatically start it
+const mongod = await MongoMemoryServer.create();
+const mongodbUri = mongod.getUri();
 
 const app = express();
 
@@ -25,7 +30,8 @@ app.use('/assets', express.static('assets'));
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/recipes', {
+console.log("MondoDB @ " + mongodbUri);
+mongoose.connect(mongodbUri /*'mongodb://localhost:27017/recipes'*/, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

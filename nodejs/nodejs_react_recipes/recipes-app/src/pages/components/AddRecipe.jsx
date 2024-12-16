@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import "./AddRecipe.css?no-inline";
 
 function AddRecipe({ onRecipeAdded }) {
   const TINYMCE_APIKEY = "1y2txrzbb9yi55y9qsftdxekakkmjtlot9u3oa7wuilnapdx";
   const [recipe, setRecipe] = useState({ name: "", instructions: "", image: null });
   const [successMessage, setSuccessMessage] = useState("");
-
+  const navigate = useNavigate();  
+  
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setRecipe({ ...recipe, [name]: value });
@@ -40,6 +42,9 @@ function AddRecipe({ onRecipeAdded }) {
         setRecipe({ name: "", instructions: "", image: null }); // Reset form
         onRecipeAdded(); // Notify parent to refresh recipes
       } else {
+        if (response.status === 401) {
+          navigate("/login");
+        }
         throw new Error("Failed to add recipe");
       }
     } catch (error) {
