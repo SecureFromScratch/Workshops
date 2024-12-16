@@ -30,7 +30,7 @@ async function uploadHack() {
             }
         });
 
-        if (response.status === 200) {
+        if (response.status < 300) {
             console.log("Success:", response.data);
         } else {
             console.log("Failed:", response.status);
