@@ -20,7 +20,6 @@ function LoginPage({ onLogin, csrfToken }) {
   const handleSessionCreation = async (event, apiRoute) => {
     event.preventDefault();
     //createCookie(username);
-    console.log("csrfToken=" + csrfToken);
     try {
       const response = await fetch(`/api/${apiRoute}`, {
         method: "POST",
