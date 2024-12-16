@@ -40,9 +40,8 @@ async function addRecipeFileVerificationWrapper(req, res) {
   
   const storeFolder = path.join(process.cwd(), 'assets/images');
   const savePath = await generateUniqueName(storeFolder, file.originalname);
-  await fs.writeFile(savePath, file.buffer);
   
-  file.filename = path.relative(storeFolder, savePath);
+  file.originalname = path.relative(storeFolder, savePath);
 
   return await addRecipe(req, res);
 }

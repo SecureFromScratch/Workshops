@@ -1,7 +1,28 @@
 import multer from 'multer';
 import path from 'path';
-import { randomUUID } from 'crypto';
 import logger from '../../../logger.js'
+
+export default multer({ 
+  storage: multer.memoryStorage(), 
+  fileFilter: async (req, file, cb) => {
+    try {
+      validateMetadata(file);
+
+      cb(null, true);
+    } catch (err) {
+      const httpError = new Error(`Validation failed: ${err.message}`);
+      httpError.status = 400;
+      cb(httpError);
+    } 
+  },
+  preservePath: true,
+  limits: {
+    fileSize: 2 * 1024 * 1024, // Limit file size to 2 MB
+    files: 1,                 // Limit to 1 file per request
+    fields: 5,                // Allow up to 5 non-file fields
+    fieldSize: 8192,          // Limit each field size to 8 KB (assuming instructions are less than 8kb)
+  },
+});
 
 const allowedTypes = {
   'image/jpeg': ['.jpg', '.jpeg'],
@@ -29,32 +50,3 @@ function validateMetadata(file) {
     throw new Error('File extension does not match MIME type!');
   }
 }
-
-/*const storage = multer.diskStorage({
-  destination: path.join(process.cwd(), 'assets/images'),
-  filename: (req, file, cb) => {
-    cb(null, randomUUID() + '_' + file.originalname);
-  },
-});*/
-
-export default multer({ 
-  storage: multer.memoryStorage(), 
-  fileFilter: async (req, file, cb) => {
-    try {
-      validateMetadata(file);
-
-      cb(null, true);
-    } catch (err) {
-      const httpError = new Error(`Validation failed: ${err.message}`);
-      httpError.status = 400;
-      cb(httpError);
-    } 
-  },
-  preservePath: true,
-  limits: {
-    fileSize: 2 * 1024 * 1024, // Limit file size to 2 MB
-    files: 1,                 // Limit to 1 file per request
-    fields: 5,                // Allow up to 5 non-file fields
-    fieldSize: 8192,          // Limit each field size to 8 KB (assuming instructions are less than 8kb)
-  },
-});

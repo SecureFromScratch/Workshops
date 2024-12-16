@@ -1,11 +1,11 @@
 import Recipe from '../models/recipeModel.js';
 import path from 'path';
-import fs from 'fs';
+import { promises as fs } from 'fs';
+import fsSync from 'fs';
 import { fileTypeFromBuffer } from 'file-type';
 import { combineButExclude } from '../objutils.js'
 import { summarizeVotes } from './tagsController.js'
 import logger from '../logger.js'
-import { fileURLToPath } from 'url';
 import { randomUUID } from 'crypto';
 import axios from 'axios'
 
@@ -30,12 +30,12 @@ async function prepImageDataForResponse(recipe) {
   }
 
   let imagePath = path.join(process.cwd(), recipe.imagePath); // Assuming `imageName` field contains the file name
-  if (!fs.existsSync(imagePath)) {
+  if (!fsSync.existsSync(imagePath)) {
     imagePath = path.join(process.cwd(), 'assets/images', recipe.imagePath); // Assuming `imageName` field contains the file name
   }
 
   try {
-    const imageBuffer = fs.readFileSync(imagePath);
+    const imageBuffer = await fs.readFile(imagePath);
     const mimetype = await detectMimeType(imagePath, imageBuffer);
     const base64Image = imageBuffer.toString('base64')
     return `data:${mimetype};base64,${base64Image}`;
@@ -76,11 +76,15 @@ export async function getAllRecipes(req, res) {
 
 // Add a single recipe
 export async function addRecipe(req, res) {
+
   try {
+    const imagePath = `assets/images/${req.file.originalname}`
+    await fs.writeFile(path.join(process.cwd(), imagePath), req.file.buffer);
+
     const recipe = new Recipe(
       combineButExclude(
         { id: crypto.randomUUID(), }, 
-        req.file ? { imagePath: `assets/images/${req.file.filename}` } : {},
+        req.file ? { imagePath: imagePath } : {},
         req.body
       )
     );
