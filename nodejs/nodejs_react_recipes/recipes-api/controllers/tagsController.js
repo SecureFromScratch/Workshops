@@ -20,8 +20,8 @@ export async function adjustTagVote(req, res) {
 
     // Validate the input
     if (!recipeId || !votes) {
-        logger.warn('Invalid input for adjusting tag vote', { recipeId, tag, vote });
-        return res.status(400).json({ error: 'Missing recipeId, tag, or vote' });
+        logger.warn('Invalid input for adjusting tag vote', { recipeId, vote });
+        return res.status(400).json({ error: 'Missing recipeId or vote' });
     }
 
     try {
