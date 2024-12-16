@@ -1,13 +1,15 @@
-import Recipe from '../models/recipeModel.js';
+import srcRootOfUnchanged from '../srcRootOfUnchanged.js'
+
+const { Recipe } = await import(srcRootOfUnchanged + '../models/recipeModel.js');
 import path from 'path';
 import fs from 'fs';
 import { fileTypeFromBuffer } from 'file-type';
-import { combineButExclude } from '../objutils.js'
-import { summarizeVotes } from './tagsController.js'
-import logger from '../logger.js'
-import { fileURLToPath } from 'url';
+const { combineButExclude } = await import(srcRootOfUnchanged + '../objutils.js');
+const { summarizeVotes } = await import(srcRootOfUnchanged + './tagsController.js');
+const { logger } = await import(srcRootOfUnchanged + '../logger.js');
 import { randomUUID } from 'crypto';
 import axios from 'axios'
+import isPrivateNetworkUrl from '../isPrivateNetworkUrl.js'
 
 async function detectMimeType(imagePath, imageBuffer) {
   const fileType = await fileTypeFromBuffer(imageBuffer);
@@ -95,7 +97,11 @@ export async function addRecipe(req, res) {
 // Add recipe - extra control
 export async function addRecipeWithImageUrl(req, res) {
   const { name, instructions, imageUrl, isPremium } = req.body;
-  
+
+  if (isPrivateNetworkUrl(imageUrl)) {
+    return res.status(400).json({ error: 'Unsupported url domain' });
+  }
+
   try {
     const imagePath = await downloadImageFile(imageUrl);
     const recipe = new Recipe({ id: crypto.randomUUID(), name, instructions, isPremium, imagePath });
