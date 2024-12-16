@@ -11,7 +11,13 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\startup.js"
+            "runtimeArgs": [
+                "--experimental-json-modules"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "program": "${workspaceFolder}/startup.js"
         },
         {
             "type": "node",
@@ -20,7 +26,13 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\storage\\eraseAllContent.js"
+            "runtimeArgs": [
+                "--experimental-json-modules"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "program": "${workspaceFolder}/storage/eraseAllContent.js"
         }
     ]
 }
