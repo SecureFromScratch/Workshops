@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Text;
+
 
 namespace recipes_api.data
 {
@@ -45,20 +48,82 @@ namespace recipes_api.data
             using (var connection = new SQLiteConnection(_connectionString))
             {
                 connection.Open();
-                string sql = @"
-                    CREATE TABLE IF NOT EXISTS Recipes (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Name TEXT NOT NULL,
-                        Instructions TEXT NOT NULL,
-                        ImagePath TEXT,
-                        Deleted INTEGER DEFAULT 0
-                    );";
-                using (var command = new SQLiteCommand(sql, connection))
+                using (var command = new SQLiteCommand(connection))
                 {
+                    command.CommandText = @"
+                        CREATE TABLE IF NOT EXISTS Recipes (
+                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            Name TEXT NOT NULL,
+                            Instructions TEXT NOT NULL,
+                            ImagePath TEXT,
+                            Deleted INTEGER DEFAULT 0
+                        );
+
+                        CREATE TABLE IF NOT EXISTS Users (
+                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            Username TEXT NOT NULL UNIQUE,
+                            Password TEXT NOT NULL
+                        );
+                    ";
                     command.ExecuteNonQuery();
                 }
             }
+
+            SeedUsers();
         }
+
+        private void SeedUsers()
+            {
+                using (var connection = new SQLiteConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    // Check if users already exist
+                    using (var checkCommand = new SQLiteCommand("SELECT COUNT(*) FROM Users", connection))
+                    {
+                        long userCount = (long)checkCommand.ExecuteScalar();
+                        if (userCount > 0) return; // Don't insert if users exist
+                    }
+
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.Transaction = transaction; // Set the transaction
+
+                            command.CommandText = "INSERT INTO Users (Username, Password) VALUES (@Username, @Password)";
+                            
+                            command.Parameters.AddWithValue("@Username", "admin");
+                            command.Parameters.AddWithValue("@Password", HashPassword("admin123"));
+                            command.ExecuteNonQuery();
+
+                            command.Parameters.Clear();
+                            command.Parameters.AddWithValue("@Username", "user1");
+                            command.Parameters.AddWithValue("@Password", HashPassword("password1"));
+                            command.ExecuteNonQuery();
+
+                            command.Parameters.Clear();
+                            command.Parameters.AddWithValue("@Username", "user2");
+                            command.Parameters.AddWithValue("@Password", HashPassword("password2"));
+                            command.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                    }
+
+                    Console.WriteLine("Sample users added to database.");
+                }
+            }
+
+
+          private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(bytes);
+            }
+        }
+
 
         public async Task AddRecipe(Recipe recipe)
         {
@@ -95,13 +160,11 @@ namespace recipes_api.data
                     {
                         foreach (var recipe in recipes)
                         {
-                            string sql = "INSERT INTO Recipes (Name, Instructions, ImagePath) VALUES (@Name, @Instructions, @ImagePath)";
+                            // 🚨 SQL Injection Vulnerability: Directly Concatenating User Input
+                            string sql = $"INSERT INTO Recipes (Name, Instructions, ImagePath) VALUES ('{recipe.Name}', '{recipe.Instructions}', '{recipe.ImagePath}')";
+                            
                             using (var command = new SQLiteCommand(sql, connection, transaction))
                             {
-                                command.Parameters.AddWithValue("@Name", recipe.Name);
-                                command.Parameters.AddWithValue("@Instructions", recipe.Instructions);
-                                command.Parameters.AddWithValue("@ImagePath", recipe.ImagePath);
-
                                 await command.ExecuteNonQueryAsync();
                             }
                         }
