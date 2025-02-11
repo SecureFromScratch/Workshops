@@ -6,12 +6,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
             "name": "Application",
             "request": "launch",
             "mainClass": "com.securefromscratch.quiz.Application",
@@ -20,6 +14,12 @@
             "env": {
                 "JAVA_TOOL_OPTIONS": "-Djava.util.logging.config.file=${workspaceFolder}/logging.properties"
             }
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
         }
     ]
 }

@@ -22,15 +22,20 @@ public class QuestionAndAnswers {
     public ShuffledAnswers generateShuffledAnswers() {
         String[] possibleAnswers = Arrays.copyOf(m_wrongAnswerOptions, m_wrongAnswerOptions.length + 1);
         possibleAnswers[m_wrongAnswerOptions.length] = m_correctAnswer;
-        int correctAnswerIdx = secureShuffle(possibleAnswers, m_wrongAnswerOptions.length);
-        return new ShuffledAnswers(possibleAnswers, correctAnswerIdx);
+        secureShuffle(possibleAnswers);
+        for (int i = 0 ; i < possibleAnswers.length ; ++i) {
+            if (possibleAnswers[i].equals(m_correctAnswer)) {
+                return new ShuffledAnswers(possibleAnswers, i);
+            }
+        }
+        return new ShuffledAnswers(possibleAnswers, 0); // should never be reached
     }
 
     public boolean isCorrectAnswer(String a_answer) {
         return a_answer.equals(m_correctAnswer);
     }
 
-    private static int secureShuffle(String[] a_toShuffle, int a_correctAnswerIdx) {
+    private static void secureShuffle(String[] a_toShuffle) {
         SecureRandom random = new SecureRandom();
         for (int i = a_toShuffle.length - 1; i > 0; --i) {
             int toSwapWith = random.nextInt(i + 1);
@@ -39,10 +44,6 @@ public class QuestionAndAnswers {
             String savedFirstVal = a_toShuffle[toSwapWith];
             a_toShuffle[toSwapWith] = a_toShuffle[i];
             a_toShuffle[i] = savedFirstVal;
-            if (a_correctAnswerIdx == toSwapWith) {
-                a_correctAnswerIdx = i;
-            }
         }
-        return a_correctAnswerIdx;
     }
 }
