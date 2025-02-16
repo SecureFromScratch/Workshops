@@ -15,42 +15,36 @@
             "name": "Quiz",
             "request": "launch",
             "mainClass": "app.Quiz",
-            "projectName": "no_network_quiz_710eb4d2"
         },
         {
             "type": "java",
             "name": "Quiz(1)",
             "request": "launch",
             "mainClass": "spoilers.protection1.Quiz",
-            "projectName": "no_network_quiz_710eb4d2"
         },
         {
             "type": "java",
             "name": "Quiz(2)",
             "request": "launch",
             "mainClass": "spoilers.protection2.Quiz",
-            "projectName": "no_network_quiz_710eb4d2"
         },
         {
             "type": "java",
             "name": "Quiz(3)",
             "request": "launch",
             "mainClass": "spoilers.protection3.Quiz",
-            "projectName": "no_network_quiz_710eb4d2"
         },
         {
             "type": "java",
             "name": "Quiz(4)",
             "request": "launch",
             "mainClass": "spoilers.protection4.Quiz",
-            "projectName": "no_network_quiz_710eb4d2"
         },
         {
             "type": "java",
             "name": "Quiz(5)",
             "request": "launch",
             "mainClass": "spoilers.welcome_list.Quiz",
-            "projectName": "no_network_quiz_710eb4d2"
         }
     ]
 }
