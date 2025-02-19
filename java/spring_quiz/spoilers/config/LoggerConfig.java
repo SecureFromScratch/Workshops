@@ -2,13 +2,20 @@ package com.securefromscratch.quiz.config;
 
 import java.util.logging.*;
 
-public class LoggerConfig {
-    private final static Class<?>[] VALID_FORMATTERS = { SimpleFormatter.class /* TODO: This should NOT be a valid formatter. Replace it with a valid formatter */ };
+import com.securefromscratch.quiz.config.logger.BackslashFormatter;
 
-    public static Logger genLogger(String name) {
+public class LoggerConfig {
+    private final static Class<?>[] VALID_FORMATTERS = { BackslashFormatter.class };
+
+    private static Set<String> m_testedLoggers = new HashSet<String>();
+
+    public static LoggerEx genLogger(String name) {
         Logger logger = Logger.getLogger(name);
-        //ensureFormattersAreValid(name, logger);
-        return logger;
+        if (!m_testedLoggers.contains(name)) {
+            m_testedLoggers.add(name);
+            ensureFormattersAreValid(name, logger);
+        }
+        return new LoggerEx(logger);
     }
 
     public static void ensureFormattersAreValid(String loggerName, Logger logger) {
