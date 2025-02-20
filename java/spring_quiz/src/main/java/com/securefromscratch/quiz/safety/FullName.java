@@ -25,11 +25,10 @@ public class FullName extends BoundedString {
     @Override
     protected void validate(String value) throws TypeValidationException {
         int spaceIdx = value.indexOf(' ');
-        if (spaceIdx == 0) {
+        if (spaceIdx == -1) {
             throw new TypeValidationException();
         }
     }
-
 
     @Override
     public String toString() {
