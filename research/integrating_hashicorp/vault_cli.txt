@@ -1,0 +1,1 @@
+"https://developer.hashicorp.com/vault/tutorials/get-started/learn-cli?productSlug=vault&tutorialSlug=getting-started&tutorialSlug=getting-started-first-secret" 
