@@ -1,0 +1,3 @@
+"https://docs.spring.io/spring-security/reference/5.8/migration/servlet/exploits.html#_i_am_using_angularjs_or_another_javascript_framework" 
+"https://security.stackexchange.com/questions/220797/is-the-double-submit-cookie-pattern-still-effective" 
+"https://docs.spring.io/spring-security/reference/features/exploits/csrf.html#csrf-protection-read-only" 
