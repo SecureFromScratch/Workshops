@@ -1,0 +1,5 @@
+What does the <i> tag mean?
+Makes text lean to the side, i.e. <i>italic text</i>
+Text is Important, and will be emphasized
+A tag used to Import Javascript code, i.e. <i src="main.js">
+There is no <i> html tag
