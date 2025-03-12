@@ -1,0 +1,20 @@
+git clone --no-checkout --filter=blob:none https://github.com/SecureFromScratch/Workshops.git ;
+cd Workshops
+git sparse-checkout init --cone
+git sparse-checkout set csharp
+git checkout angular_dot_netsqlite
+
+cd csharp/recipes_dotnet8_angular17/recipes-api
+dotnetbuild
+run ipconfig and copy your ip address
+Go to appsettings.json in the "MyDeviceIP" key put your ip address 
+dotnet run
+
+cd csharp/recipes_dotnet8_angular17/recipes-app
+npm i
+npm start
+Go to 
+http://localhost:4200/
+And make sure there is a carrot cake recipe in the browser
+
+
