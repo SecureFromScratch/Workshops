@@ -59,7 +59,7 @@ public class BackslashFormatter extends SimpleFormatter {
         for (++sanitizationIdx ; sanitizationIdx < params.length ; ++sanitizationIdx) {
             Object curObj = params[sanitizationIdx];
             encoded[sanitizationIdx] = encodeString((curObj instanceof String)
-                ? (String)curObj : params[sanitizationIdx].toString());
+                ? (String)curObj : curObj.toString());
         }
         return encoded;
     }
@@ -71,7 +71,7 @@ public class BackslashFormatter extends SimpleFormatter {
             String encodedString = encodeString(
                 (curObj instanceof String)
                 ? (String)curObj 
-                : params[sanitizationIdx].toString()
+                : curObj.toString()
             );
             if (encodedString != curObj) { /* intentional reference comparison */
                 return continueSanitizingParameters(params, sanitizationIdx, encodedString);
