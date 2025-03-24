@@ -47,23 +47,88 @@ public class BackslashFormatter extends SimpleFormatter {
         }
     }
 
-    private Object[] encodeParameters(Object[] params) {
+    // this method is called to create a copy of parameters
+    // only *after* we are sure a copy is actually needed
+    // (because at least one parameter needs to be a encoded string)
+    private Object[] continueSanitizingParameters(Object[] params, int sanitizationIdx, String encodedString) {
         Object[] encoded = new Object[params.length];
-        for (int sanitizationIdx = 0 ; sanitizationIdx < params.length ; ++sanitizationIdx) {
-            Object curObj = params[sanitizationIdx];
-            if (curObj instanceof SafeType) {
-                curObj = ((SafeType<?>)curObj).get();
-            }
-            if (curObj instanceof String) {
-                encoded[sanitizationIdx] = encodeString((String)curObj);
-            }
+        for (int i = 0 ; i < sanitizationIdx ; ++i) {
+            encoded[i] = params[i];
         }
-
+        encoded[sanitizationIdx] = encodedString;
+        for (++sanitizationIdx ; sanitizationIdx < params.length ; ++sanitizationIdx) {
+            Object curObj = params[sanitizationIdx];
+            encoded[sanitizationIdx] = encodeString((curObj instanceof String)
+                ? (String)curObj : curObj.toString());
+        }
         return encoded;
     }
 
+    private Object[] encodeParameters(Object[] params) {
+        int sanitizationIdx = 0;
+        for ( ; sanitizationIdx < params.length ; ++sanitizationIdx) {
+            Object curObj = params[sanitizationIdx];
+            String encodedString = encodeString(
+                (curObj instanceof String)
+                ? (String)curObj 
+                : curObj.toString()
+            );
+            if (encodedString != curObj) { /* intentional reference comparison */
+                return continueSanitizingParameters(params, sanitizationIdx, encodedString);
+            }
+        }
+
+        return params;
+    }
+
+    private String continueSanitizingString(String string, int sanitizationIdx) {
+        StringBuilder sb = new StringBuilder(string.length() + 16 + (string.length() / 10) /*estimate of number of extra chars for describing control chars */);
+        sb.append(string, 0, sanitizationIdx);
+
+        do {
+            char c = string.charAt(sanitizationIdx);
+            switch (c) {
+                case '\b': sb.append("\\b"); break;
+                case '\t': sb.append("\\t"); break;
+                case '\n': sb.append("\\n"); break;
+                case '\f': sb.append("\\f"); break;
+                case '\r': sb.append("\\r"); break;
+                case '\"': sb.append("\\\""); break;
+                case '\'': sb.append("\\'"); break;
+                case '\\': sb.append("\\\\"); break;
+                default:
+                    if (Character.isISOControl(c)) { // Handle non-printable characters
+                        sb.append(String.format("\\u%04x", (int) c));
+                    } else {
+                        sb.append(c);
+                    }
+            }
+
+            ++sanitizationIdx;
+        } while (sanitizationIdx < string.length());
+
+        return sb.toString();
+    }
+
     private String encodeString(String string) {
-        // TODO: Backslash encode all control characters
+        int charIdx = 0;
+        for (; charIdx < string.length() ; ++charIdx) {
+            if (Character.isISOControl(string.charAt(charIdx))) {
+                return continueSanitizingString(string, charIdx);
+            }
+        }
         return string;
+    }
+
+    static boolean hasNewlineChar(Object curObj) {
+        if (curObj instanceof String) {
+            if (((String)curObj).indexOf('\n') != -1) {
+                return true;
+            }
+            if (((String)curObj).indexOf('\r') != -1) {
+                return true;
+            }
+        }
+        return false;
     }
 }
