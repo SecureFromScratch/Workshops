@@ -1,5 +1,5 @@
-What does the <i> tag mean?
-Makes text lean to the side, i.e. <i>italic text</i>
-Text is Important, and will be emphasized
-A tag used to Import Javascript code, i.e. <i src="main.js">
-There is no <i> html tag
+What does the <p> tag mean?
+Marks text as a standalone Paragraph, i.e. <p>This is a paragraph</p>
+Text represents something really bad that happened (Panic), i.e. <p>We're about to crash!</p>
+A tag used to load Protected Javascript code, i.e. <p src="defense.js">
+There is no <p> html tag
