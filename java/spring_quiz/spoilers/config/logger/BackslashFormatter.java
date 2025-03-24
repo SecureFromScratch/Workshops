@@ -58,8 +58,8 @@ public class BackslashFormatter extends SimpleFormatter {
         encoded[sanitizationIdx] = encodedString;
         for (++sanitizationIdx ; sanitizationIdx < params.length ; ++sanitizationIdx) {
             Object curObj = params[sanitizationIdx];
-            encoded[sanitizationIdx] = (curObj instanceof String)
-                ? encodeString((String)curObj : params[sanitizationIdx].toString());
+            encoded[sanitizationIdx] = encodeString((curObj instanceof String)
+                ? (String)curObj : params[sanitizationIdx].toString());
         }
         return encoded;
     }
