@@ -68,14 +68,13 @@ public class BackslashFormatter extends SimpleFormatter {
         int sanitizationIdx = 0;
         for ( ; sanitizationIdx < params.length ; ++sanitizationIdx) {
             Object curObj = params[sanitizationIdx];
-            if (curObj instanceof SafeType) {
-                curObj = ((SafeType<?>)curObj).get();
-            }
-            if (curObj instanceof String) {
-                String encodedString = encodeString((String)curObj);
-                if (encodedString != curObj) { /* intentional reference comparison */
-                    return continueSanitizingParameters(params, sanitizationIdx, encodedString);
-                }
+            String encodedString = encodeString(
+                (curObj instanceof String)
+                ? (String)curObj 
+                : params[sanitizationIdx].toString()
+            );
+            if (encodedString != curObj) { /* intentional reference comparison */
+                return continueSanitizingParameters(params, sanitizationIdx, encodedString);
             }
         }
 
