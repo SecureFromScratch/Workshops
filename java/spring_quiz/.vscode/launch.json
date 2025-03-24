@@ -9,6 +9,7 @@
             "name": "Application",
             "request": "launch",
             "mainClass": "com.securefromscratch.quiz.Application",
+            "projectName": "spring_quiz",
             "vmArgs": "-D\"java.util.logging.config.file=${workspaceFolder}/logging.properties\"",
             "env": {
                 "JAVA_TOOL_OPTIONS": "-D\"java.util.logging.config.file=${workspaceFolder}/logging.properties\""
