@@ -1,0 +1,11 @@
+private static final int GCM_TAG_LENGTH = 128;
+...
+byte[] key = new byte[...];
+byte[] iv = new byte[...];
+String plaintext = "This is data to encrypt";
+Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+GCMParameterSpec spec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
+
+cipher.init(Cipher.ENCRYPT_MODE, keySpec, spec);
+byte[] ciphertext = cipher.doFinal(plaintext.getBytes());
