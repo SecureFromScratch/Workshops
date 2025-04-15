@@ -1,0 +1,6 @@
+@dotnetcore_quiz_HostAddress = http://localhost:5223
+
+GET {{dotnetcore_quiz_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
