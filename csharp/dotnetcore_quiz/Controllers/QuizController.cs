@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SecureFromScratch.Quiz.Model;
 using SecureFromScratch.Quiz.Services;
 using SecureFromScratch.Quiz.Safety;
+//using SecureFromScratch.Quiz.Safety.Spoilers;
 using SecureFromScratch.Quiz.Config;
 
 namespace SecureFromScratch.Quiz.Controllers
@@ -12,6 +13,7 @@ namespace SecureFromScratch.Quiz.Controllers
     public class QuizController : ControllerBase
     {
         private readonly ILogger<QuizController> _logger;
+        //private readonly LoggerEx _answersLogger;
         private readonly ILogger _answersLogger;
         private readonly MultipleChoiceQuestion _quizService;
 
@@ -21,7 +23,8 @@ namespace SecureFromScratch.Quiz.Controllers
             MultipleChoiceQuestion quizService)
         {
             _logger = logger;
-            _answersLogger = loggerFactory.CreateLogger("Answers");
+            //_answersLogger = new LoggerEx(loggerFactory.CreateLogger("Answers"));
+            _answersLogger = logger;
             _quizService = quizService;
         }
 
