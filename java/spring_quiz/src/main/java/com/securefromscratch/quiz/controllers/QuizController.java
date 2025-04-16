@@ -13,6 +13,7 @@ import static j2html.TagCreator.*;
 import com.securefromscratch.quiz.safety.FullName;
 import com.securefromscratch.quiz.config.LoggerConfig;
 import com.securefromscratch.quiz.model.QuestionAndAnswers.ShuffledAnswers;
+import com.securefromscratch.quiz.services.EncryptionUtil;
 import com.securefromscratch.quiz.services.MultipleChoiceQuestion;
 
 @RestController
@@ -31,7 +32,7 @@ public class QuizController {
         return String.format(
             "<a href='/answer?username=%s&isCorrect=%s'>" 
             + a_optionText 
-            + "</a><br>\n", a_username, a_isCorrect);
+            + "</a><br>\n", a_username, EncryptionUtil.encryptBoolean(a_isCorrect));
     }
 
     public record QuestionDetails(String question, String[] answers) { }
@@ -55,7 +56,9 @@ public class QuizController {
     }
 
     @GetMapping("/answer")
-    public String submitAnswer(@RequestParam("username") FullName username, @RequestParam("isCorrect") boolean isCorrect) {
+    public String submitAnswer(@RequestParam("username") FullName username, @RequestParam("isCorrect") String isCorrectStr) {
+        Boolean isCorrect = EncryptionUtil.dncryptBoolean(isCorrectStr);
+        
         LOGGER.info(String.format("/answer with name=%s and answer=%s", username, isCorrect));
 
         if (isCorrect) {
