@@ -12,6 +12,11 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { EditorModule } from '@tinymce/tinymce-angular';
 //import { CsrfInterceptor } from './csrf-interceptor.service'; // Adjust path if needed
 import { CookieService } from 'ngx-cookie-service';
+import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
+
 
 
 
@@ -28,7 +33,9 @@ const routes: Routes = [
     AppComponent,    
     RecipesCatalogComponent,
     SiteHeaderComponent,
-    AddRecipeComponent, 
+    AddRecipeComponent,
+    LoginComponent,
+    DashboardComponent, 
     
   ],
   imports: [
@@ -37,7 +44,8 @@ const routes: Routes = [
     AppRoutingModule,
     HttpClientModule,
     FormsModule,    
-    EditorModule
+    EditorModule,
+    ReactiveFormsModule
     
   ],
 

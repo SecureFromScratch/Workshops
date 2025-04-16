@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.Extensions.Configuration;
 
 using recipes_api;
+using recipes_api.Controllers;
 using recipes_api.data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,8 +69,17 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseCors("AllowAngularApp");
-
-
 app.MapControllers();
 
+var users = new List<(string Username, string Password)>
+{
+    ("user1", Guid.NewGuid().ToString("N").Substring(0, 8)),
+    ("user2", Guid.NewGuid().ToString("N").Substring(0, 8))
+};
+
+foreach (var user in users) {
+    Console.WriteLine($"Generated user: {user.Username}, Password: {user.Password}");
+    UserStore.Users[user.Username] = user.Password;
+
+}
 app.Run();

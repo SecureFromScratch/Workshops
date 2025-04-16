@@ -1,16 +1,21 @@
 <header class="site-header">
-    <nav class="navbar">
+    <!--nav class="navbar">
       <div class="navbar-logo">
-        <a routerLink="/">Cake Recipes</a> <!-- Home link -->
+        <a routerLink="/">Cake Recipes</a> 
       </div>
       <ul class="navbar-links">
         <li>
-          <a routerLink="/recipes">Recipes</a> <!-- Link to the recipes component -->
+          <a routerLink="/recipes">Recipes</a> 
         </li>
         <li>
-          <a routerLink="/add-recipe">Add Recipe</a> <!-- Link to the add recipe component -->
+          <a routerLink="/add-recipe">Add Recipe</a> 
         </li>
       </ul>
-    </nav>
-  </header>
+    </nav-->
+    <nav>
+  <span *ngIf="isLoggedIn">Welcome, {{ username }}!</span>
+  <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+</nav>
+
+</header>
   
