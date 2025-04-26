@@ -1,0 +1,144 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.welcome-container {
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    /*min-height: 100vh;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.signup-header {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+/* Floating Login Button */
+.floating-login-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-decoration: none;
+    padding: 10px 20px;
+    color: white;
+    background-color: #007bff;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.floating-login-button:hover {
+    background-color: #0056b3;
+}
+
+/* Header */
+header h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Center Content */
+.center-content {
+    margin: auto;
+}
+
+.welcome-logo {
+    width: 450px; /* Matches header width */
+    max-width: 800px; /* Limit max width */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 20px;
+}
+
+/* Registration Form */
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 400px;
+}
+
+.form-group input {
+    flex: 1;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group label {
+    font-size: 1em;
+    color: #333;
+    white-space: nowrap;
+}
+
+.registration-form h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* Register Button */
+.button {
+    text-decoration: none;
+    padding: 10px 20px;
+    color: white;
+    background-color: #007bff;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+/* Footer */
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.footer-logo {
+    width: 32px;
+    height: 32px;
+}
+
+footer p {
+    font-size: 1em;
+    color: #555;
+}

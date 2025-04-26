@@ -1,0 +1,211 @@
+body { font-family: Arial, sans-serif; }
+
+.header-container {
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    background: url("/busybee.webp");
+    background-size: 300px 100px;
+    height: 100px;
+    align-content: center;
+}
+
+.header-container h1 {
+    display: inline;
+    text-shadow: 0 0 20px black;
+    color: white;
+    font-size: 3em;
+}
+
+.logo-img {
+    height: 80px;
+    width: 500px;
+    vertical-align: middle;
+    border-radius: 20px;
+}
+
+.task { border: 1px solid #ccc; padding: 10px; margin: 10px; }
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.task-header label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.task-details { padding-top: 10px; }
+.task-details p { margin: 0 0 5px; }
+
+/*.add-task-button {
+    font-size: 2em;
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+    margin-right: 10px;
+}*/
+
+/* Floating add button */
+.floating-add-task-button {
+    position: fixed;
+    top: 40px;
+    right: 20px;
+    font-size: 3em;
+    color: white;
+    background-color: blue;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.floating-add-task-button:hover {
+    background-color: darkblue;
+}
+
+/* Menu button */
+.menu-button {
+    font-size: 1.5em;
+    font-weight: 800;
+    color: gray;
+    border: 2px solid gray;
+    background-color: lightgray;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.menu-button:hover {
+    background-color: #f0f0f0;
+    color: black;
+}
+
+/* Dropdown menu styles */
+.menu {
+    position: absolute;
+    top: 60px;
+    left: 10px;
+    width: 120px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.menu li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Class to hide the menu */
+.hidden {
+    display: none;
+}
+
+/* Background colors for different due dates */
+.overdue-summary { background-color: darkred; color: white; }
+.due-today-summary { background-color: #ffcccc; }
+.due-tomorrow-summary { background-color: #ffff66; }
+.due-in-7-days-summary { background-color: #ffff99; }
+.due-in-10-days-summary { background-color: #ffffcc; }
+
+.comments {
+    margin-top: 15px;
+}
+
+.comment {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+}
+
+.comment .created-on {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 0.8em;
+    color: gray;
+}
+
+.comment .text {
+    display: inline-block;
+}
+
+.comment img {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.attachment-type-img {
+    width: 20px;
+    height: 20px;
+}
+
+.comment .attachment {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.reply-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    color: #0066cc;
+}
+
+.comment-form {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.comment-form input[type="text"] {
+    flex-grow: 1;
+}
+
+.created-on {
+    font-size: 0.8em;
+    color: gray;
+    align-self: flex-end;
+}
+
+.expand-button {
+    /*background: none;
+    border: none;*/
+    cursor: pointer;
+    margin-left: 10px;
+    position: relative;
+    top: -3px;
+    /*font-size: 1.2rem;*/
+}
+
+.expand-button:hover {
+    color: #007bff; /* Example hover color */
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusyBee Tasks</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div class="header-container">
+    <span class="menu-button" id="menuButton">...</span>
+    <!--img src="/busybee.webp" class="logo-img" /-->
+    <h1>BusyBee</h1>
+</div>
+<div id="tasks-container"></div>
+
+<!-- Floating add button -->
+<button class="floating-add-task-button" id="addTaskButton">+</button>
+
+<div id="menu" class="menu hidden">
+    <ul>
+        <li id="exportOption">Export</li>
+        <li id="importOption">Import</li>
+        <li id="logoutOption">Logout</li>
+    </ul>
+</div>
+
+<script src="../helpers.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

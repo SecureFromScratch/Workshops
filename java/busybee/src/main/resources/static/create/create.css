@@ -1,0 +1,9 @@
+body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; }
+form { display: flex; flex-direction: column; }
+label { margin-top: 10px; }
+input, textarea { padding: 8px; margin-top: 5px; }
+button { margin-top: 20px; padding: 10px; cursor: pointer; }
+.button-group { display: flex; gap: 10px; }
+.responsibility-group { display: flex; align-items: center; gap: 10px; }
+.add-responsibility { padding: 5px 10px; cursor: pointer; }
+.hidden { display: none; }

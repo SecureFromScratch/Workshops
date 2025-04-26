@@ -1,0 +1,15 @@
+Targets
+    Occurrences of 'logger.' in Project with mask '*.java'
+Found Occurrences in Project with mask '*.java'  (3 usages found)
+    Unclassified  (3 usages found)
+        Tasks.main  (3 usages found)
+            com.securefromscratch.Tasks.config  (1 usage found)
+                DeserializationFilterConfig.java  (1 usage found)
+                    DeserializationFilterConfig()  (1 usage found)
+                        52 LOGGER.error("REJECTED class " + clazz.getName());
+            com.securefromscratch.Tasks.controllers  (2 usages found)
+                ExportImportController.java  (2 usages found)
+                    exportTasks()  (1 usage found)
+                        49 LOGGER.error("Failed to serialize tasks for export", e);
+                    importTasks(MultipartFile)  (1 usage found)
+                        74 LOGGER.error("Failed to import tasks", e);
