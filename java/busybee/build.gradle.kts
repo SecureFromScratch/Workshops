@@ -1,7 +1,7 @@
 plugins {
 	java
 	id("org.springframework.boot") version "3.3.4"
-	id("io.spring.dependency-management") version "1.1.6"
+	id("io.spring.dependency-management") version "1.1.6"	
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -33,11 +33,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:3.4.3")
 	implementation("org.owasp.safetypes:safetypes-java:1.0.0")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-	//implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("javax.validation:validation-api:2.0.1.Final")
 	implementation("com.j2html:j2html:1.6.0")
 	implementation("org.apache.commons:commons-collections4:4.0")
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+	// for templates 
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")	
+
+
 
 	//implementation("io.github.owasp-untrust:untrust-boxedpath:0.2")
 

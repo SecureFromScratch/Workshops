@@ -1,5 +1,10 @@
 package com.securefromscratch.busybee.controllers;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.securefromscratch.busybee.safety.Name;
+import com.securefromscratch.busybee.safety.TaskDescription;
+import com.securefromscratch.busybee.safety.TaskDueDate;
+import com.securefromscratch.busybee.safety.TaskName;
 import com.securefromscratch.busybee.storage.Task;
 import com.securefromscratch.busybee.storage.TasksStorage;
 import org.apache.commons.collections4.CollectionUtils;
@@ -10,8 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "null")
@@ -43,12 +52,28 @@ public class TasksController {
         return CollectionUtils.collect(allTasks, transformer);
     }
 
+
+    public record MarkAsDoneRequestDTO(UUID taskid) { }
+    public record MarkAsDoneResponseDTO(boolean success) { }
+
     // Request: { "taskid": "<uuid>" }
     // Expected Response: { "success": true/false }
     @PostMapping("/done")
-    public ResponseEntity markTaskDone() {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("TODO");
+    public ResponseEntity<MarkAsDoneResponseDTO> markTaskDone(@RequestBody MarkAsDoneRequestDTO dto) {        
+        try {
+            m_tasks.markDone(dto.taskid());
+            return ResponseEntity.ok().body(new MarkAsDoneResponseDTO(true));
+
+            //return new MarkAsDoneResponseDTO(true);
+        } catch (IOException e) {
+            //return ResponseEntity..internalServerError();
+            return ResponseEntity.internalServerError().body(new MarkAsDoneResponseDTO(false));
+        }
     }
+
+    public record CreateRequestDTO(TaskName name, @JsonProperty("desc") TaskDescription description,
+    TaskDueDate dueDate) { }
+    public record CreateResponseDTO(UUID taskid) { }
 
     // Request: {
     //     "name": "<task name>",
@@ -59,7 +84,16 @@ public class TasksController {
     // }
     // Expected Response: { "taskid": "<uuid>" }
     @PostMapping("/create")
-    public ResponseEntity create() {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("TODO");
+    public ResponseEntity create(@RequestBody CreateRequestDTO request) {
+        UUID newTaksId;
+        try {
+            newTaksId = m_tasks.add(request.name(),request.description(),request.dueDate() ,new String[0]);
+            return ResponseEntity.ok().body(new CreateResponseDTO(newTaksId));
+        } catch (IOException e) {
+            LOGGER.error("Failed creating a task with parameters {0}", e);
+            return ResponseEntity.internalServerError().body("IO Exception");
+        }
+        
+        //return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("TODO");
     }
 }

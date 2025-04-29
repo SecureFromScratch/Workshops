@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Tasks</title>
+    <link rel="stylesheet" href="welcome.css">
+    <script defer src="register.js"></script>
+</head>
+<body>
+<div class="welcome-container">
+    <a href="/login" class="floating-login-button">Login</a>
+    <header>
+        <h1>Welcome to BusyBee!!!!</h1>
+        <img src="busybee.webp" alt="BusyBee Logo" class="welcome-logo">
+    </header>
+    <div class="center-content">
+        <form id="registration-form" class="registration-form">
+            <h2 class="signup-header">Sign Up</h2>
+            <div class="form-group">
+                <label for="new-username">New Username</label>
+                <input type="text" id="new-username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="new-password">New Password</label>
+                <input type="password" id="new-password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="button">Register</button>
+            <p id="error-message" class="error-message hidden"></p>
+        </form>
+    </div>
+    <footer>
+        <img src="/sfslogo4_w_white_margins2.png" alt="Secure From Scratch Logo" class="footer-logo">
+        <p>Made by Secure From Scratch</p>
+    </footer>
+</div>
+</body>
+</html>
