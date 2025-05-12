@@ -1,5 +1,5 @@
-let csrfToken = null;
-let csrfHeaderName = null;
+//let csrfToken = null;
+//let csrfHeaderName = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Fetch CSRF token on page load

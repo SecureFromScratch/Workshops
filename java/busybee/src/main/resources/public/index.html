@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Tasks</title>
+  <link rel="stylesheet" href="welcome.css" />
+
+  <style>
+    .forms-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin: 40px auto;
+      max-width: 900px;
+    }
+
+    .form-box {
+      flex: 1;
+      max-width: 400px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .form-divider {
+      width: 2px;
+      background-color: #ddd;
+      height: 100%;
+      margin-top: 20px;
+    }
+
+    .welcome-container header {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .signup-header {
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .footer-logo {
+      height: 50px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="welcome-container">
+  <header>
+    <h1>Welcome to BusyBee</h1>
+    <img src="busybee.webp" alt="BusyBee Logo" class="welcome-logo" />
+  </header>
+
+  <div class="forms-container">
+    <!-- Login Form -->
+    <div class="form-box">
+      <form id="login-form">
+        <h2 class="signup-header">Login</h2>
+        <div class="form-group">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" placeholder="Enter your username" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="button" id="login-button">Login</button>
+        <p id="login-error" class="error-message hidden"></p>
+      </form>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- Registration Form -->
+    <div class="form-box">
+      <form id="registration-form">
+        <h2 class="signup-header">Sign Up</h2>
+        <div class="form-group">
+          <label for="new-username">New Username</label>
+          <input type="text" id="new-username" placeholder="Enter your username" required />
+        </div>
+        <div class="form-group">
+          <label for="new-password">New Password</label>
+          <input type="password" id="new-password" placeholder="Enter your password" required />
+        </div>
+        <button type="submit" class="button">Register</button>
+        <p id="error-message" class="error-message hidden"></p>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <img src="/sfslogo4_w_white_margins2.png" alt="Secure From Scratch Logo" class="footer-logo" />
+    <p>Made by Secure From Scratch</p>
+  </footer>
+</div>
+
+<script src="login.js" defer></script>
+<script src="register.js" defer></script>
+</body>
+</html>
