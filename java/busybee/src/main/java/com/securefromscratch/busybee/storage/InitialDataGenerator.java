@@ -57,9 +57,9 @@ public class InitialDataGenerator {
         tasks.get(0).addComment("Found and bought at our favorite grocer",
                 Optional.of("wikimedia_Fresh_vegetable_stall.jpg"), Optional.empty(),
                 "Rami", randomPastDates.remove(0), Optional.of(c0_1));
-        tasks.get(2).addComment("באמת הגיע הזמן לסדר את הבלאגן בארון", Optional.of("wikipedia_Space-saving_closet.JPG"), Optional.empty(), "Or", randomPastDates.remove(0), Optional.empty());
+        tasks.get(2).addComment("באמת הגיע הזמן לסדר את הבלאגן בארון", Optional.of("camera/wikipedia_Space-saving_closet.JPG"), Optional.empty(), "Or", randomPastDates.remove(0), Optional.empty());
         UUID c3_1 = tasks.get(tasks.size() - 1).addComment("מישהו יודע את התשובה לשאלה 12?", Optional.empty(), Optional.of("דוח מעבדה עקרונות תכנות מאובטח.docx"), "Nisan", randomPastDates.remove(0), Optional.empty());
-        tasks.get(tasks.size() - 1).addComment("פשוט תעתיק את התוצאה מחלון הפקודה", Optional.of("CommandWindow.png"), Optional.empty(), "Rony", randomPastDates.remove(0), Optional.of(c3_1));
+        tasks.get(tasks.size() - 1).addComment("פשוט תעתיק את התוצאה מחלון הפקודה", Optional.of("screenshots/CommandWindow.png"), Optional.empty(), "Rony", randomPastDates.remove(0), Optional.of(c3_1));
         tasks.get(tasks.size() - 1).addComment("אתה מתכוון לשאלה עם ה-POST?", "Aviv", randomPastDates.remove(0), Optional.of(c3_1));
         UUID c3_2 = tasks.get(tasks.size() - 1).addComment("המחשב נתקע. מה עושים?", "Rony", randomPastDates.remove(0), Optional.empty());
     }
