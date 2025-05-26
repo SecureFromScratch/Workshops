@@ -1,4 +1,4 @@
-package com.securefromscratch.auth;
+package com.securefromscratch.busybee.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

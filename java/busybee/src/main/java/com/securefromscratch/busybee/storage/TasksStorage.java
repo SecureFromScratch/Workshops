@@ -2,6 +2,11 @@ package com.securefromscratch.busybee.storage;
 
 import org.springframework.stereotype.Service;
 
+import com.securefromscratch.busybee.safety.Name;
+import com.securefromscratch.busybee.safety.TaskDescription;
+import com.securefromscratch.busybee.safety.TaskDueDate;
+import com.securefromscratch.busybee.safety.TaskName;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,6 +25,16 @@ public class TasksStorage {
 
     public List<Task> getAll() {
         return Collections.unmodifiableList(m_tasks);
+    }
+
+    public UUID add(TaskName name, TaskDescription desc, String[] responsibilityOf) throws IOException {
+        Task newTask = new Task(name.get(), desc.get(), "Yariv", responsibilityOf);
+        return add(newTask);
+    }
+
+    public UUID add(TaskName name, TaskDescription desc,TaskDueDate dueDate, String[] responsibilityOf) throws IOException {
+        Task newTask = new Task(name.get(), desc.get(), dueDate.get(),"Yariv", responsibilityOf);
+        return add(newTask);
     }
 
     public UUID add(String name, String desc, String[] responsibilityOf) throws IOException {

@@ -1,14 +1,14 @@
 function getCookie(name) {
-	const value = `; ${document.cookie}`;
-	const parts = value.split(`; ${name}=`);
-	if (parts.length === 2) return parts.pop().split(';').shift();
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 function getCsrfToken() {
     return getCookie('XSRF-TOKEN');
 }
 
-function submitTask() {
+async function submitTask() {
     const responsibilityElements = document.querySelectorAll(".responsibility-field");
     const responsibilities = Array.from(responsibilityElements).map(input => input.value).filter(value => value.trim());
 
@@ -20,15 +20,41 @@ function submitTask() {
         responsibilityOf: responsibilities
     };
 
-    sendPost("/create", taskData)
-    .then(response => {
+    // Step 1: Fetch CSRF token from backend
+    try {
+        const response = await fetch('/gencsrftoken', { credentials: 'same-origin' });
+        if (response.ok) {
+            const data = await response.json();
+            csrfToken = data.token;
+            csrfHeaderName = data.headerName;
+            console.log("✅ CSRF token:", csrfToken);
+        } else {
+            console.error('❌ Failed to fetch CSRF token:', response.status);
+        }
+    } catch (err) {
+        console.error('❌ Error fetching CSRF token:', err);
+    }
+    // creating the token
+    try {
+
+        const response = await fetch("/create", {
+            method: "POST",
+            headers: {                
+                "Content-Type": "application/json",
+
+                [csrfHeaderName]: csrfToken
+            },
+            body: JSON.stringify(taskData),
+            credentials: "same-origin"
+        });
         if (response.ok) {
             window.location.href = "/main/main.html";
         } else {
             alert("Failed to add task. Please try again.");
         }
-    })
-    .catch(error => console.error("Error:", error));
+    } catch (err) {
+        console.error('❌ Error adding task:', err);
+    }
 }
 
 function cancelTask() {

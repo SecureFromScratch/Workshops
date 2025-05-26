@@ -32,31 +32,31 @@ public class InitialDataGenerator {
                         "Get sticker for car",
                         "Parking inside Ariel requires sticker. You can get one at security office.",
                         LocalDate.now().plusDays(10),
-                        "Ariel Security Department",
+                        "Dana",
                         new String[]{"Yariv"}, randomPastDates.remove(0)
                 ),
                 new Task(
                         "Change closet from summer to winter",
                         "Winter is Coming",
                         LocalDate.now().plusDays(20),
-                        "Ariel Security Department",
-                        new String[]{"Yariv"}, randomPastDates.remove(0)
+                        "Or",
+                        new String[]{"Dana"}, randomPastDates.remove(0)
                 ),
                 new Task(
                         "Prepare lab report 1",
                         "Can be found at <a href='https://moodlearn.ariel.ac.il/mod/resource/view.php?id=2011102'>moodle lab report 1</a>",
                         LocalDate.now(),
                         randomFutureDates.remove(randomFutureDates.size() - 1).toLocalTime(),
-                        "Yariv",
-                        new String[]{"Students"}, randomPastDates.remove(0)
+                        "Avi",
+                        new String[]{"Avi"}, randomPastDates.remove(0)
                 )
         ));
         UUID c0_1 = tasks.get(0).addComment("Out of tomatoes in local supermarket",
                 Optional.of("Wikimedia-Corona_Lockdown_Tirupur,_Tamil_Nadu_(3).jpg"), Optional.empty(),
-                "Rita", randomPastDates.remove(0), Optional.empty());
+                "Avi", randomPastDates.remove(0), Optional.empty());
         tasks.get(0).addComment("Found and bought at our favorite grocer",
                 Optional.of("wikimedia_Fresh_vegetable_stall.jpg"), Optional.empty(),
-                "Rami", randomPastDates.remove(0), Optional.of(c0_1));
+                "Dana", randomPastDates.remove(0), Optional.of(c0_1));
         tasks.get(2).addComment("באמת הגיע הזמן לסדר את הבלאגן בארון", Optional.of("wikipedia_Space-saving_closet.JPG"), Optional.empty(), "Or", randomPastDates.remove(0), Optional.empty());
         UUID c3_1 = tasks.get(tasks.size() - 1).addComment("מישהו יודע את התשובה לשאלה 12?", Optional.empty(), Optional.of("דוח מעבדה עקרונות תכנות מאובטח.docx"), "Nisan", randomPastDates.remove(0), Optional.empty());
         tasks.get(tasks.size() - 1).addComment("פשוט תעתיק את התוצאה מחלון הפקודה", Optional.of("CommandWindow.png"), Optional.empty(), "Rony", randomPastDates.remove(0), Optional.of(c3_1));

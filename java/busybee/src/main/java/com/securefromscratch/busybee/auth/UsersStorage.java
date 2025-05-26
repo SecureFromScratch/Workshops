@@ -1,4 +1,4 @@
-package com.securefromscratch.auth;
+package com.securefromscratch.busybee.auth;
 
 import org.springframework.stereotype.Service;
 
@@ -13,9 +13,9 @@ public class UsersStorage {
         return Optional.ofNullable(m_users.get(username));
     }
 
-    public UserAccount createUser(String username, String password) {
-        UserAccount newAccount = new UserAccount(username, password);
-        // TODO: Add user to map
+    public UserAccount createUser(String username, String password, String role) {
+        UserAccount newAccount = new UserAccount(username, password, role);
+        m_users.put(username, newAccount);
 
         return newAccount;
     }

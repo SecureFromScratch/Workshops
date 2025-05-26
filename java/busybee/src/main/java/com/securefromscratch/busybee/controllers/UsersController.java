@@ -1,7 +1,6 @@
 package com.securefromscratch.busybee.controllers;
 
 
-import com.securefromscratch.auth.UsernamePasswordDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -11,7 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.securefromscratch.auth.UsernamePasswordDetailsService;
+
+import com.securefromscratch.busybee.auth.UsernamePasswordDetailsService;
 
 /*/
 @Controller

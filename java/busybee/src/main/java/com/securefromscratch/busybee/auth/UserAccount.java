@@ -1,14 +1,25 @@
-package com.securefromscratch.auth;
+package com.securefromscratch.busybee.auth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserAccount {
     private String username;
     private String hashedPassword;
     private boolean enabled = true;
+    private List<String> roles = new ArrayList<String>();
 
-    public UserAccount(String username, String hashedPassword) {
+    public UserAccount(String username, String hashedPassword, String role) {
+        this.username = username;
+        this.hashedPassword = hashedPassword;
+        this.roles.add(role);
+    }
+
+    public UserAccount(String username, String hashedPassword, List<String> roles) {
         // TODO: Assign username, hashedPassword
-        this.username = "Yariv";
-        this.hashedPassword = "$2a$10$edWpneV.CBg7s2Gl.slQ7e4NfmNE6502X0HNhkIrNe3b/kWZotUGO";
+        this.username = username;
+        this.hashedPassword = hashedPassword;
+        this.roles = roles;
     }
 
     public String getUsername() {
@@ -27,8 +38,8 @@ public class UserAccount {
         this.hashedPassword = hashedPassword;
     }
 
-    public String getRole() {
-        return "USER";
+    public List<String> getRoles() {
+        return roles;
     }
 
     public boolean isEnabled() {
