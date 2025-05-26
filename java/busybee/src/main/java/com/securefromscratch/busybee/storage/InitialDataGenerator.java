@@ -52,7 +52,7 @@ public class InitialDataGenerator {
                 )
         ));
         UUID c0_1 = tasks.get(0).addComment("Out of tomatoes in local supermarket",
-                Optional.of("Wikimedia-Corona_Lockdown_Tirupur,_Tamil_Nadu_(3).jpg"), Optional.empty(),
+                Optional.of("Wikimedia-Corona_Lockdown_Tirupur_Tamil_Nadu.jpg"), Optional.empty(),
                 "Rita", randomPastDates.remove(0), Optional.empty());
         tasks.get(0).addComment("Found and bought at our favorite grocer",
                 Optional.of("wikimedia_Fresh_vegetable_stall.jpg"), Optional.empty(),
