@@ -5,7 +5,7 @@ Install Git (optional)
 
 Either do the following or, download from release the recipes dotnet zip and the recipes angular zip
 =====================================================================================================
-Go to command lune and 
+Go to command line and 
 git clone --no-checkout --filter=blob:none https://github.com/SecureFromScratch/Workshops.git ;
 cd Workshops
 git sparse-checkout init --cone
