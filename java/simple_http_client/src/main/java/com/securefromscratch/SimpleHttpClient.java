@@ -9,7 +9,7 @@ public class SimpleHttpClient {
         String hostname = "www.securefromscratch.com";
         int port = 80;
         String path = "/simple.html";
-        String bodyOutputFilename = "a.html";
+        String bodyOutputFilename = null;
         // ========END OF CONTROL HOSTNAME, PORT, PATH=========
 
         try (Socket socket = new Socket(hostname, port);
