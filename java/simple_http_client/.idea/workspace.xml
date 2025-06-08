@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d9e9f2bf-692b-436a-9155-b64297f94c2c" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2mWLbj7a89YD4SdDitTJqxwPzQp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/yariv/source/repos/unicourse/for_students/1/http/ServerOutputPrinter",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.securefromscratch.spoiler" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.SimpleHttpClient">
+    <configuration name="SimpleHttpClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.securefromscratch.SimpleHttpClient" />
+      <module name="NaiveHttpClient" />
+      <option name="PROGRAM_PARAMETERS" value="httpbin.org /" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.securefromscratch.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.securefromscratch.spoiler.SimpleHttpClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.securefromscratch.spoiler.SimpleHttpClient" />
+      <module name="NaiveHttpClient" />
+      <option name="PROGRAM_PARAMETERS" value="localhost 8080 /genpwd?length=44" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.securefromscratch.spoiler.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.com.securefromscratch.spoiler.SimpleHttpClient" />
+      <item itemvalue="Application.SimpleHttpClient" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.SimpleHttpClient" />
+        <item itemvalue="Application.com.securefromscratch.spoiler.SimpleHttpClient" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d9e9f2bf-692b-436a-9155-b64297f94c2c" name="Changes" comment="" />
+      <created>1727187461157</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1727187461157</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/securefromscratch/SimpleHttpClient.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
