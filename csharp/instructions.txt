@@ -1,9 +1,24 @@
+Install .net 8 and angular 17 or last version.
+Install visual code. 
+Install visual studio community version (optional)
+Install Git (optional)
+
+Either do the following or, download from release the recipes dotnet zip and the recipes angular zip
+=====================================================================================================
+Go to command lune and 
 git clone --no-checkout --filter=blob:none https://github.com/SecureFromScratch/Workshops.git ;
 cd Workshops
 git sparse-checkout init --cone
 git sparse-checkout set csharp
 git checkout angular_dot_netsqlite
 
+The zips:
+=====================================================================================================
+https://github.com/user-attachments/files/18725438/recipes_dotnet.zip
+https://github.com/user-attachments/files/18724541/AngularProject.zip
+
+Running
+=====================================================================================================
 cd csharp/recipes_dotnet8_angular17/recipes-api
 dotnetbuild
 run ipconfig and copy your ip address
