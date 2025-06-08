@@ -26,11 +26,13 @@ public class SimpleHttpClient {
 
             out.flush(); // ANSWER: What does this do? Why is it needed?
 
+            // ========MODIFY OUTPUT CODE=========
             // Reading and printing out the response
             String responseLine;
             while ((responseLine = in.readLine()) != null) {
                 System.out.println(responseLine);
             }
+            // ========END OF MODIFY OUTPUT CODE AREA=========
         } catch (UnknownHostException e) {
             System.err.println("Unknown host: " + hostname);
         } catch (IOException e) {
