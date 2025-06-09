@@ -37,7 +37,7 @@
   <component name="RunManager" selected="Application.SimpleHttpClient">
     <configuration name="SimpleHttpClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.securefromscratch.SimpleHttpClient" />
-      <module name="NaiveHttpClient" />
+      <module name="SimpleHttpClient" />
       <option name="PROGRAM_PARAMETERS" value="httpbin.org /" />
       <extension name="coverage">
         <pattern>
@@ -51,7 +51,7 @@
     </configuration>
     <configuration name="com.securefromscratch.spoiler.SimpleHttpClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.securefromscratch.spoiler.SimpleHttpClient" />
-      <module name="NaiveHttpClient" />
+      <module name="SimpleHttpClient" />
       <option name="PROGRAM_PARAMETERS" value="localhost 8080 /genpwd?length=44" />
       <extension name="coverage">
         <pattern>
