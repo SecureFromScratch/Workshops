@@ -5,10 +5,17 @@ import java.net.Socket;
 import java.util.Arrays;
 
 public class ProxyConnectionHandler implements Runnable {
-    private final static int MAX_PREVIEW_BYTES = 160;
-    private static final String[] INCLUSION_FILTERS = null;//new String[] { "^/$", ".html$", "/login", "/tasks" };
+    // USE ^ TO MARK START OF PATH, $ TO MARK END OF PATH
+    // i.e. ".html$" - end with .html
+    //      "^/$" - is exatly the path /
+    private static final String[] INCLUSION_FILTERS = null; //new String[] { "/tasks" }; 
     private static final String[] RESPONSE_HEADERS_TO_REMOVE = null; // new String[] { "nosniff" };
-    private static final String[] RESPONSE_HEADERS_TO_ADD = null; // new String[] { "content-type: image/jpeg" };    
+    private static final String[] RESPONSE_HEADERS_TO_ADD = null;
+    /*    = new String[] { 
+            "Set-Cookie: myCookie=No1; Path=/; Max-Age: 60",
+            "Set-Cookie: anotherCookie=wow; Path=/; Expires=Wed, 21 Oct 2055 07:28:00 GMT" };
+    */
+    private final static int MAX_PREVIEW_BYTES = 160;
     
     private Socket clientSocket;
     private int browserPort;
@@ -39,7 +46,7 @@ public class ProxyConnectionHandler implements Runnable {
             boolean printOut = forwardWithHeaderLogging(INCLUSION_FILTERS, clientIn, serverOut, "REQUEST", requestHeadersToRemove, requestHeadersToAdd);
 
             // Forward server → client with console output
-            forwardWithHeaderLogging(printOut ? null : new String[0], serverIn, clientOut, "RESPONSE", RESPONSE_HEADERS_TO_REMOVE, RESPONSE_HEADERS_TO_ADD);
+            forwardWithHeaderLogging(printOut ? null : new String[0], serverIn, clientOut, "RESPONSE", printOut ? RESPONSE_HEADERS_TO_REMOVE : null, printOut ? RESPONSE_HEADERS_TO_ADD : null);
 
             if (printOut) {
                 System.out.println("================================================================\n");
