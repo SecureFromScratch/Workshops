@@ -12,8 +12,8 @@ public class ProxyConnectionHandler implements Runnable {
     private static final String[] RESPONSE_HEADERS_TO_REMOVE = null; // new String[] { "nosniff" };
     private static final String[] RESPONSE_HEADERS_TO_ADD = null;
     /*    = new String[] { 
-            "Set-Cookie: myCookie=No1; Path=/; Max-Age=60",
-            "Set-Cookie: anotherCookie=wow; Path=/; Expires=Wed, 21 Oct 2055 07:28:00 GMT" };
+            "Set-Cookie: myCookie=No1; Path=/; Max-Age=60; HttpOnly; SameSite=Strict",
+            "Set-Cookie: anotherCookie=notThatGood; Path=/; HttpOnly; SameSite=Strict; Expires=Wed, 21 Oct 2000 07:28:00 GMT" };
     */
     private final static int MAX_PREVIEW_BYTES = 160;
     
