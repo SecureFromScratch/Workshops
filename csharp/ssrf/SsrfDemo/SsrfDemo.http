@@ -1,0 +1,6 @@
+@SsrfDemo_HostAddress = http://localhost:5018
+
+GET {{SsrfDemo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

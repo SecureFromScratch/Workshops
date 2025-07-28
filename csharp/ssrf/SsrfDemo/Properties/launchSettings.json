@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "SsrfDemo": {
+      "commandName": "Project",
+      "applicationUrl": "http://0.0.0.0:5018",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
