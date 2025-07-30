@@ -1,0 +1,6 @@
+@BasketRaceDemo_HostAddress = http://localhost:5110
+
+GET {{BasketRaceDemo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
