@@ -12,10 +12,10 @@ public class WebsitePreviewController : ControllerBase
 	public async Task<IActionResult> GetPreview([FromQuery] string url)
 	{
 		if (string.IsNullOrWhiteSpace(url))
-		return BadRequest("URL required.");		
+			return BadRequest("URL required.");		
 		
 		if (!Uri.TryCreate(url, UriKind.Absolute, out var uriResult))
-		return BadRequest("Invalid URL.");
+			return BadRequest("Invalid URL.");
 		
 		try
 		{
