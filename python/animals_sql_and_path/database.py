@@ -1,7 +1,8 @@
 import typing
+import uuid
 
 import sqlalchemy
-from sqlalchemy import create_engine, Column
+from sqlalchemy import create_engine, Column, String
 from sqlalchemy.ext.declarative import declarative_base
 #from sqlalchemy.orm import sessionmaker
 #SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -39,12 +40,12 @@ class HebrewSaying(Base):
     text = Column(sqlalchemy.String, nullable=False)
 
 
-class CreditCard(Base):
-    __tablename__ = "creditcards"
-    card = Column(sqlalchemy.String, primary_key=True)
-    expDate = Column(sqlalchemy.Integer, nullable=False)
-    ownerId = Column(sqlalchemy.BigInteger, nullable=False)
-
+class Users(Base):
+    __tablename__ = "Users"
+    UserId   = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    username = Column(sqlalchemy.String)
+    password = Column(sqlalchemy.String)
+    email = Column(sqlalchemy.String)
 
 def fill_animal_data(session):
     for entry in ANIMALS_DATA:
@@ -74,8 +75,9 @@ async def create_db_and_tables():
         #session.add(Animal(animalName="Lion", imgName="lion.webp"))
         #session.add(Animal(animalName="Monkey", imgName="monkey.webp"))
         #session.add(Animal(animalName="Rabbit", imgName="rabbit.webp"))
-        session.add(CreditCard(card="4580-1234-1234-1234", expDate=1225, ownerId=277889911))
-        session.add(CreditCard(card="4580-9876-5678-4455", expDate=1127, ownerId=359404012))
+        session.add(Users(username="alice", password="alice_password",email="alice@alice.com" ))
+        session.add(Users(username="bob", password="bob_password", email="bob@bob.com"))
+
         await session.commit()
 
 async def get_async_session() -> typing.AsyncGenerator[AsyncSession, None]:
