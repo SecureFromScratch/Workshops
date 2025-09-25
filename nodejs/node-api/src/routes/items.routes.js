@@ -19,11 +19,6 @@ r.get("/search",  asyncHandler(ctrl.getByCriteria));
 r.post("/create", validateItemCreate, asyncHandler(ctrl.create));
 
 
-console.log({
-  list: typeof ctrl.list,
-  getByCriteria: typeof ctrl.getByCriteria,  
-  createPlain: typeof ctrl.create,
-  createWithFile: typeof ctrl.createWithFile,
-});
+
 
 export default r;
