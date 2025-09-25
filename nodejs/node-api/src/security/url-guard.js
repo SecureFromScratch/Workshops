@@ -1,6 +1,8 @@
 import dns from "node:dns/promises";
 import net from "node:net";
-import { toASCII } from "punycode";
+import { domainToASCII } from "node:url";
+
+
 
 const ALLOWED_HOSTS = new Set([
   "images.example-cdn.com",
@@ -40,7 +42,7 @@ export async function validateExternalImageUrl(raw) {
   if (url.username || url.password) throw new Error("Credentials not allowed");
   //if (url.port && url.port !== "443") throw new Error("Port not allowed");
 
-  const host = toASCII(url.hostname).toLowerCase();
+  const host = domainToASCII(url.hostname).toLowerCase();
   if (net.isIP(host)) throw new Error("IP literals not allowed");
   if (!ALLOWED_HOSTS.has(host)) throw new Error("Host not allowed");
 

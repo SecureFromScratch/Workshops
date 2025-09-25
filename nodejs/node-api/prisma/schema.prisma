@@ -61,8 +61,7 @@ model Coupon {
   code   String  @unique
   active Boolean @default(true)
 
-  redemptions     CouponRedemption[]
-  redemptionsVuln CouponRedemptionVuln[]
+  redemptions     CouponRedemption[]  
 }
 
 model CouponRedemption {
@@ -73,19 +72,7 @@ model CouponRedemption {
 
   coupon Coupon @relation(fields: [couponId], references: [id])
 
-  @@unique([userId, couponId]) // SAFE: 1 per user
+   @@index([userId, couponId])
   @@index([couponId])
 }
 
-model CouponRedemptionVuln {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  couponId  Int
-  createdAt DateTime @default(now())
-
-  coupon Coupon @relation(fields: [couponId], references: [id])
-
-  // VULN: no uniqueness!
-  @@index([userId, couponId])
-  @@index([couponId])
-}

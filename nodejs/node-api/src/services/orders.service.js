@@ -30,22 +30,22 @@ export async function createOrder({ itemId, quantity, idempotencyKey, buyerIp })
   });
 }
 
-
-
 export async function redeemCoupon({ userId, code }) {
   return prisma.$transaction(async (tx) => {
     const coupon = await tx.coupon.findFirst({ where: { code, active: true } });
     if (!coupon) throw new Error("Coupon invalid");
 
-    try {
-      return await tx.couponRedemption.create({
-        data: { userId, couponId: coupon.id }
-      });
-    } catch (e) {
-      // P2002 = unique violation (already redeemed)
-      if (e.code === "P2002") throw new Error("Already used");
-      throw e;
-    }
+    const used = await tx.couponRedemption.findFirst({
+      where: { userId, couponId: coupon.id }
+    });
+    if (used) throw new Error("Already used");
+
+    // widen race window
+    await new Promise(r => setTimeout(r, 300));
+
+    return tx.couponRedemption.create({
+      data: { userId, couponId: coupon.id }
+    });
   });
 }
 

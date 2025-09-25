@@ -2,7 +2,9 @@ import https from "node:https";
 import http from "node:http";
 import dns from "node:dns/promises";
 import net from "node:net";
-import { toASCII } from "punycode";
+import { domainToASCII } from "node:url";
+
+
 
 const REDIRECT_CODES = new Set([301, 302, 303, 307, 308]);
 
@@ -54,7 +56,7 @@ export async function ssrfFetch(urlString, {
   for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount++) {
     assertHttpsOnly(current);
 
-    const hostAscii = toASCII(current.hostname).toLowerCase();
+    const hostAscii = domainToASCII(current.hostname).toLowerCase();
     if (net.isIP(hostAscii)) throw new Error("IP literals not allowed");
     if (allowHosts && !allowHosts.has(hostAscii)) throw new Error("Host not allowed");
 

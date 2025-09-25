@@ -94,6 +94,26 @@ curl -s "http://localhost:3000/api/v1/items/search?category=books&active=true" |
 * `search` rejects unknown params; at least one of `category|price|active` must be provided.
 * Status codes: reads → `200`, creates → `201`, bad input → `400`.
 
+**Postgres**
+
+* Check postgres connectivity
+  
+  docker exec -it nodeapi-postgres pg_isready -U postgres -d nodeapi
+
+* Getting postgres prompt 
+
+  psql -h 127.0.0.1 -U postgres -d nodeapi   # pass: postgres
+
+* Tables list
+  
+  \dt
+
+* Select & Trucate
+
+  Truncate Table "CouponRedemption";
+
+  SELECT * FROM "CouponRedemption";
+
 
 ## Reset to a fresh DB (ensure clean, student-like state)
 

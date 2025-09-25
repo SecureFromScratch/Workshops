@@ -19,6 +19,6 @@ export async function buy(req, res) {
 export async function redeem(req, res) {
   const { userId, code } = req.couponReq;
   const r = await redeemCoupon({ userId, code });
-  res.status(201).json({ id: r.id, userId, couponId: r.couponId, createdAt: r.createdAt, mode: "safe" });
+  res.status(201).json({ id: r.id, userId, couponId: r.couponId, createdAt: r.createdAt});
 }
 
