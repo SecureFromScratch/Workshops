@@ -39,12 +39,6 @@ export async function create(req, res) {
 }
 
 
-// multipart + file
-export async function createWithFile(req, res) {
-  const item = await svc.createItemWithFile(req.itemData, req.file ?? null);
-  return res.status(201).json(item);
-}
-
 
 
 

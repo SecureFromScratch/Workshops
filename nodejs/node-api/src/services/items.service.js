@@ -1,9 +1,14 @@
-import { promises as fs } from "fs";
-import path from "path";
-import crypto from "crypto";
+import path from "node:path";
+import fs from "node:fs/promises";
+import crypto from "node:crypto";
+import { fileTypeFromBuffer } from "file-type";
+import { prisma } from "../prisma.js";
 
-import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
+const ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
+
+
 
 export async function listItems() {
   return prisma.item.findMany({ orderBy: { id: "asc" } });
@@ -39,30 +44,8 @@ export async function create(data) {
 }
 
 
-
-
-
-export async function createItemWithFile(data, file) {
-  if (!file) return createItem(data);
-  const uploadsDir = path.resolve("uploads/items");
-  await fs.mkdir(uploadsDir, { recursive: true });
-  const safeName = crypto.randomUUID();                 // <-- define it
-  const finalPath = path.join(uploadsDir, safeName);
-  await fs.writeFile(finalPath, file.buffer);
-
-  const payload = {
-    ...data,
-    fileName: file.originalname,
-    filePath: safeName,                                  // store server name only
-    mimeType: file.detectedMime || file.mimetype,
-    fileSize: file.size,
-  };
-
-  try {
-    return await prisma.item.create({ data: payload });
-  } catch (e) {
-
-    try { await fs.unlink(finalPath); } catch { }
-    throw e;
-  }
+// Optional: plain create without file
+export async function createItem(data) {
+   return prisma.item.create({ data });
 }
+
