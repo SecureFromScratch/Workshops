@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { fileTypeFromBuffer } from "file-type";
+import { validateExternalImageUrl } from "../security/url-guard.js";
+
 
 // src/middlewares/validateItemCreate.js
 const ItemCreateSchema = z.object({
@@ -7,8 +9,8 @@ const ItemCreateSchema = z.object({
   category: z.string().trim().min(1),
   price: z.coerce.number().nonnegative(),
   active: z.coerce.boolean().default(true),
-  imageUrl: z.string().trim().url().max(2048)   
-   .optional(),
+  imageUrl: z.string().trim().url().max(2048)
+    .optional(),
 });
 
 
@@ -25,7 +27,11 @@ export async function validateItemCreate(req, res, next) {
       });
     }
     req.itemData = parsed.data; // sanitized payload
-    
+
+    if ("imageUrl" in req.itemData) {
+      req.itemData.imageUrl = await validateExternalImageUrl(req.itemData.imageUrl);
+    }
+
 
     // optional file checks (magic bytes)
     if (req.file) {

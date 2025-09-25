@@ -1,7 +1,9 @@
 import * as svc from "../services/items.service.js";
 import { normalizeQuery } from "../utils/normalize.js";
 //import { normalizeQuery } from "../utils/normalize.js";
+import { ssrfFetch } from "../security/ssrfFetch.js";
 
+const allowHosts = new Set(["images.example-cdn.com", "static.example.com"]);
 
 
 export async function getByCriteria(req, res) {
@@ -18,7 +20,13 @@ export async function list(req, res) {
     items.map(async (it) => {
       if (!it.imageUrl) return it;
       try {
-        const resp = await fetch(it.imageUrl, { redirect: "follow" });
+        //const resp = await fetch(it.imageUrl, { redirect: "follow" });
+
+        const resp = await ssrfFetch("https://images.example-cdn.com/path/pic.jpg", {
+        allowHosts,
+        maxBytes: 3 * 1024 * 1024, // 3MB cap
+        });
+
         if (!resp.ok) throw new Error();
         const buf = Buffer.from(await resp.arrayBuffer());
         return { ...it, imageBase64: buf.toString("base64") };
