@@ -5,7 +5,6 @@ import { fileTypeFromBuffer } from "file-type";
 import { prisma } from "../prisma.js";
 
 
-const prisma = new PrismaClient();
 const ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 
