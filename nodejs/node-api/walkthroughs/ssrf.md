@@ -52,7 +52,8 @@ const resp = await fetch(it.imageUrl, { redirect: "follow" });
 With:
 
 ```js
-const resp = await ssrfFetch("https://images.example-cdn.com/path/pic.jpg", {
+const resp = await ssrfFetch("https://images.example-cdn.com/path/pic.jpg");
+
 ```
 
 **What this does**
@@ -67,6 +68,26 @@ const resp = await ssrfFetch("https://images.example-cdn.com/path/pic.jpg", {
 * Provides **defense-in-depth** (host allowlist, IP filtering, redirect policing, strict limits), making SSRF and egress abuse far harder.
 
 
+## 3. Test!
 
+### Creating an item with malicious imageUrl (change the address to yours)
+
+```bash
+curl -sS -X POST "http://your-ip-address:3000/api/v1/items/create" \
+  -H "Content-Type: application/json" \
+  --data '{"name":"Uncle Tom","category":"books","price":26,"active":true,"imageUrl":"http://localhost:3000/internal/top-secret"}' | jq .
+
+
+```
+
+### Checking the content 
+
+It shouldn't work also because of the first fix, you can cancel the first fix to test the second one
+
+```bash
+curl -sS "http://localhost:3000/api/v1/items" | jq .
+
+
+```
 
 
