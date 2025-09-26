@@ -67,7 +67,6 @@ export async function createWithFile(req, res) {
 Create:
 
 ```js
-const ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 export async function createItemWithFile(data, file) {
    if (!file) return createItem(data);
