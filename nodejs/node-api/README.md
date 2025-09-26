@@ -1,6 +1,6 @@
 # Node API + Postgres (DB in Docker, API local)
 
-Secure catalog API with file upload, Prisma ORM, and Postgres. Students run **Postgres in Docker** and the **API locally** for fast iteration.
+Secure coding lab, catalog API with Prisma ORM, and Postgres. Students run **Postgres in Docker** and the **API locally** for fast iteration.
 
 ## Prerequisites
 
