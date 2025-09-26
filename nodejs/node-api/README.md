@@ -104,6 +104,16 @@ curl -s "http://localhost:3000/api/v1/items/search?category=books&active=true" |
 
   psql -h 127.0.0.1 -U postgres -d nodeapi   # pass: postgres
 
+  **Important Note**
+  The password shown in this lab is **for training/demo purposes only**.
+  In a real environment you should:
+
+  * Use a **long, randomly generated password** (at least 16–20 characters).
+  * Mix **uppercase, lowercase, numbers, and symbols**.
+  * Never reuse passwords across systems.
+  * Store secrets in a **password manager** or a **secrets vault** (e.g., HashiCorp Vault, AWS Secrets Manager, Azure Key Vault).
+  * Rotate regularly and enforce **least-privilege access**.
+
 * Tables list
   
   \dt
