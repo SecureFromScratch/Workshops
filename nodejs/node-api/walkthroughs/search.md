@@ -18,21 +18,26 @@ r.get("/search", asyncHandler(ctrl.getByCriteria));
 With:
 
 ```js
-r.get("/search", searchCriteria, asyncHandler(ctrl.getByCriteria));
+r.get("/search", searchCriteria , applyPagination,asyncHandler(ctrl.getByCriteria)); 
 ```
 Take a look at the searchCriteria middleware in 
 src/middlewares/searchCriteria.js
 
+Take a look at the pagination middleware in 
+src/middlewares/pagination.js
+
+
 **What this does**
 
-* Ensures every `/search` request is **validated and normalized** before it reaches your controller.
-* Applies an **allowlist** (category/price/active) and rejects unknown/invalid params.
-* Establishes a consistent place to attach **`req.criteria`** (and, if you add it there, **`req.page`**).
+* Validates and normalizes **allowed** query params (category/price/active) and **pagination** (page/pageSize).
+* **Rejects** unknown/duplicate params and out-of-range values with **400**.
+* Sets **`req.criteria`** and **`req.pagination`** (`limit`/`offset`) before the controller runs.
 
 **Why it matters**
 
-* Stops “match-all” and malformed queries early, reducing wasteful DB scans.
-* Moves input parsing out of business logic (clean separation of concerns).
+* **Bounds DB work** (always applies LIMIT/OFFSET) and blocks table-wide scans → mitigates CWE-400.
+* **Separation of concerns**: validation in middleware, business logic in service → simpler, testable, safer code.
+
 ---
 
 ## 2. Update the Controller
@@ -42,26 +47,13 @@ src/middlewares/searchCriteria.js
 Replace:
 
 ```js
-export async function getByCriteria(req, res) {
   const items = await svc.getItemsByCriteria(req.query ?? {});
-  res.json(items);
-}
 ```
 
 With:
 
 ```js
-export async function getByCriteria(req, res, next) {
-  try {
-    const items = await svc.getItemsByCriteria({
-      criteria: req.criteria,
-      page: req.page, // from middleware
-    });
-    res.json(items);
-  } catch (e) {
-    next(e);
-  }
-}
+ const items = await svc.getItemsByCriteria(req.criteria, req.pagination);
 ```
 **What this does**
 
@@ -104,19 +96,21 @@ export async function getItemsByCriteria(criteria = {}) {
 With:
 
 ```js
-export async function getItemsByCriteria({ criteria, page }) {
-  if (!criteria || Object.keys(criteria).length === 0) {
-    throw new Error("At least one filter is required");
-  }
+export async function getItemsByCriteria(criteria = {}, { limit, offset } = {}) {
+  const safeLimit  = clamp(limit  ?? PAGINATION.DEFAULT_PAGE_SIZE, 1, PAGINATION.MAX_PAGE_SIZE);
+  const safeOffset = Number.isFinite(offset) ? Math.max(offset, 0) : 0; // ✅ ensure number
 
-  const take = Math.min(Math.max(1, page?.take ?? 50), 100);
+  const where = {
+    ...(criteria.category ? { category: criteria.category } : {}),
+    ...(typeof criteria.price === "number"  ? { price: criteria.price } : {}),
+    ...(typeof criteria.active === "boolean" ? { active: criteria.active } : {}),
+  };
 
   return prisma.item.findMany({
-    where: criteria,
+    where,
     orderBy: { id: "asc" },
-    take,
-    ...(page?.cursorId ? { cursor: { id: page.cursorId }, skip: 1 } : {}),
-    select: { id: true, name: true, price: true, category: true, active: true },
+    take: safeLimit,
+    skip: safeOffset,            
   });
 }
 ```
@@ -124,16 +118,33 @@ export async function getItemsByCriteria({ criteria, page }) {
 
 **What this does**
 
-* **Requires a selective filter** (no empty criteria → no table-wide reads).
-* **Clamps page size** (`take`) to a safe maximum.
-* Supports **cursor pagination** to avoid deep offsets.
-* **Trims payload** via `select` to reduce bandwidth.
+* Trusts **typed, validated criteria** (no ad-hoc coercions) to build a safe `where`.
+* Enforces **final clamps** on `limit/offset` and always sends `take/skip` (with `skip` ≥ 0).
+* Uses a **stable, indexed order** (`id ASC`) for predictable, cacheable pagination.
 
 **Why it matters**
 
-* Eliminates the core DoS vector: unbounded, match-all queries.
-* Adds defense-in-depth even if upstream validation is bypassed.
+* Bounds the query size → **prevents uncontrolled resource consumption (CWE-400)**.
+* Avoids table-wide scans and costly sorts → **predictable query cost**.
+* Adds **defense-in-depth** if upstream validation is bypassed.
 
 
+------------------------------
 
+## 4. Test the Challenges
 
+### Valid query (should return array of items)
+
+curl -s "http://localhost:3000/api/v1/items/search?category=books&active=true&page=1&pageSize=5" | jq .
+
+### Invalid param (should 400)
+
+curl -s "http://localhost:3000/api/v1/items/search?foo=bar" | jq .
+
+### Duplicate key (should 400)
+
+curl -s "http://localhost:3000/api/v1/items/search?category=books&category=other" | jq .
+
+### Oversized pageSize (should clamp / reject based on config)
+
+curl -s "http://localhost:3000/api/v1/items/search?pageSize=5000" | jq .

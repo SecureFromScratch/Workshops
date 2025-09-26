@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import crypto from "node:crypto";
 import { fileTypeFromBuffer } from "file-type";
 import { prisma } from "../prisma.js";
+import { PAGINATION, clamp } from "../config/pagination.js";
 
 
 const ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);
@@ -32,19 +33,25 @@ export async function getItemsByCriteria(criteria = {}) {
 }
 
 
+
+
+
+
 export async function create(data) {
   if (!data || !data.name || !data.category || typeof data.price !== "number") {
     throw new Error("createItem: missing required fields");
   }
-  return prisma.item.create({ data: {
-    name: data.name, category: data.category, price: data.price,
-    active: data.active ?? true, fileName: null, filePath: null, mimeType: null, fileSize: null, imageUrl: data.imageUrl ?? null
-  }});
+  return prisma.item.create({
+    data: {
+      name: data.name, category: data.category, price: data.price,
+      active: data.active ?? true, fileName: null, filePath: null, mimeType: null, fileSize: null, imageUrl: data.imageUrl ?? null
+    }
+  });
 }
 
 
 // Optional: plain create without file
 export async function createItem(data) {
-   return prisma.item.create({ data });
+  return prisma.item.create({ data });
 }
 
