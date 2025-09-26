@@ -6,6 +6,16 @@
 * Use the walk-through: walkthroughs/*
 
 ---------------------------
+
+## Preparations
+
+Go to the README for Installation and sanity test
+
+
+---------------------------
+
+
+
 ## Uncontrolled Resource Consumption 
   
   CWE 400
