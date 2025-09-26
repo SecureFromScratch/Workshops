@@ -131,7 +131,7 @@ export async function getItemsByCriteria(criteria = {}, { limit, offset } = {}) 
 
 ------------------------------
 
-## 4. Test the Challenges
+## 4. Test!
 
 ### Valid query (should return array of items)
 
