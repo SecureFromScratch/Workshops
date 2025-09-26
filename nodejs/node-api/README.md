@@ -12,15 +12,18 @@ Secure coding lab, catalog API with Prisma ORM, and Postgres. Students run **Pos
 ## 1) Clone & env (sparse checkout of node-api)
 
 ```bash
-# Clone repo shallow, no blobs, sparse
-git clone --depth=1 --filter=blob:none --sparse https://github.com/SecureFromScratch/Workshops.git node-api
-cd node-api
+# Clone shallow, no blobs, sparse
+git clone --depth=1 --filter=blob:none --sparse https://github.com/SecureFromScratch/Workshops.git
+cd Workshops
 
 # Pull ONLY the node-api project
-git sparse-checkout set Workshops/nodejs/node-api
+git sparse-checkout set nodejs/node-api
 
 # Work inside node-api
-cd Workshops/nodejs/node-api
+cd nodejs/node-api
+
+# Create local env
+cp .env.example .env
 
 # Create local env
 cp .env.example .env
