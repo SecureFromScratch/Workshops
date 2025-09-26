@@ -60,7 +60,9 @@ npx prisma db seed
 
 ```bash
 # if you have a dev script (nodemon):
+npx nodemon src/server.js
 npm run dev
+
 # otherwise:
 node src/server.js
 ```
@@ -72,6 +74,8 @@ Here’s a tighter “Quick test” + cleaner endpoints section:
 ## 5) Quick test
 
 ```bash
+# Run 
+
 # Health
 curl -s http://localhost:3000/health
 
