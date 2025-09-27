@@ -14,24 +14,60 @@ export async function listItems() {
   return prisma.item.findMany({ orderBy: { id: "asc" } });
 }
 
-export async function getItemsByCriteria(criteria = {}) {
-  const where = {};
-  if (criteria.category != null) {
-    where.category = String(criteria.category);
-  }
-  if (criteria.price != null) {
-    const n = Number(criteria.price);
-    if (Number.isFinite(n)) {
-      where.price = n;               // Prisma expects a number
-    }
-  }
-  if (criteria.active != null) {
-    const v = String(criteria.active).toLowerCase();
-    where.active = v === "true" || v === "1" || v === "on";
-  }
-  return prisma.item.findMany({ where, orderBy: { id: "asc" } });
+export async function getItemsByCriteria(criteria = {}, { limit, offset } = {}) {
+  const safeLimit  = clamp(limit  ?? PAGINATION.DEFAULT_PAGE_SIZE, 1, PAGINATION.MAX_PAGE_SIZE);
+  const safeOffset = Number.isFinite(offset) ? Math.max(offset, 0) : 0; // ✅ ensure number
+
+  const where = {
+    ...(criteria.category ? { category: criteria.category } : {}),
+    ...(typeof criteria.price === "number"  ? { price: criteria.price } : {}),
+    ...(typeof criteria.active === "boolean" ? { active: criteria.active } : {}),
+  };
+
+  return prisma.item.findMany({
+    where,
+    orderBy: { id: "asc" },
+    take: safeLimit,
+    skip: safeOffset,            
+  });
 }
 
+export async function createItemWithFile(data, file) {
+   if (!file) return createItem(data);
+
+   // 1) Verify content by bytes (never trust client mimetype)
+   const detected = await fileTypeFromBuffer(file.buffer);
+   if (!detected || !ALLOWED_MIME.has(detected.mime)) {
+      throw new Error("Unsupported or unrecognized file type");
+   }
+
+   // 2) Prepare destination (outside web root if applicable)
+   const uploadsDir = path.resolve("uploads/items");
+   await fs.mkdir(uploadsDir, { recursive: true });
+
+   // 3) Server-controlled filename (no user path/extension)
+   const safeName = `${crypto.randomUUID()}.${detected.ext}`;
+   const finalPath = path.join(uploadsDir, safeName);
+
+   // 4) Write bytes
+   await fs.writeFile(finalPath, file.buffer, { flag: "wx" }); // fail if exists
+
+   const payload = {
+      ...data,
+      fileName: file.originalname,          // display only
+      filePath: safeName,                   // server-side name only
+      mimeType: detected.mime,
+      fileSize: file.size
+   };
+
+   try {
+      return await prisma.item.create({ data: payload });
+   } catch (e) {
+      // best-effort cleanup to avoid orphaned files
+      try { await fs.unlink(finalPath); } catch {}
+      throw e;
+   }
+}
 
 
 

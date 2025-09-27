@@ -27,7 +27,11 @@ export async function validateItemCreate(req, res, next) {
       });
     }
     req.itemData = parsed.data; // sanitized payload
-    
+  
+    if ("imageUrl" in req.itemData) {
+      req.itemData.imageUrl = await validateExternalImageUrl(req.itemData.imageUrl);
+    }
+
 
     // optional file checks (magic bytes)
     if (req.file) {

@@ -72,7 +72,7 @@ model CouponRedemption {
 
   coupon Coupon @relation(fields: [couponId], references: [id])
 
-   @@index([userId, couponId])
+   @@unique([userId, couponId]) // SAFE: 1 per user
   @@index([couponId])
 }
 

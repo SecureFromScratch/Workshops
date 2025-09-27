@@ -7,11 +7,15 @@ const allowHosts = new Set(["images.example-cdn.com", "static.example.com"]);
 
 
 export async function getByCriteria(req, res) {
-  const items = await svc.getItemsByCriteria(req.query ?? {});
+  //const items = await svc.getItemsByCriteria(req.query ?? {});
+   const items = await svc.getItemsByCriteria(req.criteria, req.pagination);
   res.json(items);
 }
 
-
+export async function createWithFile(req, res) {
+  const item = await svc.createItemWithFile(req.itemData, req.file ?? null);
+  return res.status(201).json(item);
+}
 
 
 export async function list(req, res) {
@@ -21,8 +25,8 @@ export async function list(req, res) {
     items.map(async (it) => {
       if (!it.imageUrl) return it;
       try {
-        const resp = await fetch(it.imageUrl, { redirect: "follow" });
-
+        //const resp = await fetch(it.imageUrl, { redirect: "follow" });
+        const resp = await ssrfFetch("https://images.example-cdn.com/path/pic.jpg");
         
         if (!resp.ok) throw new Error();
         const buf = Buffer.from(await resp.arrayBuffer());
