@@ -131,20 +131,28 @@ export async function getItemsByCriteria(criteria = {}, { limit, offset } = {}) 
 
 ------------------------------
 
-## 4. Test the Challenges
+## 4. Test!
 
 ### Valid query (should return array of items)
 
+```bash
 curl -s "http://localhost:3000/api/v1/items/search?category=books&active=true&page=1&pageSize=5" | jq .
+```
 
 ### Invalid param (should 400)
 
+```bash
 curl -s "http://localhost:3000/api/v1/items/search?foo=bar" | jq .
+```
 
 ### Duplicate key (should 400)
 
+```bash
 curl -s "http://localhost:3000/api/v1/items/search?category=books&category=other" | jq .
+```
 
 ### Oversized pageSize (should clamp / reject based on config)
 
+```bash
 curl -s "http://localhost:3000/api/v1/items/search?pageSize=5000" | jq .
+```
