@@ -17,20 +17,25 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan("dev"));
+
 
 app.get("/health", (_, res) => res.json({ status: "ok" }));
-app.use("/api/v1", routes);
-app.use(errorHandler);
 
-// ➕ show Multer/other errors in terminal and return JSON
-app.use((err, req, res, next) => {
-  console.error("ERROR:", err.message);
-  if (err.stack) console.error(err.stack);
-  res.status(400).json({ error: err.message });
-});
 
 app.use("/internal", internalRouter);
-//app.use("/orders", ordersRouter);
+
++app.use("/api/v1", routes);
+
+// one error handler, last
+app.use(errorHandler);
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  console.error("ERROR:", err.message);
+  if (err.stack) console.error(err.stack);
+  const status =
+    err.statusCode ??
+    (err.name === "ZodError" ? 400 : 500);
+  res.status(status).json({ error: err.message });
+});
 
 export default app;
