@@ -4,12 +4,58 @@ This tutorial guides you through prevent Race Condition in coupon redemption
 
 ---
 
-## 1) Update the service 
+## 1) Feel The race!
+
+Run the following curl command to run two or more requests in parallel
+
+printf '{"userId":1,"code":"SAVE10"}' > /tmp/p.json
+
+```bash
+# run two parallel requests
+( curl -v --http1.1 -H 'Content-Type: application/json' -H 'Connection: close' -d @/tmp/p.json http://localhost:3000/api/v1/orders/redeem-coupon & )
+( curl -v --http1.1 -H 'Content-Type: application/json' -H 'Connection: close' -d @/tmp/p.json http://localhost:3000/api/v1/orders/redeem-coupon & )
+wait
+```
+
+Check the database:
+```bash
+psql -h 127.0.0.1 -U postgres -d nodeapi # pass: postgres
+
+```
+
+
+```plsql
+SELECT * FROM "CouponRedemption";
+```
+
+If you want to try again Truncate
+
+```plsql
+Truncate Table "CouponRedemption";
+
+```
+
+If you check carefully the code, you would see that we used transaction. so why it didn't work?
+Because in postgres the transaction consistency isn't sequential by default.
+The default is **Read Committed isolation**. Meaning **each statement sees only rows that were committed before it began, but does not block concurrent inserts/updates and does not guarantee repeatable results**.
+
+---
+
+So two concurrent transactions can both see “no row” when checking, and both succeed in inserting, even though each one individually is atomic.
+
+
+
+
+## 2) Update the service 
 
 
 **File:** `src/services/orders.service.js`
 
-Replace :
+Add to the prisma.$transaction a second parameter :
+
+```js
+{ isolationLevel: Prisma.TransactionIsolationLevel.Serializable }
+```
 
 ```js
 export async function redeemCoupon({ userId, code }) {
@@ -28,45 +74,27 @@ export async function redeemCoupon({ userId, code }) {
     return tx.couponRedemption.create({
       data: { userId, couponId: coupon.id }
     });
-  });
+  }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
 }
-
-````
-With:
-
-```js
-export async function redeemCouponSafe({ userId, code }) {
-  return prisma.$transaction(async (tx) => {
-    const coupon = await tx.coupon.findFirst({ where: { code, active: true } });
-    if (!coupon) throw new Error("Coupon invalid");
-
-    try {
-      return await tx.couponRedemption.create({
-        data: { userId, couponId: coupon.id }
-      });
-    } catch (e) {
-      // P2002 = unique violation (already redeemed)
-      if (e.code === "P2002") throw new Error("Already used");
-      throw e;
-    }
-  });
-}
-
 ````
 
 **What this does**
 
-* Removes the racy **check-then-create** pattern and relies on a **single atomic create**.
-* Converts “already redeemed” into a **unique-constraint error** that is caught and mapped to a clean message.
+* Runs the transaction at Postgres’ strongest level (**SERIALIZABLE**), so the DB detects anomalies like “depend-on-absence” (write-skew/phantoms).
+* If two txns both “see no row” and try to insert, Postgres aborts one with **`40001 serialization_failure`** (Prisma `P2034`).
 
 **Why it matters**
 
-* Closes the TOCTOU window where two concurrent requests both pass the “used?” check.
-* Makes the database the **source of truth** for exclusivity under concurrency.
+* Forces a serial order of commits → stops both inserts from succeeding concurrently.
+* Eliminates the check-then-insert race **when you retry** the aborted transaction.
+
+**Why it’s not the right solution**
+
+* It’s heavier under contention and **still inferior to** (and not a replacement for) a **unique constraint `(userId, couponId)` + insert-first pattern**.
 
 ---
 
-## 2) Update the schema
+## 3) Update the schema
 
 **File:** `prisma/schema.prisma`
 
@@ -77,18 +105,22 @@ export async function redeemCouponSafe({ userId, code }) {
 ```
 
 * With:
-  ```plsql
-    @@unique([userId, couponId]) // SAFE: 1 per user
-  ```
+```plsql
+@@unique([userId, couponId]) // SAFE: 1 per user
+```
   In CouponRedemption model
 
 * Update schema
 
-  npx prisma db push || The next two commands  
-  
-  npx prisma migrate dev -n remove_unique_redemption
-  
+```bash
+  npx prisma db push
+```
+Or
+
+```bash
+  npx prisma migrate dev -n remove_unique_redemption  
   npx prisma generate
+```
 
   Stop + restart the Node.js server so the new client is loaded.
 
@@ -107,6 +139,7 @@ export async function redeemCouponSafe({ userId, code }) {
 
 
 
-
+--------------------------------------
+## 4) Test again!
 
 
