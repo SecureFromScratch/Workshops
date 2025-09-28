@@ -41,7 +41,7 @@ UPLOAD_DIR=./uploads/items
 
 ```script
 docker compose up -d
-# wait until db is healthy
+
 docker compose ps     
 ```
 
@@ -50,7 +50,7 @@ docker compose ps
 ```bash
 npm ci
 npx prisma generate
-npx prisma migrate deploy   # or: npx prisma migrate dev
+npx prisma migrate deploy  
 npx prisma db seed
 ```
 
