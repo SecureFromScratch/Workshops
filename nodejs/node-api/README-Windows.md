@@ -39,9 +39,10 @@ UPLOAD_DIR=./uploads/items
 
 ## 2) Start Postgres (Docker)
 
-```bash
+```script
 docker compose up -d
-docker compose ps     # wait until db is healthy
+# wait until db is healthy
+docker compose ps     
 ```
 
 ## 3) Install deps & prepare DB (host)
