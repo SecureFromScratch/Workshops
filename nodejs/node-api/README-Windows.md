@@ -53,7 +53,7 @@ npx prisma generate
 npx prisma migrate deploy  
 npx prisma db seed
 ```
-## 4) Install  (optioanl)
+## 4) Install jq (optional)
 
 `jq` is a command-line JSON processor.
 
