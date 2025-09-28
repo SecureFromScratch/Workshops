@@ -4,7 +4,7 @@ Secure coding lab, catalog API with Prisma ORM, and Postgres. Students run **Pos
 
 ## Prerequisites
 
-* Docker + Docker Compose
+* Docker + Docker Compose (more info in walkthroghs/install-docker-windows.md)
 * Node.js **20+** and npm
 * (Optional) `psql` CLI (more info in walkthroghs/install-plsql-client.md)
 
