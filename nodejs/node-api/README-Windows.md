@@ -78,10 +78,10 @@ Here’s a tighter “Quick test” + cleaner endpoints section:
 curl -s http://localhost:3000/health
 
 # List items
-curl -s http://localhost:3000/api/v1/items | jq .
+curl -s http://localhost:3000/api/v1/items
 
 # Search (allowlisted keys: category, price, active)
-curl -s "http://localhost:3000/api/v1/items/search?category=books&active=true" | jq .
+curl -s "http://localhost:3000/api/v1/items/search?category=books&active=true"
 ```
 
 ### Endpoints
