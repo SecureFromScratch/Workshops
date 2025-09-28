@@ -6,7 +6,7 @@ Secure coding lab, catalog API with Prisma ORM, and Postgres. Students run **Pos
 
 * Docker + Docker Compose
 * Node.js **20+** and npm
-* (Optional) `psql` CLI
+* (Optional) `psql` CLI (more info in walkthroghs/install-plsql-client.md)
 
 
 ## 1) Clone & env (sparse checkout of node-api)
