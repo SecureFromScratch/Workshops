@@ -53,8 +53,17 @@ npx prisma generate
 npx prisma migrate deploy  
 npx prisma db seed
 ```
+## 4) Install  (optioanl)
 
-## 4) Run the API (host)
+`jq` is a command-line JSON processor.
+
+* It reads JSON from stdin or a file.
+* It lets you query, filter, format, and transform JSON using its own mini-language.
+* It’s like `sed` or `awk`, but for JSON.
+For installation: 
+winget install jqlang.jq
+
+## 5) Run the API (host)
 
 ```bash
 # if you have a dev script (nodemon):
@@ -69,7 +78,7 @@ node src/server.js
 
 Here’s a tighter “Quick test” + cleaner endpoints section:
 
-## 5) Quick test
+## 6) Quick test
 
 ```bash
 # Run 
