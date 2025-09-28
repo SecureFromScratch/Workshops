@@ -125,15 +125,36 @@ export async function createItemWithFile(data, file) {
 
 ### Valid query (should return array of items)
 
+Linux
+
 ```bash
 base64 -d > /tmp/ok.png <<'B64'
 iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=
 B64
+```
 
+```bash
 curl -s -X POST "http://localhost:3000/api/v1/items/create-with-file"   -F 'name=Book A'   -F 'category=books'   -F 'price=15'   -F 'active=true'   -F 'file=@/tmp/ok.png;type=image/png' | jq .
 ```
 
+Windows
+
+```powershell
+@"
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=
+"@ | ForEach-Object {
+   [System.Convert]::FromBase64String($_)
+} | Set-Content -Path "c:\TEMP\ok.png" -Encoding Byte
+```
+
+```powershell
+curl -s -X POST "http://localhost:3000/api/v1/items/create-with-file"   -F 'name=Book A'   -F 'category=books'   -F 'price=15'   -F 'active=true'   -F 'file=@/tmp/ok.png;type=image/png' | jq .
+```
+
+
 ### Unsupported File
+
+Linux
 
 ```bash
 echo "not an image" > /tmp/bad.txt
@@ -142,19 +163,52 @@ curl -s -X POST "http://localhost:3000/api/v1/items/create-with-file" \
 ```
 
 ### Fake File
+Linux
 
 ```bash
 base64 -d > /tmp/notpng.png <<'B64'
 UklGRiIAAABXRUJQVlA4ICAAAADQAgCdASoIAAgAAAcJaQAA3AA/v4AAA==
 B64
+```
 
+```bash
 curl -s -X POST "http://localhost:3000/api/v1/items/create-with-file"   -F 'name=Book A'   -F 'category=books'   -F 'price=15'   -F 'active=true'   -F 'file=@/tmp/notpng.png;type=image/png' | jq .
 ```
+
+Windows
+
+```powershell
+@"
+UklGRiIAAABXRUJQVlA4ICAAAADQAgCdASoIAAgAAAcJaQAA3AA/v4AAA==
+"@ | ForEach-Object {
+   [System.Convert]::FromBase64String($_)
+} | Set-Content -Path "c:\TEMP\notpng.png" -Encoding Byte
+```
+
+```powershell
+curl -s -X POST "http://localhost:3000/api/v1/items/create-with-file"   -F 'name=Book A'   -F 'category=books'   -F 'price=15'   -F 'active=true'   -F 'file=@/tmp/notpng.png;type=image/png' | jq .
+```
+
 
 ### Oversized File
 
 ```bash
 head -c 6000000 </dev/zero >/tmp/big.png
+```
+
+```bash
+curl -s -X POST http://localhost:3000/api/v1/items/create-with-file \
+  -F 'name=Big' -F 'category=books' -F 'price=1' -F 'active=true' \
+  -F 'file=@/tmp/big.png' | jq .
+```
+
+Windows
+
+```powershell
+ ([System.IO.File]::Open("c:\tmp\big.png",[System.IO.FileMode]::Create,[System.IO.FileAccess]::Write)).SetLength(6000000)
+```
+
+```powershell
 curl -s -X POST http://localhost:3000/api/v1/items/create-with-file \
   -F 'name=Big' -F 'category=books' -F 'price=1' -F 'active=true' \
   -F 'file=@/tmp/big.png' | jq .
