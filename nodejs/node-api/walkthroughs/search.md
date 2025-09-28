@@ -7,6 +7,12 @@ This tutorial guides you through updating the code to prevent uncontrolled resou
 
 ## 1. Update the Route
 
+Take a look at the searchCriteria middleware in 
+src/middlewares/searchCriteria.js
+
+Take a look at the pagination middleware in 
+src/middlewares/pagination.js
+
 **File:** `src/routes/items.routes.js`
 
 Replace:
@@ -20,11 +26,6 @@ With:
 ```js
 r.get("/search", searchCriteria , applyPagination,asyncHandler(ctrl.getByCriteria)); 
 ```
-Take a look at the searchCriteria middleware in 
-src/middlewares/searchCriteria.js
-
-Take a look at the pagination middleware in 
-src/middlewares/pagination.js
 
 
 **What this does**
