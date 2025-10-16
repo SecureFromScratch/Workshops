@@ -1,0 +1,26 @@
+:root { --gap: 12px; --radius: 12px; --shadow: 0 6px 20px rgba(0,0,0,.08); --muted: #6b7280; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: #f7f7f8; color: #0f172a; }
+header { position: sticky; top: 0; background: #ffffffcc; backdrop-filter: saturate(1.2) blur(6px); border-bottom: 1px solid #eee; padding: 14px max(16px, env(safe-area-inset-left)) 12px max(16px, env(safe-area-inset-right)); display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--gap); }
+h1 { font-size: 18px; margin: 0; letter-spacing: .2px; }
+#controls { display: flex; gap: var(--gap); align-items: center; }
+.input { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #e5e7eb; border-radius: 999px; padding: 8px 12px; box-shadow: var(--shadow); }
+.input input { border: 0; outline: 0; min-width: 220px; font-size: 14px; background: transparent; }
+.toggle { appearance: none; width: 40px; height: 22px; background: #e5e7eb; border-radius: 999px; position: relative; outline: none; cursor: pointer; }
+.toggle:checked { background: #22c55e; }
+.toggle::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: transform .18s ease; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.toggle:checked::after { transform: translateX(18px); }
+
+/* Two-panel layout */
+.layout { display: grid; grid-template-columns: 1fr 300px; gap: 16px; align-items: start; }
+
+/* Items panel */
+main { padding: 16px; max-width: 1200px; margin: 0 auto; }
+
+#status { display:flex; align-items:center; gap:8px; font-size: 13px; color: var(--muted); }
+.spinner { width:14px; height:14px; border: 2px solid #e5e7eb; border-top-color:#111827; border-radius:50%; animation:spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#empty { text-align: center; color: var(--muted); padding: 36px 0; }
+
+/* Ensure hidden really hides, regardless of other rules */
+[hidden] { display: none !important; }

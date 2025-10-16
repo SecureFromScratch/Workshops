@@ -1,0 +1,20 @@
+#grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px; display: grid; gap: 10px; }
+/*.name { font-weight: 600; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }*/
+.name { font-weight: 600; font-size: 16px; white-space: normal; overflow: break-word; overflow-wrap: anywhere; }
+.muted { color: var(--muted); font-size: 12px; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.badge { font-size: 11px; padding: 4px 8px; border-radius: 999px; border: 1px solid #e5e7eb; background:#fafafa; }
+/*.badge.active { color:#065f46; background:#ecfdf5; border-color:#bbf7d0; }*/
+/*.badge.inactive { color:#7f1d1d; background:#fef2f2; border-color:#fecaca; }*/
+.price { font-weight: 700; }
+.files { display: grid; gap: 4px; font-size: 12px; }
+details { border-top: 1px dashed #eee; padding-top: 8px; }
+summary { cursor: pointer; list-style: none; }
+summary::-webkit-details-marker { display:none }
+/* Item qty */
+.qty { margin-top: 6px; }
+.qty-input { width: 88px; padding: 6px 8px; border: 1px solid #e5e7eb; border-radius: 8px; }
+
+.media { margin: -6px -6px 8px; }
+.thumb { width: 100%; height: 160px; object-fit: cover; border-radius: 10px; display: block; }

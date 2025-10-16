@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>AnonBuy — Gift Card Redeem</title>
+   <link rel="stylesheet" href="redeem.css" />
+</head>
+<body>
+   <main class="wrap">
+      <form id="redeem-form" novalidate>
+         <h1 class="title">Redeem Gift Card</h1>
+         <label for="code" class="label">Gift Card Code</label>
+         <input id="code" name="code" class="input" type="text" inputmode="latin" autocomplete="one-time-code" required />
+         <button id="submit" class="btn" type="submit">Redeem</button>
+         <p id="msg" class="msg" aria-live="polite"></p>
+      </form>
+   </main>
+   <script src="redeem.js" defer></script>
+</body>
+</html>

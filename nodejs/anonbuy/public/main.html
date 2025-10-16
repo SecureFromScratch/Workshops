@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Items</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/items.css" />
+    <link rel="stylesheet" href="/cart.css" />
+  </head>
+  <header>
+    <h1>Items</h1>
+    <div id="controls">
+      <label class="input" title="Search by name or category">
+        <span aria-hidden="true">🔎</span>
+        <input id="q" type="search" placeholder="Search…" autocomplete="off" />
+      </label>
+      <!--label class="row">
+        <span class="muted">Active only</span>
+        <input id="onlyActive" type="checkbox" class="toggle" />
+      </label-->
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Left: Items -->
+    <section id="items-pane" aria-label="Items">
+      <div id="status" hidden><span class="spinner" aria-hidden="true"></span><span>Loading…</span></div>
+      <div id="grid" hidden></div>
+      <div id="empty" hidden>No items found.</div>
+    </section>
+
+    <!-- Right: Cart -->
+    <aside id="cart-pane" aria-label="Shopping Cart">
+      <h2>Shopping Cart</h2>
+      <div id="cart-list" class="cart-list" aria-live="polite"></div>
+      <div id="cart-empty" class="muted">Your cart is empty.</div>
+      <footer id="cart-footer" class="cart-footer">
+        <!-- Total row -->
+        <div class="row">
+          <strong>Total</strong>
+          <div id="cart-total" class="price"></div>
+        </div>
+        <!-- Credit row -->
+        <div class="row">
+          <span class="muted">Available Credit</span>
+          <div id="cart-credit" class="muted price"></div>
+        </div>
+
+        <!-- Coupon row -->
+        <div class="row">
+          <label class="muted" for="coupon-code">Coupon</label>
+          <div class="field">
+            <input id="coupon-code" type="text" inputmode="text" maxlength="64" placeholder="Enter code" autocomplete="off">
+            <button id="coupon-apply" class="button" type="button">Apply</button>
+          </div>
+        </div>
+
+        <!-- Buy row -->
+        <div class="row">
+          <div class="muted"></div>
+          <button id="buy-btn" class="button primary" type="button" disabled>Buy</button>
+        </div>
+      </footer>
+    </aside>
+  </main>
+
+  <!-- Item card -->
+  <template id="item-card">
+    <article class="card item-card" role="article">
+      <figure class="media" data-field="imageWrap" hidden>
+        <img class="thumb" data-field="image" loading="lazy" referrerpolicy="no-referrer" alt="" />
+      </figure>
+      <div class="row">
+        <div class="name" data-field="name"></div>
+        <span class="badge" data-field="category"></span>
+      </div>
+      <div class="row">
+        <div class="muted" data-field="createdAt"></div>
+        <div class="price" data-field="price"></div>
+      </div>
+      <!--div class="row">
+        <span class="badge active" data-field="active"></span>
+      </div-->
+      <div class="qty" data-field="qtyWrap" hidden>
+        <label>
+          <span class="muted">Qty</span>
+          <input type="number" class="qty-input" data-field="qty" min="0" step="1" inputmode="numeric" pattern="[0-9]*" />
+        </label>
+      </div>
+      <details data-field="fileDetails" hidden>
+        <summary class="muted">File</summary>
+        <div class="files">
+          <div><strong>Name:</strong> <span data-field="fileName"></span></div>
+          <div><strong>Size:</strong> <span data-field="fileSize"></span></div>
+          <div><strong>Type:</strong> <span data-field="mimeType"></span></div>
+        </div>
+      </details>
+    </article>
+  </template>
+
+  <!-- Cart line -->
+  <template id="cart-line">
+    <div class="cart-line">
+      <img class="cart-thumb" alt="" />
+      <div class="cart-info">
+        <div class="cart-name"></div>
+        <div class="cart-meta">
+          <span class="cart-qty"></span>
+          <span class="cart-unit"></span>
+          <span class="cart-total"></span>
+          <span class="cart-discount" hidden></span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script type="module" src="/client.js" defer></script>
+</body>

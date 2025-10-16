@@ -1,0 +1,87 @@
+:root {
+   --bg: rgba(0,0,0,0.55);
+   --fg: #fff;
+   --accent: #ffd54f;
+   --error: #ff6b6b;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+   height: 100%;
+   margin: 0;
+}
+
+body {
+   color: var(--fg);
+   background: #000 url("./images/anonbuy-cover-16x10.png") center center/contain no-repeat fixed;
+   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.wrap {
+   min-height: 100%;
+   display: grid;
+   place-items: center;
+   padding: 2rem;
+   backdrop-filter: blur(2px);
+}
+
+#redeem-form {
+   width: min(480px, 100%);
+   background: var(--bg);
+   padding: 1.5rem;
+   border-radius: 16px;
+   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.title {
+   margin: 0 0 1rem 0;
+   font-size: 1.5rem;
+   text-align: center;
+}
+
+.label {
+   display: block;
+   margin-bottom: 0.5rem;
+}
+
+.input {
+   width: 100%;
+   padding: 0.75rem 0.9rem;
+   border: 1px solid rgba(255,255,255,0.25);
+   border-radius: 10px;
+   background: rgba(0,0,0,0.35);
+   color: var(--fg);
+   outline: none;
+}
+
+.input:focus {
+   border-color: var(--accent);
+   box-shadow: 0 0 0 3px rgba(255,213,79,0.25);
+}
+
+.btn {
+   margin-top: 0.9rem;
+   width: 100%;
+   padding: 0.8rem 1rem;
+   border: 0;
+   border-radius: 10px;
+   background: var(--accent);
+   color: #000;
+   font-weight: 600;
+   cursor: pointer;
+}
+
+.btn[disabled] {
+   opacity: 0.6;
+   cursor: not-allowed;
+}
+
+.msg {
+   min-height: 1.25rem;
+   margin-top: 0.75rem;
+   font-size: 0.95rem;
+}
+
+.msg.error { color: var(--error); }
+.msg.ok { color: var(--accent); }
