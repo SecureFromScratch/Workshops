@@ -9,15 +9,8 @@ generator client {
 
 model Wallet {
   id      Int     @id @default(autoincrement())
-  userId  Int
-  balance Decimal @default(0)
-}
-
-model GiftCards {
-  id         Int      @id @default(autoincrement())
-  cardCode   String   @unique
-  amount     Int      @default(100)
-  redeemedBy Int?
+  code    String  @unique
+  balance Decimal @default(0) @db.Decimal(8, 2)
 }
 
 model Item {
@@ -45,13 +38,14 @@ enum OrderStatus {
 }
 
 model Order {
-  id             Int         @id @default(autoincrement())
-  createdAt      DateTime    @default(now())
-  status         OrderStatus @default(PENDING)
-  idempotencyKey String?     @unique
-  buyerIp        String?
+  id         Int         @id @default(autoincrement())
+  createdAt  DateTime    @default(now())
+  status     OrderStatus @default(PENDING)
+  walletCode String      @unique
+  buyerIp    String?
 
-  lines OrderLine[]
+  lines   OrderLine[]
+  coupons CouponRedemption[]
 }
 
 model OrderLine {
@@ -75,17 +69,20 @@ model Coupon {
   percent Int     @default(10)
   active  Boolean @default(true)
 
-  redemptions     CouponRedemption[]  
+  redemptions CouponRedemption[]
 }
 
 model CouponRedemption {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  couponId  Int
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  orderId    Int
+  couponId   Int
+  couponCode String?
+  redeemedAt DateTime @default(now())
+  percent    Int
 
+  order  Order  @relation(fields: [orderId], references: [id])
   coupon Coupon @relation(fields: [couponId], references: [id])
 
-   @@index([userId, couponId])
-  @@index([couponId])
+  @@index([orderId])
+  @@index([orderId, couponId])
 }

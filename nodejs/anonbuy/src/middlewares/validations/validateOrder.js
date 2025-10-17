@@ -7,7 +7,7 @@ export const OrderLineSchema = z.object({
 
 export const OrderSchema = z.object({
    lines: z.array(OrderLineSchema).min(0),
-   idempotencyKey: z.string().trim().min(8).max(128).optional()
+   walletCode: z.string().trim().min(1).max(256)
 }).strict();
 
 export function validateSetOrder(req, res, next) {

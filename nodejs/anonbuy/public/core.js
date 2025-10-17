@@ -4,8 +4,12 @@
 export const state = {
   items: [],
   filtered: [],
-  cart: new Map(), // itemId -> { quantity, unitPrice, totalPrice, discountedPrice }
-  idempotencyKey: loadIdem(),
+  cart: new Map(), // itemId -> { quantity, unitPrice, totalPrice }
+  coupons: [],
+  cartTotal: 0,
+  discountedTotal: 0,
+  //idempotencyKey: loadIdem(),
+  walletCode: loadWalletCode(),
   creditBalance: null
 };
 
@@ -20,11 +24,26 @@ export const els = {
   cartList: document.getElementById('cart-list'),
   cartEmpty: document.getElementById('cart-empty'),
   cartFooter: document.getElementById('cart-footer'),
+
   cartTotal: document.getElementById('cart-total'),
+  cartHolderOfDiscounted: document.getElementById('cart-holder-discounted'),
+  cartDiscounted: document.getElementById('cart-discounted'),
+  cartHolderOfSavings: document.getElementById('cart-holder-savings'),
+  cartSavings: document.getElementById('cart-savings'),
   cartCredit: document.getElementById('cart-credit'),
-  couponCode: document.getElementById('coupon-code'),
+
   couponApply: document.getElementById('coupon-apply'),
+  couponsList: document.getElementById('coupons-list'),
+  couponTpl: document.getElementById('coupon-pill'),
+  couponCodeInp: document.getElementById('coupon-code'),
+
   buyBtn: document.getElementById('buy-btn'),
+
+  walletMergeBtn: document.getElementById('wallet-merge-btn'),
+  walletMergeDlg: document.getElementById('wallet-merge-dialog'),
+  walletMergeCode: document.getElementById('wallet-merge-code'),
+  walletMergeCancel: document.getElementById('wallet-merge-cancel'),
+  walletMergeOk: document.getElementById('wallet-merge-ok'),
 };
 
 // ===== Utilities (bodies preserved) =====
@@ -55,9 +74,27 @@ export async function fetchJSON(url, opts={}) {
   const ctrl = new AbortController();
   const t = setTimeout(()=>ctrl.abort(), 10000);
   try {
-    const res = await fetch(url, { ...opts, signal: ctrl.signal, headers: { 'accept':'application/json', ...(opts.headers||{}) } });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
+    const res = await fetch(
+      url, { 
+        ...(opts.body ? { method: 'POST' } : {}), // before spread of opts to allow override of method
+        ...opts, 
+        signal: ctrl.signal, 
+        headers: { 
+          'accept':'application/json', 
+          ...(opts.headers||{}) 
+        } 
+      });
+    const isJson = res.headers.get("content-type")?.includes("application/json");
+    const data = isJson ? await res.json() : null;
+    if (!res.ok || !data) {
+      if (data && data.message) {
+        throw new Error(data.message);
+      }
+      else {
+        throw new Error('HTTP ' + res.status);
+      }
+    }
+    return data;
   } finally { 
     clearTimeout(t); 
   }
@@ -73,16 +110,18 @@ export function showStatus(show, msg) {
     }
 }
 
-function loadIdem(){ 
+/*function loadIdem(){ 
     const k = sessionStorage.getItem('idem'); 
     if (k) return k; 
     const v = crypto.randomUUID?.() || String(Date.now())+Math.random(); 
     sessionStorage.setItem('idem', v); 
     return v; 
-}
+}*/
 
-export function getOrderKey() {
-  return localStorage.getItem('idempotencyKey');
+function loadWalletCode(){ 
+    const k = sessionStorage.getItem('walletCode'); 
+    if (k) return k; 
+    window.location.assign("/index.html"); // surf back to main page 
 }
 
 export function getUserId() {

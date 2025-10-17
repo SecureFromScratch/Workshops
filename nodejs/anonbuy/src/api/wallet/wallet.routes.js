@@ -3,7 +3,7 @@ import asyncHandler from "../../middlewares/asyncHandler.js";
 import * as ctrl from "./wallet.controller.js";
 
 const r = Router();
-r.post("/redeem", asyncHandler(ctrl.redeem));
-r.get("/balance/:userId", asyncHandler(ctrl.balance));
+r.get("/balance/:code", asyncHandler(ctrl.balance));
+r.post("/withdraw", asyncHandler(ctrl.withdraw));
 
 export default r;

@@ -1,40 +1,32 @@
 import { prisma, Prisma } from "../../prisma.js";
 
-export async function redeemGiftCard({ code }) {
+export async function getWallet({ code }) {
+   const existing = await prisma.wallet.findUnique({ where: { code } });
+   return existing;
+}
+
+export async function transferEverything({ from, to }) {
    return prisma.$transaction(async (tx) => {
-      const card = await tx.giftCards.findUnique({
-         where: { cardCode: code },
-         select: { id: true, amount: true, redeemedBy: true }
-      });
-
-      if (!card) return -1;
-
-      if (card.redeemedBy == null) {
-         // simple new user id (no Users table): next integer after current max
-         const agg = await tx.wallet.aggregate({ _max: { userId: true } });
-         const userId = (agg._max.userId ?? 0) + 1;
-
-         await tx.wallet.create({
-            data: {
-               userId,
-               balance: new Prisma.Decimal(card.amount) // Decimal expects string/Decimal
-            }
-         });
-
-         await tx.giftCards.update({
-            where: { id: card.id },
-            data: { redeemedBy: userId }
-         });
-
-         return userId;
+      const fromWallet = await prisma.wallet.findUnique({ where: { code: from } });
+      if (!fromWallet) {
+         return { error: "Wallet to withdraw from not found" };
       }
 
-      return card.redeemedBy;
+      const transferAmount = fromWallet.balance;
+      if (transferAmount <= 0) {
+         return { error: "Wallet to withdraw from doesn't have any funds" };
+      }
+
+      const result = await prisma.wallet.update({
+         where: { code: to }, 
+         data: { balance: { increment: transferAmount } },
+      });
+
+      await prisma.wallet.update({
+         where: { code: from }, 
+         data: { balance: 0 }
+      });
+
+      return result;
    });
 }
-
-export async function getWallet({ userId }) {
-    const existing = await prisma.wallet.findMany({ where: { userId } });
-    return existing && existing[0];
-}
-

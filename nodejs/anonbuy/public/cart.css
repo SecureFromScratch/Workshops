@@ -8,9 +8,34 @@
 .cart-meta { display: flex; gap: 8px; font-size: 12px; color: var(--muted); }
 .cart-footer { border-top: 1px dashed #eee; margin-top: 12px; padding-top: 12px; }
 /* Cart footer rows */
-.price.over-budget { color:#b91c1c; font-weight:700; }
+.price.over-budget { color:white; background-color:#b91c1c; font-weight:700; }
+.price.savings { color:#02b900; font-weight:900; }
 .field { display:flex; gap:8px; align-items:center; }
-.field input { padding:6px 8px; border:1px solid #e5e7eb; border-radius:8px; min-width:160px; }
-.button { padding:8px 12px; border:1px solid #e5e7eb; background:#fff; border-radius:10px; cursor:pointer; }
+.field input { padding:6px 8px; border:1px solid #e5e7eb; border-radius:8px; min-width:100px; max-width: 12em }
+.button { padding:8px 12px; border:1px solid #e5e7eb; background:#afa; border-radius:10px; cursor:pointer; }
 .button.primary { border-color:#111827; background:#111827; color:#fff; }
 .button:disabled { opacity:.5; cursor:not-allowed; }
+
+/* Coupons */
+.coupon-list { display: grid; gap: 8px; margin-bottom: 8px; }
+.coupon-line {
+  display: flex; align-items: center; gap: 8px;
+  background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 6px 8px;
+}
+.coupon-code { font-weight: 600; }
+.coupon-percent { color: #374151; font-size: 12px; }
+.icon-btn {
+  border: 1px solid #e5e7eb; background: #fff; border-radius: 8px;
+  width: 28px; height: 28px; line-height: 26px; text-align: center; cursor: pointer;
+}
+.icon-btn:hover { background: #f9fafb; }
+
+/* popup */
+#wallet-merge-dialog { border: 0; border-radius: 12px; padding: 0; }
+#wallet-merge-dialog::backdrop { background: rgba(0,0,0,.35); }
+.wallet-merge { padding: 16px; min-width: 320px; display: grid; gap: 12px; }
+.wallet-merge h3 { margin: 0; font-size: 16px; }
+.wallet-merge label { display: grid; gap: 6px; font-size: 14px; }
+#wallet-merge-code { padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px; }
+.wallet-merge .actions { display: flex; gap: 8px; justify-content: flex-end; }

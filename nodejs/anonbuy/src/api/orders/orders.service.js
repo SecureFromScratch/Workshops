@@ -1,12 +1,15 @@
 import { prisma, Prisma } from "../../prisma.js";
 
-export async function getOrder({ idempotencyKey }) {
-    const existing = await prisma.order.findUnique({ where: { idempotencyKey }, include: { lines: true } });
-    return existing;
+export async function getOrder({ walletCode }) {
+   const existing = await prisma.order.findUnique({ 
+      where: { walletCode }, 
+      include: { lines: true, coupons: true } 
+   });
+   return existing;
 }
 
-export async function setOrder({ lines, idempotencyKey, buyerIp }) {
-  return prisma.$transaction(async (tx) => {
+export async function setOrder({ lines, walletCode, buyerIp }) {
+   return prisma.$transaction(async (tx) => {
       // 1) Validate all items in ONE query
       const itemIds = [...new Set(lines.map(l => l.itemId))];
       const items = await tx.item.findMany({
@@ -30,10 +33,7 @@ export async function setOrder({ lines, idempotencyKey, buyerIp }) {
          return { itemId, quantity, unitPrice, totalPrice };
       });
 
-      // 3) Create new or reset existing-by-idempotency
-      const existing = idempotencyKey
-         ? await tx.order.findUnique({ where: { idempotencyKey } })
-         : null;
+      const existing = await tx.order.findUnique({ where: { walletCode } })
 
       if (existing) {
          // reset lines
@@ -47,7 +47,7 @@ export async function setOrder({ lines, idempotencyKey, buyerIp }) {
                   create: lineData
                }
             },
-            include: { lines: true }
+            include: { lines: true, coupons: true }
          });
       }
 
@@ -55,32 +55,46 @@ export async function setOrder({ lines, idempotencyKey, buyerIp }) {
       return tx.order.create({
          data: {
             status: "PENDING",
-            idempotencyKey: idempotencyKey ?? null,
+            walletCode: walletCode,
             buyerIp: buyerIp ?? null,
             lines: { create: lineData }
          },
-         include: { lines: true }
+         include: { lines: true, coupons: true }
       });
    });
 }
 
-export async function redeemCoupon({ userId, code }) {
+export async function redeemCoupon({ walletCode, couponCode }) {
   return prisma.$transaction(async (tx) => {
-    const coupon = await tx.coupon.findFirst({ where: { code, active: true } });
-    if (!coupon) throw new Error("Coupon invalid");
+    // USING findFirst IS BAD - DO YOU KNOW WHY?
+    const coupon = await tx.coupon.findFirst({ where: { code: couponCode, active: true } });
+    if (!coupon) return { error: "Coupon invalid" };
+
+    const order = await tx.order.findUnique({ where: { walletCode } });
+    if (!order) return { error: "No current order" };
 
     const used = await tx.couponRedemption.findFirst({
-      where: { userId, couponId: coupon.id }
+      where: { orderId: order.id, couponId: coupon.id }
     });
-    if (used) throw new Error("Already used");
+    if (used) return { error: "Already used" };
 
     // widen race window
     await new Promise(r => setTimeout(r, 300));
 
     return tx.couponRedemption.create({
-      data: { userId, couponId: coupon.id }
+      data: { couponId: coupon.id, couponCode: coupon.code, orderId: order.id, percent: coupon.percent },
     });
   });
 }
 
+export async function removeCoupon({ walletCode, couponId }) {
+  return prisma.$transaction(async (tx) => {
+    const order = await tx.order.findUnique({ where: { walletCode } });
+    if (!order) return { error: "No current order" };
+
+    return tx.couponRedemption.deleteMany({
+      where: { orderId: order.id, couponId }
+    });
+  });
+}
 

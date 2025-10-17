@@ -1,14 +1,13 @@
 import * as svc from "./orders.service.js";
-import { redeemCoupon } from "./orders.service.js";
 
 export async function currentOrder(req, res) {
-  const { idempotencyKey } = req.params;
-  if (!idempotencyKey) {
+  const { walletCode } = req.params;
+  if (!walletCode) {
       res.status(200).json({ });
       return;
   }
 
-  const order = await svc.getOrder({ idempotencyKey });
+  const order = await svc.getOrder({ walletCode });
   if (!order) { 
       res.status(200).json({ });
       return;
@@ -24,20 +23,24 @@ export async function currentOrder(req, res) {
       unitPrice,
       totalPrice
     })),
+    coupons: order.coupons.map(
+      ({ id, orderId, couponId, couponCode, percent }) => 
+      ({ id ,orderId, couponId, couponCode, percent })
+    )
   });
 }
 
 // lines: Array<{ itemId: number, quantity: number }>
 // order-level fields: { idempotencyKey?: string, buyerIp?: string }
 export async function setOrder(req, res) {
-  const { lines, idempotencyKey } = res.locals.data;
+  const { lines, walletCode } = res.locals.data;
   const buyerIp = (req.ip || req.socket?.remoteAddress || "").replace(/^::ffff:/, "");
 
   if (!Array.isArray(lines)) {
       throw new Error("lines must be an array");
   }
 
-  const order = await svc.setOrder({ lines, idempotencyKey, buyerIp });
+  const order = await svc.setOrder({ lines, walletCode, buyerIp });
   res.status(201).json({
     id: order.id,
     status: order.status,
@@ -48,6 +51,10 @@ export async function setOrder(req, res) {
       unitPrice,
       totalPrice
     })),
+    coupons: order.coupons.map(
+      ({ id, orderId, couponId, couponCode, percent }) => 
+      ({ id ,orderId, couponId, couponCode, percent })
+    )
   });
 }
 
@@ -65,12 +72,34 @@ export async function setOrderOld(req, res) {
       unitPrice,
       totalPrice
     })),
+    coupons: order.coupons.map(
+      ({ id, orderId, couponId, couponCode, percent }) => 
+      ({ id ,orderId, couponId, couponCode, percent })
+    )
   });
 }
 
-export async function redeem(req, res) {
-  const { userId, code } = req.couponReq;
-  const r = await redeemCoupon({ userId, code });
-  res.status(201).json({ id: r.id, userId, couponId: r.couponId, createdAt: r.createdAt});
+export async function redeemCoupon(req, res) {
+  // THERE'S A VULNERABILITY HERE - CAN YOU FIND IT?
+  const { walletCode, code } = req.couponReq;
+  const r = await svc.redeemCoupon({ walletCode, couponCode: code });
+  if (r.error) {
+    res.status(400).json({ message: r.error });
+  }
+  else {
+    res.status(201).json({ 
+      id: r.id, couponCode: code, couponId: r.couponId, percent: r.percent });
+  }
 }
 
+export async function removeCoupon(req, res) {
+  const { walletCode, couponId } = req.couponReq;
+  const r = await svc.removeCoupon({ walletCode, couponId });
+  console.log(r);
+  if (r.error) {
+    res.status(400).json({ message: r.error });
+  }
+  else {
+    res.status(200).json({ });
+  }
+}

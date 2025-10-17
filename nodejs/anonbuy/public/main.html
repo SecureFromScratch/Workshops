@@ -41,13 +41,9 @@
           <strong>Total</strong>
           <div id="cart-total" class="price"></div>
         </div>
-        <!-- Credit row -->
-        <div class="row">
-          <span class="muted">Available Credit</span>
-          <div id="cart-credit" class="muted price"></div>
-        </div>
 
-        <!-- Coupon row -->
+        <!-- Coupons and Apply row -->
+        <div id="coupons-list" class="coupon-list" aria-live="polite"></div>
         <div class="row">
           <label class="muted" for="coupon-code">Coupon</label>
           <div class="field">
@@ -56,12 +52,42 @@
           </div>
         </div>
 
+        <!-- Discounted Total -->
+        <div class="row" id="cart-holder-discounted">
+          <strong>Discounted Total</strong>
+          <div id="cart-discounted" class="price"></div>
+        </div>
+        <div class="row muted" id="cart-holder-savings">
+          <strong>You Save</strong>
+          <div id="cart-savings" class="price savings"></div>
+        </div>
+
+        <!-- Credit row -->
+        <div class="row">
+          <span class="muted">Available Credit</span>
+          <div id="cart-credit" class="muted price"></div>
+        </div>
+
         <!-- Buy row -->
         <div class="row">
-          <div class="muted"></div>
+          <button id="wallet-merge-btn" class="button" type="button" aria-haspopup="dialog">+💰</button>
           <button id="buy-btn" class="button primary" type="button" disabled>Buy</button>
         </div>
       </footer>
+      <dialog id="wallet-merge-dialog">
+        <div class="wallet-merge">
+          <h3>Merge Funds From Another Wallet</h3>
+          <label>
+            Wallet code
+            <input id="wallet-merge-code" type="text" maxlength="512" placeholder="Enter wallet code" autocomplete="off">
+          </label>
+          <div class="actions">
+            <button id="wallet-merge-cancel" class="button" type="button">Cancel</button>
+            <button id="wallet-merge-ok" class="button primary" type="button" disabled>OK</button>
+          </div>
+        </div>
+      </dialog>
+
     </aside>
   </main>
 
@@ -109,9 +135,16 @@
           <span class="cart-qty"></span>
           <span class="cart-unit"></span>
           <span class="cart-total"></span>
-          <span class="cart-discount" hidden></span>
         </div>
       </div>
+    </div>
+  </template>
+
+  <template id="coupon-pill">
+    <div class="coupon-line">
+      <span class="coupon-code"></span>
+      <span class="coupon-percent"></span>
+      <button class="icon-btn coupon-remove" type="button" aria-label="Remove coupon">✕</button>
     </div>
   </template>
 

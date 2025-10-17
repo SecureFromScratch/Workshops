@@ -1,19 +1,20 @@
 'use strict';
-import { state, els, setText, setHidden, fmtPrice, fetchJSON, showStatus } from './core.js';
+import { state, els, setHidden, fmtPrice, fetchJSON, showStatus } from './core.js';
 
 let itemsApi; // provided by main.js
 
 export function init({ itemsApi: injectedItems }) {
   itemsApi = injectedItems;
 
-if (els.couponApply) {
+  if (els.couponApply) {
     els.couponApply.addEventListener('click', applyCoupon);
   }
-  if (els.couponCode) {
-    els.couponCode.addEventListener('keydown', (e) => {
+  if (els.couponCodeInp) {
+    els.couponCodeInp.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') applyCoupon();
     });
   }
+
   if (els.buyBtn) {
     els.buyBtn.addEventListener('click', onBuy);
   }
@@ -33,7 +34,13 @@ export function toCartMap(lines) {
   return m;
 }
 
-export function renderCart() {
+export function renderAll() {
+  renderCart();
+  renderCoupons();
+  renderTotals();
+}
+
+function renderCart() {
   els.cartList.innerHTML = '';
   const frag = document.createDocumentFragment();
   let total = 0;
@@ -58,44 +65,92 @@ export function renderCart() {
     total += Number(effective) || 0;
 
     el.querySelector('.cart-total').textContent = `= ${fmtPrice(line.totalPrice)}`;
-    const disc = el.querySelector('.cart-discount');
-    if (line.discountedPrice != null && line.discountedPrice !== line.totalPrice) {
-      disc.textContent = `discounted: ${fmtPrice(line.discountedPrice)}`;
-      setHidden(disc, false);
-    } else {
-      setHidden(disc, true);
-    }
 
     frag.appendChild(el);
   }
 
   els.cartList.appendChild(frag);
   
+  const isEmpty = state.cart.size === 0;
+  
+  //setHidden(els.cartFooter, false);
+  setHidden(els.cartEmpty, !isEmpty);
+
+  // Repaint items so qty boxes appear/disappear
+  itemsApi.renderItems();
+
+  state.total = total;
+  state.discountedTotal = total;
+}
+
+export function renderTotals() {
+  const total = state.total;
+  let discountedTotal = state.discountedTotal || total;
+
+  els.cartTotal.textContent = fmtPrice(total);
+  let overBudgetElement = els.cartTotal;
+
+  if (discountedTotal < total) {
+    els.cartDiscounted.textContent = fmtPrice(discountedTotal);
+    els.cartSavings.textContent = fmtPrice(total - discountedTotal);
+    setHidden(els.cartHolderOfDiscounted, false);
+    setHidden(els.cartHolderOfSavings, false);
+    overBudgetElement = els.cartDiscounted;
+  } else {
+    setHidden(els.cartHolderOfDiscounted, true);
+    setHidden(els.cartHolderOfSavings, true);
+    discountedTotal = total;
+  }
+
   // Paint credit (can be null if endpoint failed)
   if (state.creditBalance == null) {
     els.cartCredit.textContent = '—';
   } else {
     els.cartCredit.textContent = fmtPrice(state.creditBalance);
   }
-    
-  const overBudget = (state.creditBalance != null) && (total > state.creditBalance);
 
-  // Paint total and over-budget state
-  els.cartTotal.textContent = fmtPrice(total);
+  const overBudget = (state.creditBalance != null) && (discountedTotal > state.creditBalance);
+
+  // Ensure no element has the over budget state
+  els.cartTotal.classList.remove('over-budget');
+  els.cartDiscounted.classList.remove('over-budget');
+  els.cartCredit.classList.remove('over-budget');
+  // Paint over-budget state
   if (overBudget) {
-    els.cartTotal.classList.add('over-budget');
-  } else {
-    els.cartTotal.classList.remove('over-budget');
+    overBudgetElement.classList.add('over-budget');
+    els.cartCredit.classList.add('over-budget');
   }
 
   const isEmpty = state.cart.size === 0;
-  
   els.buyBtn.disabled = isEmpty || overBudget;
-  //setHidden(els.cartFooter, false);
-  setHidden(els.cartEmpty, !isEmpty);
+}
 
-  // Repaint items so qty boxes appear/disappear
-  itemsApi.renderItems();
+function renderCoupons() {
+  let discounted = state.total;
+  state.discountedTotal = state.total;
+
+  if (!els.couponsList || !els.couponTpl) return;
+  els.couponsList.innerHTML = '';
+  const frag = document.createDocumentFragment();
+
+  for (const c of state.coupons) {
+    console.log(c);
+    const node = els.couponTpl.content.firstElementChild.cloneNode(true);
+    node.querySelector('.coupon-code').textContent = c.couponCode;
+    node.querySelector('.coupon-percent').textContent = `(${c.percent}% off)`;
+
+    const btn = node.querySelector('.coupon-remove');
+    btn.dataset.couponId = String(c.couponId);
+    btn.addEventListener('click', () => removeCoupon(c.couponId), { once: true });
+
+    discounted = (100.0 - c.percent) * discounted / 100.0;
+
+    frag.appendChild(node);
+  }
+
+  state.discountedTotal = discounted;
+
+  els.couponsList.appendChild(frag);
 }
 
 export function updateCartItem(itemId, quantity) {
@@ -107,9 +162,33 @@ export function updateCartItem(itemId, quantity) {
     state.cart.set(key, { quantity, unitPrice: unit, totalPrice: unit * quantity, discountedPrice: null });
   }
   // Optimistic UI
-  renderCart();
+  renderAll();
   // Persist debounced
   debouncedPersist();
+}
+
+async function removeCoupon(couponId) {
+  try {
+    showStatus(true, 'Removing coupon…');
+    const res = await fetch('/api/v1/order/remove-coupon', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'accept': 'application/json' },
+      body: JSON.stringify({ walletCode: state.walletCode, couponId })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: 'Remove failed' }));
+      throw new Error(err?.message || ('HTTP ' + res.status));
+    }
+
+    // keep order of remaining coupons
+    state.coupons = state.coupons.filter(c => String(c.couponId) !== String(couponId));
+
+    renderCoupons();
+    renderTotals();
+    showStatus(false);
+  } catch (e) {
+    showStatus(true, `Remove failed: ${e?.message || e}`);
+  }
 }
 
 function debounce(fn, ms) { let id; return (...args) => { clearTimeout(id); id = setTimeout(()=>fn(...args), ms); }; }
@@ -118,8 +197,8 @@ const debouncedPersist = debounce(persistCart, 300);
 async function persistCart() {
   const items = [...state.cart.entries()].map(([itemId, line]) => ({ itemId, quantity: line.quantity }));
   try {
-      const body = JSON.stringify({ idempotencyKey: state.idempotencyKey ?? null, lines: items });
-      const updated = await fetchJSON('/api/v1/order/change', {
+    const body = JSON.stringify({ walletCode: state.walletCode, lines: items });
+    const updated = await fetchJSON('/api/v1/order/change', {
       method: 'POST',
       headers: { 'content-type':'application/json' },
       body
@@ -127,12 +206,8 @@ async function persistCart() {
     if (!updated?.lines) {
       throw new Error('failed updating cart on server');
     }
-    state.cart = toCartMap(updated.lines);
-    /*else {
-      const current = await fetchJSON('/api/v1/order/' + state.idempotencyKey);
-      state.cart = toCartMap(current?.lines || []);
-    }*/
-    renderCart();
+    //state.cart = toCartMap(updated.lines);
+    //renderCart();
     showStatus(false);
   } catch (e) {
     showStatus(true, `Cart update failed: ${e?.message || e}`);
@@ -140,24 +215,32 @@ async function persistCart() {
 }
 
 async function applyCoupon() {
-  const code = (els.couponCode?.value || '').trim();
-  const userId = getUserId();
-  if (!userId || code.length < 3 || code.length > 64) {
-    showStatus(true, 'Invalid coupon or user id');
+  const code = (els.couponCodeInp?.value || '').trim();
+  if (code.length < 3 || code.length > 64) {
+    showStatus(true, 'Invalid coupon');
     return;
   }
   try {
     els.couponApply.disabled = true;
     showStatus(true, 'Applying coupon…');
-    await fetchJSON('/api/v1/coupon/redeem', {
+
+    const data = await fetchJSON('/api/v1/order/redeem-coupon', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ userId, code }) // matches your Zod schema
+      body: JSON.stringify({ walletCode: state.walletCode, code })
     });
-    // Refresh order to reflect discounts
-    const current = await fetchJSON('/api/v1/order/' + state.idempotencyKey);
-    state.cart = toCartMap(current?.lines || []);
-    renderCart();
+
+    // append to the end to preserve apply order
+    state.coupons.push({
+      id: data.id,
+      couponCode: data.couponCode,
+      couponId: data.couponId,
+      percent: data.percent
+    });
+
+    renderCoupons();
+    renderTotals();
+
     showStatus(false);
   } catch (e) {
     showStatus(true, `Coupon failed: ${e?.message || e}`);
@@ -176,8 +259,8 @@ async function onBuy() {
     els.buyBtn.disabled = true;
     showStatus(true, 'Placing order…');
     const payload = {
-      lines,                                   // OrderSchema.lines
-      idempotencyKey: state.idempotencyKey     // optional per schema
+      lines,
+      walletCode: state.walletCode
     };
     const res = await fetchJSON('/api/v1/order/buy', {
       method: 'POST',
@@ -186,9 +269,13 @@ async function onBuy() {
     });
     // Assuming success: clear local cart and refresh from server (if any)
     state.cart.clear();
-    const current = await fetchJSON('/api/v1/order/' + state.idempotencyKey).catch(() => null);
+    state.coupons = [];
+    const current = await fetchJSON('/api/v1/order/' + state.walletCode).catch(() => null);
     if (current?.lines) state.cart = toCartMap(current.lines);
-    renderCart();
+    if (current?.coupons) state.coupons = current.coupons;
+    console.log(state.coupons);
+
+    renderAll();
     showStatus(false);
   } catch (e) {
     showStatus(true, `Buy failed: ${e?.message || e}`);

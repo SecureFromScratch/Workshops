@@ -9,16 +9,3 @@ CREATE TABLE "public"."Wallet" (
 
     CONSTRAINT "Wallet_pkey" PRIMARY KEY ("id")
 );
-
--- CreateTable
-CREATE TABLE "public"."GiftCards" (
-    "id" SERIAL NOT NULL,
-    "cardCode" TEXT NOT NULL,
-    "amount" INTEGER NOT NULL DEFAULT 100,
-    "redeemedBy" INTEGER,
-
-    CONSTRAINT "GiftCards_pkey" PRIMARY KEY ("id")
-);
-
--- CreateIndex
-CREATE UNIQUE INDEX "GiftCards_cardCode_key" ON "public"."GiftCards"("cardCode");

@@ -26,7 +26,7 @@ body {
    backdrop-filter: blur(2px);
 }
 
-#redeem-form {
+#connect-form {
    width: min(480px, 100%);
    background: var(--bg);
    padding: 1.5rem;

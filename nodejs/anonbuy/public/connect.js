@@ -1,7 +1,7 @@
 (function () {
    "use strict";
 
-   const form = document.getElementById("redeem-form");
+   const form = document.getElementById("connect-form");
    const input = document.getElementById("code");
    const submit = document.getElementById("submit");
    const msg = document.getElementById("msg");
@@ -12,39 +12,35 @@
       msg.classList.toggle("ok", ok && !!text);
    }
 
-   async function postRedeem(code) {
+   async function connectToWallet(code) {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), 15000);
 
       try {
-         const res = await fetch("/api/v1/wallet/redeem", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "same-origin",
-            body: JSON.stringify({ code }),
+         const res = await fetch("/api/v1/wallet/balance/" + code, {
             signal: ctrl.signal
          });
 
          const isJson = res.headers.get("content-type")?.includes("application/json");
          const data = isJson ? await res.json() : null;
+         if (!data) {
+            throw new Error("Communication with server failed");
+         }
 
          if (!res.ok) {
-            const err = (data && (data.error || data.message)) || `Request failed with ${res.status}`;
+            const err = (data.error || data.message) || `Request failed with ${res.status}`;
             throw new Error(err);
          }
 
          console.log(data);
-         if (!data || typeof data.userId !== "number") {
-            throw new Error("Missing user Id");
-         }
-         if (!data || typeof data.next !== "string" || data.next.trim() === "") {
-            throw new Error("Missing redirect URL");
+         if (typeof data.balance !== "number" || data.balance <= 0) {
+            throw new Error("Wallet is empty. Try another Wallet.");
          }
 
-         localStorage.setItem("userId", data.userId.toString());
+         sessionStorage.setItem("walletCode", code);
 
          // Use assign to preserve history entry
-         window.location.assign(data.next);
+         window.location.assign("/main.html");
       } finally {
          clearTimeout(t);
       }
@@ -63,7 +59,7 @@
 
       submit.disabled = true;
       try {
-         await postRedeem(code);
+         await connectToWallet(code);
       } catch (err) {
          setMsg(String(err.message || err), false);
       } finally {
