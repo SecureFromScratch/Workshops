@@ -1,8 +1,8 @@
-import * as svc from "../services/orders.service.js";
-import { redeemCoupon } from "../services/orders.service.js";
+import * as svc from "./orders.service.js";
+import { redeemCoupon } from "./orders.service.js";
 
 export async function currentOrder(req, res) {
-  const { idempotencyKey } = req;
+  const { idempotencyKey } = req.params;
   if (!idempotencyKey) {
       res.status(200).json({ });
       return;

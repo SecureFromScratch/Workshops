@@ -7,7 +7,7 @@ This tutorial guides you through updating the code to prevent uncontrolled resou
 
 ## 1. Update the Route
 
-**File:** `src/routes/items.routes.js`
+**File:** `src/api/items/items.routes.js`
 
 Replace:
 

@@ -1,5 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { prisma, Prisma } from "../../prisma.js";
 
 export async function redeemGiftCard({ code }) {
    return prisma.$transaction(async (tx) => {

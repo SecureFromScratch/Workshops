@@ -17,8 +17,8 @@ els.q.addEventListener('input', Items.applyFilters);
    try {
       const [items, order, credit] = await Promise.all([
          fetchJSON('/api/v1/items'), 
-         fetchJSON('/api/v1/order/current'),
-         fetchJSON('/api/v1/giftcard/balance/' + userId).catch(() => ({ balance: null }))
+         fetchJSON('/api/v1/order/' + state.idempotencyKey),
+         fetchJSON('/api/v1/wallet/balance/' + userId).catch(() => ({ balance: null }))
       ]);
       if (!Array.isArray(items)) throw new Error('Unexpected items payload');
       state.items = items;

@@ -1,4 +1,4 @@
-import * as svc from "../services/giftcard.service.js";
+import * as svc from "./wallet.service.js";
 
 export async function redeem(req, res) {
    const { code } = req.body;
@@ -9,7 +9,7 @@ export async function redeem(req, res) {
 
   const userId = await svc.redeemGiftCard({ code });
   if (userId === -1) { 
-      res.status(400).json({ error: "Failed to redeem gift card" });
+      res.status(400).json({ error: "Failed to redeem wallet/gift card" });
       return;
   }
 
@@ -19,13 +19,13 @@ export async function redeem(req, res) {
 export async function balance(req, res) {
   const userId = parseInt(req.params.userId);
   if (Number.isNaN(userId) || userId <= 0) {
-      res.status(400).json({ error: "No current giftcard wallet. Try going to index.html"});
+      res.status(400).json({ error: "No current wallet/giftcard wallet. Try going to index.html"});
       return;
   }
 
   const wallet = await svc.getWallet({ userId });
   if (!wallet) { 
-      res.status(400).json({ error: "Not a valid giftcard wallet. Try going to index.html"});
+      res.status(400).json({ error: "Not a valid wallet/giftcard wallet. Try going to index.html"});
       return;
   }
 

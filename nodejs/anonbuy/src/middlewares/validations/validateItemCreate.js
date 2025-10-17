@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { fileTypeFromBuffer } from "file-type";
-import { validateExternalImageUrl } from "../security/url-guard.js";
+import { validateExternalImageUrl } from "../../security/url-guard.js";
 
 
-// src/middlewares/validateItemCreate.js
+// src/middlewares/validations/validateItemCreate.js
 const ItemCreateSchema = z.object({
   name: z.string().trim().min(1),
   category: z.string().trim().min(1),

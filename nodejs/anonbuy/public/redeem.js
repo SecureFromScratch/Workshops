@@ -17,7 +17,7 @@
       const t = setTimeout(() => ctrl.abort(), 15000);
 
       try {
-         const res = await fetch("/api/v1/giftcard/redeem", {
+         const res = await fetch("/api/v1/wallet/redeem", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "same-origin",

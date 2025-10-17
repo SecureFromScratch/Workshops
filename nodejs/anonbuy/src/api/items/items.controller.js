@@ -1,7 +1,7 @@
-import * as svc from "../services/items.service.js";
-import { normalizeQuery } from "../utils/normalize.js";
+import * as svc from "./items.service.js";
+import { normalizeQuery } from "../../utils/normalize.js";
 //import { normalizeQuery } from "../utils/normalize.js";
-import { ssrfFetch } from "../security/ssrfFetch.js";
+import { ssrfFetch } from "../../security/ssrfFetch.js";
 
 const allowHosts = new Set(["images.example-cdn.com", "static.example.com"]);
 

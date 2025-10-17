@@ -9,10 +9,10 @@ validated inputs, magic-byte checks, server-side naming, bounded size, and clean
 
 Look at `upload` in `src/middlewares/upload.js`.
 
-Look at `validateItemCreate` in `src/middlewares/validateItemCreate.js` (it parses and validates item fields).
+Look at `validateItemCreate` in `src/middlewares/validations/validateItemCreate.js` (it parses and validates item fields).
 
 
-**File:** `src/routes/items.routes.js`
+**File:** `src/api/items/items.routes.js`
 
 Create:
 

@@ -2,8 +2,8 @@ import path from "node:path";
 import fs from "node:fs/promises";
 import crypto from "node:crypto";
 import { fileTypeFromBuffer } from "file-type";
-import { prisma } from "../prisma.js";
-import { PAGINATION, clamp } from "../config/pagination.js";
+import { prisma } from "../../prisma.js";
+import { PAGINATION, clamp } from "../../config/pagination.js";
 
 
 const ALLOWED_MIME = new Set(["image/jpeg", "image/png", "image/webp"]);

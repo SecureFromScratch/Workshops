@@ -2,7 +2,7 @@ import { createReadStream } from "fs";
 import { access } from "fs/promises";
 import { constants as FS } from "fs";
 import path from "path";
-import { PUBLIC_DIR } from "../config/env.js";
+import { PUBLIC_DIR } from "../../config/env.js";
 
 const IMAGES_DIR = path.resolve(PUBLIC_DIR, "images");
 const ALLOWED_EXT = new Set([".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"]);

@@ -81,6 +81,10 @@ function loadIdem(){
     return v; 
 }
 
+export function getOrderKey() {
+  return localStorage.getItem('idempotencyKey');
+}
+
 export function getUserId() {
   const v = Number(localStorage.getItem('userId'));
   return Number.isFinite(v) && v > 0 ? v : null;

@@ -1,5 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { prisma, Prisma } from "../../prisma.js";
 
 export async function getOrder({ idempotencyKey }) {
     const existing = await prisma.order.findUnique({ where: { idempotencyKey }, include: { lines: true } });
@@ -21,9 +20,9 @@ export async function setOrder({ lines, idempotencyKey, buyerIp }) {
 
       // 2) Build line payload with computed prices
       const lineData = lines.map(({ itemId, quantity }) => {
-         if (!Number.isInteger(quantity) || quantity <= 0) {
-            throw new Error(`Invalid quantity for item ${itemId}`);
-         }
+         //if (!Number.isInteger(quantity) || quantity <= 0) {
+         //   throw new Error(`Invalid quantity for item ${itemId}`);
+         //}
          const unitPrice = priceById.get(itemId); // Decimal or number depending on schema
          const totalPrice = Prisma.Decimal
             ? new Prisma.Decimal(unitPrice).mul(quantity)

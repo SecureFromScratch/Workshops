@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const OrderLineSchema = z.object({
   itemId: z.coerce.number().int().positive(),
-  quantity: z.coerce.number().int().min(1).max(100),
+  quantity: z.coerce.number().int(), //.min(1).max(100),
 }).strict();
 
 export const OrderSchema = z.object({

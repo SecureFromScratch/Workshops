@@ -22,7 +22,7 @@ if (els.couponApply) {
 export function toCartMap(lines) {
   const m = new Map();
   for (const ln of (lines || [])) {
-    if (!ln || ln.quantity <= 0) continue;
+    //if (!ln || ln.quantity <= 0) continue;
     m.set(String(ln.itemId), {
       quantity: Number(ln.quantity),
       unitPrice: Number(ln.unitPrice),
@@ -124,11 +124,14 @@ async function persistCart() {
       headers: { 'content-type':'application/json' },
       body
     });
-    if (updated?.lines) state.cart = toCartMap(updated.lines);
-    else {
-      const current = await fetchJSON('/api/v1/order/current');
-      state.cart = toCartMap(current?.lines || []);
+    if (!updated?.lines) {
+      throw new Error('failed updating cart on server');
     }
+    state.cart = toCartMap(updated.lines);
+    /*else {
+      const current = await fetchJSON('/api/v1/order/' + state.idempotencyKey);
+      state.cart = toCartMap(current?.lines || []);
+    }*/
     renderCart();
     showStatus(false);
   } catch (e) {
@@ -138,7 +141,7 @@ async function persistCart() {
 
 async function applyCoupon() {
   const code = (els.couponCode?.value || '').trim();
-  const userId = getUserId?.() ?? Number(localStorage.getItem('userId'));
+  const userId = getUserId();
   if (!userId || code.length < 3 || code.length > 64) {
     showStatus(true, 'Invalid coupon or user id');
     return;
@@ -152,7 +155,7 @@ async function applyCoupon() {
       body: JSON.stringify({ userId, code }) // matches your Zod schema
     });
     // Refresh order to reflect discounts
-    const current = await fetchJSON('/api/v1/order/current');
+    const current = await fetchJSON('/api/v1/order/' + state.idempotencyKey);
     state.cart = toCartMap(current?.lines || []);
     renderCart();
     showStatus(false);
@@ -183,7 +186,7 @@ async function onBuy() {
     });
     // Assuming success: clear local cart and refresh from server (if any)
     state.cart.clear();
-    const current = await fetchJSON('/api/v1/order/current').catch(() => null);
+    const current = await fetchJSON('/api/v1/order/' + state.idempotencyKey).catch(() => null);
     if (current?.lines) state.cart = toCartMap(current.lines);
     renderCart();
     showStatus(false);
