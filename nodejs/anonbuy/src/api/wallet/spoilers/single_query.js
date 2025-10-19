@@ -1,3 +1,5 @@
+import { prisma, Prisma } from "../../../prisma.js";
+
 export async function transferAll({ from, to }) {
   // THIS IS THE MAJOR CHANGE
   // MUST WRITE SQL MANUALLY

@@ -1,9 +1,10 @@
-import { Prisma } from '@prisma/client';
+import { prisma, Prisma } from "../../../prisma.js";
 
-async function transferAll({ from, to }, maxRetries = 3) {
+export async function transferAll({ from, to }, maxRetries = 3) {
    for (let attempt = 1; attempt <= maxRetries; ++attempt) {
       try {
-        transferAllAux({ from, to });
+        const result = await transferAllAux({ from, to });
+        return result; // end retry
       }
       catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError 
@@ -34,6 +35,11 @@ async function transferAllAux({ from, to }) {
       const result = await prisma.wallet.update({
          where: { code: to }, 
          data: { balance: { increment: transferAmount } },
+      });
+  
+      await prisma.wallet.update({
+         where: { code: from }, 
+         data: { balance: 0 }
       });
     }
     // BELOW IS THE ONLY CHANGE TO THE TRANSACTION
