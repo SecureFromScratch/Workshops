@@ -15,7 +15,7 @@ model Wallet {
 
 model Item {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   category  String
   price     Float
   active    Boolean  @default(true)

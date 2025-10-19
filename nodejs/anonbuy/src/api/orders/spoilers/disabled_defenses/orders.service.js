@@ -23,17 +23,13 @@ export async function setOrder({ lines, walletCode, buyerIp }) {
 
       // 2) Build line payload with computed prices
       const lineData = lines.map(({ itemId, quantity }) => {
-         if (!Number.isInteger(quantity) || quantity <= 0) {
-            throw new Error(`Invalid quantity for item ${itemId}`);
-         }
-         const unitPrice = priceById.get(itemId); // TODO: Price should have been Decimal, but is currently float. Should fix.
-         const totalPrice = //Prisma.Decimal
-            //? new Prisma.Decimal(unitPrice).mul(quantity)
-            //: 
-            unitPrice * quantity;
-         if (!(totalPrice > 0)) {
-            throw new Error(`Invalid total price for ${itemId}`);
-         }
+         //if (!Number.isInteger(quantity) || quantity <= 0) {
+         //   throw new Error(`Invalid quantity for item ${itemId}`);
+         //}
+         const unitPrice = priceById.get(itemId); // Decimal or number depending on schema
+         const totalPrice = Prisma.Decimal
+            ? new Prisma.Decimal(unitPrice).mul(quantity)
+            : unitPrice * quantity;
          return { itemId, quantity, unitPrice, totalPrice };
       });
 

@@ -58,27 +58,6 @@ export async function setOrder(req, res) {
   });
 }
 
-export async function setOrderOld(req, res) {
-  const { itemId, quantity, idempotencyKey } = res.locals.data;
-  const ip = (req.ip || req.socket?.remoteAddress || "").replace(/^::ffff:/, "");
-  const order = await svc.createOrder({ itemId, quantity, idempotencyKey, buyerIp: ip });
-  res.status(201).json({
-    id: order.id,
-    status: order.status,
-    createdAt: order.createdAt,
-    lines: order.lines.map(({ itemId, quantity, unitPrice, totalPrice }) => ({
-      itemId,
-      quantity,
-      unitPrice,
-      totalPrice
-    })),
-    coupons: order.coupons.map(
-      ({ id, orderId, couponId, couponCode, percent }) => 
-      ({ id ,orderId, couponId, couponCode, percent })
-    )
-  });
-}
-
 export async function redeemCoupon(req, res) {
   // THERE'S A VULNERABILITY HERE - CAN YOU FIND IT?
   const { walletCode, code } = req.couponReq;
