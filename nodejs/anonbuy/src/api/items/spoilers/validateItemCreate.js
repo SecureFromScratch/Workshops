@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { fileTypeFromBuffer } from "file-type";
 import { validateExternalImageUrl } from "../../security/url-guard.js";
-
+import { ALLOWED_TYPES } from "./upload.js";
 
 // src/middlewares/validations/validateItemCreate.js
 const ItemCreateSchema = z.object({
@@ -14,8 +14,6 @@ const ItemCreateSchema = z.object({
 });
 
 
-const ALLOWED_MIME = ["image/jpeg", "image/png", "application/pdf"];
-
 export async function validateItemCreate(req, res, next) {
   try {
     // fields from multipart (after multer)
@@ -26,16 +24,19 @@ export async function validateItemCreate(req, res, next) {
         details: parsed.error.issues.map(i => ({ path: i.path.join("."), message: i.message })),
       });
     }
-    req.itemData = parsed.data; // sanitized payload
+    res.locals.itemData = parsed.data; // sanitized payload
     
-
     // optional file checks (magic bytes)
     if (req.file) {
       const detected = await fileTypeFromBuffer(req.file.buffer);
-      if (!detected || !ALLOWED_MIME.includes(detected.mime)) {
+      if (!detected || !ALLOWED_TYPES.includes(detected.mime)) {
         return res.status(400).json({ error: "Unsupported or fake file type" });
       }
-      req.file.detectedMime = detected.mime; // pass true MIME to service
+
+      res.locals.filemeta = { 
+        mimetype: detected.mime,
+        ext: detected.ext 
+      };
     }
     next();
   } catch (e) {

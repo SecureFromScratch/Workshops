@@ -10,7 +10,7 @@ export const OrderSchema = z.object({
    walletCode: z.string().trim().min(1).max(256)
 }).strict();
 
-export function validateSetOrder(req, res, next) {
+export function validateOrder(req, res, next) {
   const parsed = OrderSchema.safeParse(req.body ?? {});
   if (!parsed.success) {
     return res.status(400).json({

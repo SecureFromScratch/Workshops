@@ -1,8 +1,8 @@
 import { Router } from "express";
 import asyncHandler from "../../middlewares/asyncHandler.js";
-import { validateOrder } from "../../middlewares/validations/validateOrder.js";
+import { validateOrder } from "./validateOrder.js";
 import { currentOrder, setOrder } from "./orders.controller.js";
-import { validateCouponRedeem, validateCouponRemove } from "../../middlewares/validations/validateCoupon.js";
+import { validateCouponRedeem, validateCouponRemove } from "./validateCoupon.js";
 import { redeemCoupon, removeCoupon } from "./orders.controller.js";
 
 const r = Router();

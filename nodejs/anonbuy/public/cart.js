@@ -50,8 +50,8 @@ function renderCart() {
     const el = els.tplCartLine.content.firstElementChild.cloneNode(true);
 
     const thumb = el.querySelector('.cart-thumb');
-    if (item?.fileName && item?.mimeType?.startsWith('image/')) {
-      thumb.src = `/api/v1/image/${encodeURIComponent(item.fileName)}`;
+    if (item?.filePath && item?.mimeType?.startsWith('image/')) {
+      thumb.src = `/api/v1/image/${encodeURIComponent(item.filePath)}`;
       thumb.alt = item.name ? `${item.name} image` : 'item image';
     } else {
       thumb.removeAttribute('src');

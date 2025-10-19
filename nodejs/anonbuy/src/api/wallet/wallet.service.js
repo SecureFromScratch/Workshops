@@ -5,7 +5,7 @@ export async function getWallet({ code }) {
    return existing;
 }
 
-export async function transferEverything({ from, to }) {
+export async function transferAll({ from, to }) {
    return prisma.$transaction(async (tx) => {
       const fromWallet = await prisma.wallet.findUnique({ where: { code: from } });
       if (!fromWallet) {

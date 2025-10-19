@@ -21,7 +21,7 @@ Create:
 r.post(
   "/create-with-file",
   upload.single("file"),      // multer: memory storage, size limit, single file
-  validateItemCreate,         // validates body → sets req.itemData
+  validateItemCreate,         // validates body → sets res.locals.itemData
   asyncHandler(ctrl.createWithFile)
 );
 ```
@@ -45,14 +45,14 @@ Create:
 
 ```js
 export async function createWithFile(req, res) {
-  const item = await svc.createItemWithFile(req.itemData, req.file ?? null);
+  const item = await svc.createItemWithFile(res.locals.itemData, req.file ?? null);
   return res.status(201).json(item);
 }
 ```
 
 **What this does**
 
-* Keeps the controller thin: hands validated data + optional file to the service and returns `201 Created`.
+* Keeps the controller thin: handles validated data + optional file to the service and returns `201 Created`.
 
 **Why it matters**
 

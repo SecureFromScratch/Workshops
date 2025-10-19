@@ -60,7 +60,7 @@ export async function setOrder(req, res) {
 
 export async function redeemCoupon(req, res) {
   // THERE'S A VULNERABILITY HERE - CAN YOU FIND IT?
-  const { walletCode, code } = req.couponReq;
+  const { walletCode, code } = res.locals.couponReq;
   const r = await svc.redeemCoupon({ walletCode, couponCode: code });
   if (r.error) {
     res.status(400).json({ message: r.error });
@@ -72,7 +72,7 @@ export async function redeemCoupon(req, res) {
 }
 
 export async function removeCoupon(req, res) {
-  const { walletCode, couponId } = req.couponReq;
+  const { walletCode, couponId } = res.locals.couponReq;
   const r = await svc.removeCoupon({ walletCode, couponId });
   console.log(r);
   if (r.error) {

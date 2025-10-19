@@ -44,10 +44,10 @@ export function renderItems() {
     */
    
     // File metadata
-    const hasFile = it.fileName || it.fileSize || it.mimeType;
+    const hasFileInfo = it.fileName || it.fileSize || it.mimeType;
     const details = node.querySelector('[data-field="fileDetails"]');
-    setHidden(details, !hasFile);
-    if (hasFile) {
+    setHidden(details, !hasFileInfo);
+    if (hasFileInfo) {
       setText(node.querySelector('[data-field="fileName"]'), it.fileName ?? '—');
       setText(node.querySelector('[data-field="fileSize"]'), it.fileSize != null ? `${it.fileSize} bytes` : '—');
       setText(node.querySelector('[data-field="mimeType"]'), it.mimeType ?? '—');
@@ -56,11 +56,11 @@ export function renderItems() {
     // Image preview via /api/v1/image/{filename}
     const imgWrap = node.querySelector('[data-field="imageWrap"]');
     const img = node.querySelector('[data-field="image"]');
-    const fname = (it.fileName || '').trim();
+    const fpath = (it.filePath || '').trim();
     const looksImage = typeof it.mimeType === 'string' && it.mimeType.startsWith('image/');
-    if (fname && looksImage) {
-      img.src = `/api/v1/image/${encodeURIComponent(fname)}`;
-      img.alt = it.name ? `${it.name} image` : 'item image';
+    if (fpath && looksImage) {
+      img.src = `/api/v1/image/${encodeURIComponent(fpath)}`;
+      img.alt = it.fileName ? it.fileName : (it.name ? `${it.name} image` : 'item image');
       setHidden(imgWrap, false);
       img.addEventListener('error', () => setHidden(imgWrap, true), { once: true });
     } else {

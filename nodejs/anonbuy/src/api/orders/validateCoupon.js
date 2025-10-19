@@ -17,7 +17,7 @@ export function validateCouponRedeem(req, res, next) {
       details: p.error.issues.map(i => ({ path: i.path.join("."), message: i.message }))
     });
   }
-  req.couponReq = p.data;
+  res.locals.couponReq = p.data;
   next();
 }
 
@@ -29,6 +29,6 @@ export function validateCouponRemove(req, res, next) {
       details: p.error.issues.map(i => ({ path: i.path.join("."), message: i.message }))
     });
   }
-  req.couponReq = p.data;
+  res.locals.couponReq = p.data;
   next();
 }

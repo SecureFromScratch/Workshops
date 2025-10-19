@@ -16,14 +16,14 @@ Look at `src/security/url-guard.js`
 After:
 
 ```js
-req.itemData = parsed.data; // sanitized payload
+res.locals.itemData = parsed.data; // sanitized payload
 
 ````
 Add:
 
 ```js
-if ("imageUrl" in req.itemData) {
-      req.itemData.imageUrl = await validateExternalImageUrl(req.itemData.imageUrl);
+if ("imageUrl" in res.locals.itemData) {
+      res.locals.itemData.imageUrl = await validateExternalImageUrl(res.locals.itemData.imageUrl);
     }
 
 ````
@@ -31,7 +31,7 @@ if ("imageUrl" in req.itemData) {
 **What this does**
 
 * Runs a **strict allowlist + DNS/IP check** on `imageUrl` (HTTPS-only, no creds/ports, public IPs only).
-* **Normalizes** the URL (punycode host, strips query/fragment) and stores the **safe form** in `req.itemData`.
+* **Normalizes** the URL (punycode host, strips query/fragment) and stores the **safe form** in `res.locals.itemData`.
 
 **Why it matters**
 

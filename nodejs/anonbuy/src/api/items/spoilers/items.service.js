@@ -4,6 +4,7 @@ import crypto from "node:crypto";
 import { fileTypeFromBuffer } from "file-type";
 import { prisma } from "../../prisma.js";
 import { PAGINATION, clamp } from "../../config/pagination.js";
+import { ALLOWED_TYPES } from "./upload.js"
 
 export async function listItems() {
   return prisma.item.findMany({ orderBy: { id: "asc" } });
@@ -39,30 +40,31 @@ export async function createItem(data) {
   });
 }
 
-export async function createItemWithFile(data, file) {
+export async function createItemWithFile(data, filemeta, file) {
+  const fileExtension = filemeta.ext;
+
   const uploadsDir = path.resolve("uploads/items");
   await fs.mkdir(uploadsDir, { recursive: true });
 
-  const fileExtension = path.extname(file.originalname);
   const safeName = `${crypto.randomUUID()}.${fileExtension}`;
   const finalPath = path.join(uploadsDir, safeName);
   await fs.writeFile(finalPath, file.buffer, { flag: "wx" }); // fail if exists
 
   const payload = {
-      ...data,
-      fileName: file.originalname,          // display only
-      filePath: safeName,                   // server-side name only
-      mimeType: detected.mime,
-      fileSize: file.size
-   };
+    ...data,
+    fileName: file.originalname,          // display only
+    filePath: safeName,                   // server-side name only
+    mimeType: detected.mime,
+    fileSize: file.size
+  };
 
-   try {
-      return await prisma.item.create({ data: payload });
-   } catch (e) {
-      // best-effort cleanup to avoid orphaned files
-      try { await fs.unlink(finalPath); } catch {}
-      throw e;
-   }
+  try {
+    return await prisma.item.create({ data: payload });
+  } catch (e) {
+    // best-effort cleanup to avoid orphaned files
+    try { await fs.unlink(finalPath); } catch {}
+    throw e;
+  }
 }
 
 // Optional: plain create without file

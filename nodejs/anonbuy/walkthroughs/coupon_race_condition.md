@@ -31,7 +31,7 @@ export async function redeemCoupon({ userId, code }) {
   });
 }
 
-````
+```
 With:
 
 ```js

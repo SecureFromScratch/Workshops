@@ -12,8 +12,8 @@ async function fillWallet(code, balance) {
 async function addItem({ name, category, price, fileName, mimeType, active }) {
   await prisma.item.upsert({
     where: { name },
-    update: { price, active },                       // nothing to update on re-run
-    create: { name, category, price, fileName, mimeType, active },
+    update: { price, active, filePath: fileName },                       // nothing to update on re-run
+    create: { name, category, price, fileName, filePath: fileName, mimeType, active },
   });
 }
 

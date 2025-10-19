@@ -26,7 +26,7 @@ export async function withdraw(req, res) {
       res.status(400).json({ error: "Cannot withdraw from same wallet"});
   }
 
-  const wallet = await svc.transferEverything({ from, to });
+  const wallet = await svc.transferAll({ from, to });
   if (wallet.error) {
     res.status(400).json({ message: wallet.error });
   }
