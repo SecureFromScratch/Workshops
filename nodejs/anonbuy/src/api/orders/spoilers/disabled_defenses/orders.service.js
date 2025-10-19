@@ -1,3 +1,4 @@
+
 import { prisma, Prisma } from "../../prisma.js";
 
 export async function getOrder({ walletCode }) {
@@ -27,9 +28,10 @@ export async function setOrder({ lines, walletCode, buyerIp }) {
          //   throw new Error(`Invalid quantity for item ${itemId}`);
          //}
          const unitPrice = priceById.get(itemId); // Decimal or number depending on schema
-         const totalPrice = Prisma.Decimal
-            ? new Prisma.Decimal(unitPrice).mul(quantity)
-            : unitPrice * quantity;
+         const totalPrice = unitPrice * quantity;
+         //if (!(totalPrice > 0)) {
+         //   throw new Error(`Invalid total price for ${itemId}`);
+         //}
          return { itemId, quantity, unitPrice, totalPrice };
       });
 
