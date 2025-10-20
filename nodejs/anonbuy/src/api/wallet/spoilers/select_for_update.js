@@ -5,12 +5,12 @@ export async function transferAll({ from, to }) {
         const [fromWallet] = await tx.$queryRaw
         `SELECT id, code, balance FROM "Wallet" WHERE code = ${from} FOR UPDATE`;
         if (!fromWallet) {
-            return { error: "Wallet to withdraw from not found" };
+            throw new BusinessError("Wallet to withdraw from not found");
         }
 
         const transferAmount = fromWallet.balance;
         if (transferAmount <= 0) {
-            return { error: "Wallet to withdraw from doesn't have any funds" };
+            throw new BusinessError("Wallet to withdraw from doesn't have any funds");
         }
 
         const result = await prisma.wallet.update({

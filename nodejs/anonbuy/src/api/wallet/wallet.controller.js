@@ -1,4 +1,5 @@
 import * as svc from "./wallet.service.js";
+import { BusinessError } from "../../prisma.js";
 
 export async function balance(req, res) {
   const { code } = req.params;
@@ -26,13 +27,18 @@ export async function withdraw(req, res) {
       res.status(400).json({ error: "Cannot withdraw from same wallet"});
   }
 
-  const wallet = await svc.transferAll({ from, to });
-  if (wallet.error) {
-    res.status(400).json({ message: wallet.error });
-  }
-  else {
+  try {
+    const wallet = await svc.transferAll({ from, to });
     res.status(200).json({
       balance: parseInt(wallet.balance)
     });
+  }
+  catch (err) {
+    if (err instanceof BusinessError) {
+      res.status(400).json({ message: err.message });
+    }
+    else {
+      throw err;
+    }
   }
 }

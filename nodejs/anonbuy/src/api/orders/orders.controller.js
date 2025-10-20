@@ -1,4 +1,5 @@
 import * as svc from "./orders.service.js";
+import { BusinessError } from "../../prisma.js";
 
 export async function currentOrder(req, res) {
   const { walletCode } = req.params;
@@ -61,24 +62,33 @@ export async function setOrder(req, res) {
 export async function redeemCoupon(req, res) {
   // THERE'S A VULNERABILITY HERE - CAN YOU FIND IT?
   const { walletCode, code } = res.locals.couponReq;
-  const r = await svc.redeemCoupon({ walletCode, couponCode: code });
-  if (r.error) {
-    res.status(400).json({ message: r.error });
-  }
-  else {
+  try {
+    const r = await svc.redeemCoupon({ walletCode, couponCode: code });
     res.status(201).json({ 
       id: r.id, couponCode: code, couponId: r.couponId, percent: r.percent });
+  }
+  catch (err) {
+    if (err instanceof BusinessError) {
+      res.status(400).json({ message: err.message });
+    }
+    else {
+      throw err;
+    }
   }
 }
 
 export async function removeCoupon(req, res) {
   const { walletCode, couponId } = res.locals.couponReq;
-  const r = await svc.removeCoupon({ walletCode, couponId });
-  console.log(r);
-  if (r.error) {
-    res.status(400).json({ message: r.error });
-  }
-  else {
+  try {
+    const r = await svc.removeCoupon({ walletCode, couponId });
     res.status(200).json({ });
+  }
+  catch (err) {
+    if (err instanceof BusinessError) {
+      res.status(400).json({ message: err.message });
+    }
+    else {
+      throw err;
+    }
   }
 }
