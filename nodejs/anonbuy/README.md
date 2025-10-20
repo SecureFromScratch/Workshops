@@ -17,13 +17,10 @@ git clone --depth=1 --filter=blob:none --sparse https://github.com/SecureFromScr
 cd Workshops
 
 # Pull ONLY the node-api project
-git sparse-checkout set nodejs/node-api
+git sparse-checkout set nodejs/anonbuy
 
 # Work inside node-api
-cd nodejs/node-api
-
-# Create local env
-cp .env.example .env
+cd nodejs/anonbuy
 
 # Create local env
 cp .env.example .env

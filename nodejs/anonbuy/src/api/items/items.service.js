@@ -34,16 +34,17 @@ export async function createItem(data) {
   return prisma.item.create({
     data: {
       name: data.name, category: data.category, price: data.price,
-      active: data.active ?? true, fileName: null, filePath: null, mimeType: null, fileSize: null, imageUrl: data.imageUrl ?? null
+      active: data.active ?? true, fileName: "lamp.png", filePath: "lamp.png", mimeType: "image/png", fileSize: null, imageUrl: data.imageUrl ?? null
     }
   });
 }
 
-export async function createItemWithFile(data, file) {
+export async function createItemWithFile(data, metadata, file) {
   const uploadsDir = path.resolve("uploads/items");
   await fs.mkdir(uploadsDir, { recursive: true });
 
   const fileExtension = path.extname(file.originalname);
+  const mimetype = file.mimetype;
   const safeName = `${crypto.randomUUID()}.${fileExtension}`;
   const finalPath = path.join(uploadsDir, safeName);
   await fs.writeFile(finalPath, file.buffer, { flag: "wx" }); // fail if exists
@@ -52,7 +53,7 @@ export async function createItemWithFile(data, file) {
       ...data,
       fileName: file.originalname,          // display only
       filePath: safeName,                   // server-side name only
-      mimeType: detected.mime,
+      mimeType: mimetype,
       fileSize: file.size
    };
 
