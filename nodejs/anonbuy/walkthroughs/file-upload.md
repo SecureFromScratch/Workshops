@@ -19,7 +19,7 @@ Create:
 ```js
 // Multipart (with file)
 r.post(
-  "/create-with-file",
+  "/create",
   upload.single("file"),      // multer: memory storage, size limit, single file
   validateItemCreate,         // validates body → sets res.locals.itemData
   asyncHandler(ctrl.createWithFile)
@@ -130,7 +130,7 @@ base64 -d > /tmp/ok.png <<'B64'
 iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=
 B64
 
-curl -s -X POST "http://localhost:3000/api/v1/items/create-with-file"   -F 'name=Book A'   -F 'category=books'   -F 'price=15'   -F 'active=true'   -F 'file=@/tmp/ok.png;type=image/png' | jq .
+curl -s -X POST "http://localhost:3000/api/v1/items/create"   -F 'name=Book A'   -F 'category=books'   -F 'price=15'   -F 'active=true'   -F 'file=@/tmp/ok.png;type=image/png' | jq .
 ```
 
 ### Unsupported File
@@ -138,7 +138,7 @@ curl -s -X POST "http://localhost:3000/api/v1/items/create-with-file"   -F 'name
 ```bash
 echo "not an image" > /tmp/bad.txt
 
-curl -s -X POST "http://localhost:3000/api/v1/items/create-with-file" \
+curl -s -X POST "http://localhost:3000/api/v1/items/create" \
 ```
 
 ### Fake File
@@ -148,14 +148,14 @@ base64 -d > /tmp/notpng.png <<'B64'
 UklGRiIAAABXRUJQVlA4ICAAAADQAgCdASoIAAgAAAcJaQAA3AA/v4AAA==
 B64
 
-curl -s -X POST "http://localhost:3000/api/v1/items/create-with-file"   -F 'name=Book A'   -F 'category=books'   -F 'price=15'   -F 'active=true'   -F 'file=@/tmp/notpng.png;type=image/png' | jq .
+curl -s -X POST "http://localhost:3000/api/v1/items/create"   -F 'name=Book A'   -F 'category=books'   -F 'price=15'   -F 'active=true'   -F 'file=@/tmp/notpng.png;type=image/png' | jq .
 ```
 
 ### Oversized File
 
 ```bash
 head -c 6000000 </dev/zero >/tmp/big.png
-curl -s -X POST http://localhost:3000/api/v1/items/create-with-file \
+curl -s -X POST http://localhost:3000/api/v1/items/create \
   -F 'name=Big' -F 'category=books' -F 'price=1' -F 'active=true' \
   -F 'file=@/tmp/big.png' | jq .
 ```
