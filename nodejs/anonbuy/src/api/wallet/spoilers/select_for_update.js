@@ -1,3 +1,5 @@
+import { prisma, Prisma, BusinessError } from "../../../prisma.js";
+
 // move full balance with pessimistic lock
 export async function transferAll({ from, to }) {
     return prisma.$transaction(async (tx) => {

@@ -1,4 +1,4 @@
-import { prisma, Prisma } from "../../../prisma.js";
+import { prisma, Prisma, BusinessError } from "../../../prisma.js";
 
 export async function transferAll({ from, to }) {
   // THIS IS THE MAJOR CHANGE
@@ -20,7 +20,10 @@ export async function transferAll({ from, to }) {
     RETURNING w.id, w.code, w.balance;
   `;
 
+  if (result.length === 0) {
+    throw new BusinessError("Wallet to withdraw from doesn't have any funds");
+  }
   // result is an array; the destination row is the one whose code === "to"
   const updatedDest = result.find(r => r.code === to);
-  return updatedDest ? updatedDest.balance : null;
+  return updatedDest ? updatedDest : null;
 }
