@@ -7,9 +7,9 @@ validated inputs, magic-byte checks, server-side naming, bounded size, and clean
 
 ## 1) Update the Route
 
-Look at `upload` in `src/middlewares/upload.js`.
+Look at `upload` in `src/api/items/upload.js`.
 
-Look at `validateItemCreate` in `src/middlewares/validations/validateItemCreate.js` (it parses and validates item fields).
+Look at `validateItemCreate` in `src/api/items/validateItemCreate.js` (it parses and validates item fields).
 
 
 **File:** `src/api/items/items.routes.js`
