@@ -17,4 +17,10 @@ Run the application
 
 ##  Verify
 - Did you do a good job?
+- Are you sure?
+
+##  Hack
+- Without changing the code, try to supply to wrong answer but get the award
+- Use input redirection:  java app.Quiz < input.txt
+
 ---
