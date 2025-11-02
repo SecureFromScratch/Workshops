@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <script src="validate.js" defer></script>
+    <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+    <div id="quiz-container">
+        <h1>Welcome to the Quiz</h1>
+        <form action="/question" method="GET">
+            <input type="text" id="username" name="username" placeholder="Enter your full name" required>
+            <p id="error-message" class="error-message"></p>
+            <button type="submit" id="start-button" disabled>Start</button>
+        </form>
+    </div>
+</body>
+</html>

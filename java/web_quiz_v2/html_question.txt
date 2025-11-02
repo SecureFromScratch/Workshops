@@ -1,0 +1,5 @@
+What does the <p> tag mean?
+Marks text as a standalone Paragraph, i.e. <p>This is a paragraph</p>
+Text represents something really bad that happened (Panic), i.e. <p>We're about to crash!</p>
+A tag used to load Protected Javascript code, i.e. <p src="defense.js">
+There is no <p> html tag
