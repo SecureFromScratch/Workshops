@@ -30,6 +30,7 @@ public class QuizController {
     private static final Logger ANSWERS_LOGGER = LoggerConfig.genLogger("Answers");
 
     private final MultipleChoiceQuestion m_quizService;
+    //private final AnswerResultsStore m_resultsStore;
 
     private static String generateAnswerOption(String a_username, String a_optionText, boolean a_isCorrect) {
         return String.format(
@@ -74,17 +75,19 @@ public class QuizController {
         ).render();
     }
 
-    private final AnswerResultsStore m_resultsStore;
 
-    public QuizController(MultipleChoiceQuestion quizService, AnswerResultsStore resultsStore) {
+    public QuizController(
+        MultipleChoiceQuestion quizService
+        //, AnswerResultsStore resultsStore
+    ) {
         this.m_quizService = quizService;
-        this.m_resultsStore = resultsStore;
+        //this.m_resultsStore = resultsStore;
     }
 
     private void writeAnswerResultToFile(FullName username, boolean isCorrect) throws IOException {
-        m_resultsStore.addLine(...); // DO NOT USE COLON OR NEWLINE!
+        //m_resultsStore.addLine(...); // DO NOT USE COLON OR NEWLINE!
 
-        /*try (BufferedWriter writer = Files.newBufferedWriter(
+        try (BufferedWriter writer = Files.newBufferedWriter(
                 Paths.get("answers.txt"), 
                 StandardOpenOption.APPEND, 
                 StandardOpenOption.CREATE)) {
@@ -96,6 +99,6 @@ public class QuizController {
             }
             writer.write(username.get());
             writer.newLine();
-        }*/
+        }
     }
 }
