@@ -13,8 +13,8 @@ Students will learn how attackers uncover client-side weaknesses through **sourc
 # Solutions 
 In the next pages will show the solution one after anohter
 
-[link text](solutions/scoreboard.md)
-[link text](solutions/othersorders.md)
-[link text](solutions/authbypass.md)
-[link text](solutions/privilges.md)
-[link text](solutions/xss.md)
+- [Scoreboard](solutions/scoreboard.md)
+- [Others' orders](solutions/othersorders.md)
+- [Autneticaion bypass](solutions/authbypass.md)
+- [Privilege Escalation](solutions/privilges.md)
+- [XSS](solutions/xss.md)
