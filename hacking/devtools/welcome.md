@@ -22,6 +22,22 @@ Refer to juice shop repo for installation: [Juice Shop Repo](https://github.com/
 - Debug (in the browser)
 - Use the Pretty Print ({}) function in Sources to make minified JS readable.
 
+## How edit and resend requests 
+
+### In Chrome DevTools
+
+1. Open **Network** tab.
+2. Find the request you want to modify.
+3. Right-click it → **Copy → Copy as fetch**.
+4. Go to the **Console**, paste it, edit any part (URL, headers, body), and press **Enter** to resend.
+
+### In Firefox Developer Tools
+
+1. Open **Network** tab.
+2. Right-click the request → **Edit and Resend** (directly available).
+3. Modify any header, method, or body.
+4. Click **Send**.
+
 
 # Solutions 
 In the next pages will show the solution one after anohter
