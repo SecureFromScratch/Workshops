@@ -1,9 +1,10 @@
 # XSS - cross side scripting
 - Try to exploit the search bar
-- <img src=1 onLoad="javascript:alert(`xss`)">.
+- <img src="scoreboard.md">.
 - <iframe src="javascript:alert(`xss`)">.
 
   
+
 
 
 
