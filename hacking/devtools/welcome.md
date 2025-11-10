@@ -7,7 +7,7 @@ Refer to juice shop repo for installation: [Juice Shop Repo](https://github.com/
 
 # The challanges
 - Scoreboard - gain access to the scoreboard
-- Change others' orders
+- View others' orders
 - Access the admin pabel
 - Manipulate authentication tokens stored on the client to change privileges or view protected content.
 - XSS - Find a place where user input is reflected into the DOM without sanitization and achieve JS execution in the page context.
