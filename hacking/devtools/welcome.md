@@ -4,8 +4,8 @@ This lab is designed for **hands-on exploration of OWASP Juice Shop using only t
 Students will learn how attackers uncover client-side weaknesses through **source inspection, network tracing, storage analysis, and live code manipulation** directly within DevTools.
 
 # The challanges
-- Find the scoreboard
-- Try to change others' orders
+- scoreboard - gain access to the scoreboard
+- Change others' orders
 - Bypass the authentication by modifying in-memory state or calling exposed functions
 - Manipulate authentication tokens stored on the client to change privileges or view protected content.
 - XSS - Find a place where user input is reflected into the DOM without sanitization and achieve JS execution in the page context.
