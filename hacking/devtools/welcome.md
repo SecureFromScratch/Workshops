@@ -45,5 +45,5 @@ In the next pages will show the solution one after anohter
 - [Scoreboard](solutions/scoreboard.md)
 - [Others' orders](solutions/othersorders.md)
 - [Admin](solutions/admin.md)
-- [Privilege Escalation](solutions/privilges.md)
+- [Confidential Information](solutions/sensitive.md)
 - [XSS](solutions/xss.md)
