@@ -2,8 +2,11 @@
 - Open the developer tool bar network tab
 - Go to your basket
 - Check carefully the request
-- Change the request so you will be able too see someone else's basket and resend
+- Edit and resend the request so you will be able to get someone else's basket and resend
+- Check the ntework tab again
 
+
+## How edit and resend requests 
 
 ### In Chrome DevTools
 
@@ -18,4 +21,5 @@
 2. Right-click the request → **Edit and Resend** (directly available).
 3. Modify any header, method, or body.
 4. Click **Send**.
+
 
