@@ -2,6 +2,7 @@
 
 This lab is designed for **hands-on exploration of OWASP Juice Shop using only the browser’s Developer Tools** — no scanners, scripts, or external tools.  
 Students will learn how attackers uncover client-side weaknesses through **source inspection, network tracing, storage analysis, and live code manipulation** directly within DevTools.
+refer to juice shop repo for installation: [Juice Shop Repo](https://github.com/juice-shop/juice-shop)
 
 # The challanges
 - scoreboard - gain access to the scoreboard
