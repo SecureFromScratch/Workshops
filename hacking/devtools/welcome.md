@@ -6,9 +6,9 @@ Students will learn how attackers uncover client-side weaknesses through **sourc
 Refer to juice shop repo for installation: [Juice Shop Repo](https://github.com/juice-shop/juice-shop)
 
 # The challanges
-- scoreboard - gain access to the scoreboard
+- Scoreboard - gain access to the scoreboard
 - Change others' orders
-- Bypass the authentication by modifying in-memory state or calling exposed functions
+- Access the admin pabel
 - Manipulate authentication tokens stored on the client to change privileges or view protected content.
 - XSS - Find a place where user input is reflected into the DOM without sanitization and achieve JS execution in the page context.
 
