@@ -63,11 +63,14 @@ Follow your browser's instructions to import this certificate as a trusted root 
 
 As a student, you'll mainly be using these tabs, which are fully functional in the free Community Edition:
 
-Burp Tool	Main Purpose	How Students Use It
+
 Proxy	Intercept, view, and modify all HTTP/S requests and responses between your browser and the web server.	The most important tool. Use the Intercept tab to pause traffic and the HTTP History tab to review all past requests and responses.
+
 Repeater	Manually modify and resend a single request multiple times to see how the server responds.	Manual testing backbone. Ideal for changing parameters, testing for SQL Injection, or trying different inputs quickly.
+
 Intruder	Automate customized attacks with a set of defined payloads, great for brute-forcing, fuzzing, and enumeration.	Limited in Community. You can use it, but it runs very slowly to encourage Pro upgrades. Still useful for basic, small-scale testing.
 Decoder	Manually or automatically transform encoded data (e.g., Base64, URL encoding, Hex).	Essential for analyzing encoded inputs, tokens, or data found in requests and responses.
+
 Comparer	Perform a word-level or byte-level comparison of two items (requests or responses).	Useful for detecting subtle differences between a normal request and an attack request, or between two user sessions.
 
 
