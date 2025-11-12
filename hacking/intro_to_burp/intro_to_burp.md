@@ -14,7 +14,7 @@ Launch: Start Burp Suite. When prompted for a project file, simply choose the de
 
 
 
-🛠️ Step 2: Configure Your Proxy
+## 🛠️ Step 2: Configure Your Proxy
 
 
 
@@ -24,7 +24,7 @@ Burp Suite works as an "interception proxy," sitting between your browser and th
 
 
 
-Option 1: Use Burp's Built-in Browser (Recommended for Beginners)
+### Option 1: Use Burp's Built-in Browser (Recommended for Beginners)
 
 
 
@@ -36,7 +36,7 @@ Click the "Open Browser" button. This launches a dedicated, pre-configured Chrom
 
 
 
-Option 2: Configure an External Browser
+### Option 2: Configure an External Browser
 
 
 
@@ -56,7 +56,7 @@ Follow your browser's instructions to import this certificate as a trusted root 
 
 
 
-🔍 Step 3: Learn the Core Tools (Community Edition)
+## 🔍 Step 3: Learn the Core Tools (Community Edition)
 
 
 
@@ -73,7 +73,7 @@ Comparer	Perform a word-level or byte-level comparison of two items (requests or
 
 
 
-🎯 Step 4: Your First Task - Intercept and Modify a Request
+## 🎯 Step 4: Your First Task - Intercept and Modify a Request
 
 
 
@@ -97,7 +97,7 @@ Experiment in Repeater: Go to the Repeater tab. Change a parameter in the reques
 
 
 
-💡 Step 5: Essential Learning Resources
+## 💡 Step 5: Essential Learning Resources
 
 
 
