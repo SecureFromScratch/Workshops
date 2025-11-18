@@ -48,7 +48,10 @@ curl http://localhost:5000
 
 ##  VAmPI Exploitation
 
-- Go to VAmPI GitHub repo, learn about it's vulnerabilities and try to exploit them
+- Find an endpoint the reveals a very sensitive information
+- Find a way to decide if users exist in the system or not
+  
+
 
 
 
