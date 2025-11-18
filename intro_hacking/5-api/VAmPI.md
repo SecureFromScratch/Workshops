@@ -27,7 +27,8 @@ Expected Result:
 
 ## Postman
 
-Click the Import button and paste the following json file 
+- Click the Import button and paste the json file below
+- Try to call the api methods 
 
 ```bash
 {
@@ -151,3 +152,4 @@ Click the Import button and paste the following json file
 
 
 ```
+
