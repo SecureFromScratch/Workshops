@@ -26,9 +26,11 @@ curl http://localhost:5000
 ```
 ### Swagger
 
-Go to swagger interface and try to call the api methods
+- Go to swagger interface and try to call the api methods
 
-http://localhost:5000/ui/
+  http://localhost:5000/ui/
+
+- Use the API to create the database
 
 ## Postman
 
@@ -157,6 +159,7 @@ http://localhost:5000/ui/
 
 
 ```
+
 
 
 
