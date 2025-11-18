@@ -56,18 +56,22 @@ Critical / High / Medium / Low
 **Recommendation:**
 
 **Evidence / Notes:**
-• Screenshots
-• Request/response snippets
-• Logs
+- Screenshots
+- Request/response snippets
+- Logs
 
 ---
 
 ## 2. Finding Title
 
 **Category:**
+
 **Status:** Open / Fixed / Accepted Risk
+
 **Path / Location:**
+
 **Parameter (if any):**
+
 **Payload (if any):**
 
 **Description:**
@@ -82,9 +86,9 @@ Critical / High / Medium / Low
 **Recommendation:**
 
 **Evidence / Notes:**
-• Screenshots
-• Request/response snippets
-• Logs
+- Screenshots
+- Request/response snippets
+- Logs
 
 ---
 
@@ -108,9 +112,9 @@ Critical / High / Medium / Low
 **Recommendation:**
 
 **Evidence / Notes:**
-• Screenshots
-• Request/response snippets
-• Logs
+- Screenshots
+- Request/response snippets
+- Logs
 
 ---
 
@@ -121,6 +125,7 @@ Critical / High / Medium / Low
 | 1  |       |          |        |      |
 | 2  |       |          |        |      |
 | 3  |       |          |        |      |
+
 
 
 
