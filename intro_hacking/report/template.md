@@ -16,8 +16,11 @@
 **Business Impact Summary:**
 
 **Recommended Priorities:**
+
 1.
+
 2.
+
 3.
 
 ---
@@ -118,6 +121,7 @@ Critical / High / Medium / Low
 | 1  |       |          |        |      |
 | 2  |       |          |        |      |
 | 3  |       |          |        |      |
+
 
 
 
