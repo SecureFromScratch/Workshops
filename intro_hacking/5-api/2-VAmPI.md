@@ -33,6 +33,7 @@ curl http://localhost:5000
 - Use the API to create the database
 - Register to the API
 - Login
+- Pay attention, for other requests you need to supplly the JWT you got from the log in process
 - Explore the API
 ## Postman
 
@@ -48,7 +49,8 @@ curl http://localhost:5000
 ##  VAmPI Exploitation
 
 - Go to VAmPI GitHub repo, learn about it's vulnerabilities and try to exploit them
-- If you find it difficult explore the internet for walkthroughs
+
+
 
 
 
