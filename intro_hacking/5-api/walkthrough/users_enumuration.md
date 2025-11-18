@@ -1,4 +1,4 @@
-## User Enumuration
+## Users & Passwords Enumuration
 User enumeration is a security testing technique used to discover valid usernames or user IDs within an application or system. It's done by observing slight but discernible differences in the system's responses when an attacker attempts to authenticate or interact with different user accounts.
 
 ##  How User Enumeration Works
@@ -16,6 +16,8 @@ The core concept is to test a known input (a username or email) against a system
 ---
 
 ##  Exploit in VAmPI
+
+### Users Enumuration
 - Register the following users: cyber_champion, quality_assurance, gov_il
 - Capture the login method in Burp
 - Send the request to Burp intruder using ctrl+i
@@ -23,7 +25,16 @@ The core concept is to test a known input (a username or email) against a system
 - Go to the payload tab
 - Type different values and combine and users you created between them for example: aaaaa, bbbb, cccccc, cyber_champion ,eeeeee, quality_assurance, gov_il 
 - Click the start attack button
-- What do you learn? 
+- What do you learn?
+
+### Passwords Enumuration
+- Now clear the variables in the intruder
+- Supply a user that exists in your system
+- Add the password as a variable
+- Go to the payload tab, clear the list and add a few options for passwords\
+- Start the attack
+- What do you learn?
   
+
 
 
