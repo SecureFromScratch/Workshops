@@ -1,4 +1,4 @@
-### User Enumuration
+## User Enumuration
 User enumeration is a security testing technique used to discover valid usernames or user IDs within an application or system. It's done by observing slight but discernible differences in the system's responses when an attacker attempts to authenticate or interact with different user accounts.
 
 ##  How User Enumeration Works
@@ -24,4 +24,5 @@ The primary mitigation strategy is to ensure **consistent and generic error mess
 * **Generic Response:** Whether the username is invalid, or the password is wrong, the system should always return the same message, such as: "**Invalid username or password.**"
 * **Consistent Timing:** Implement **constant-time algorithms** for all password verification steps to prevent timing-based attacks.
 * **Rate Limiting:** Aggressively limit the rate of login attempts from a single IP address to make large-scale dictionary testing impractical.
+
 
