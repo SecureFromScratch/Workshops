@@ -1,4 +1,4 @@
-## JWT hacking to beccome admin
+## JWT hacking to become admin
 - This is your first hacking lab, you didn't learn how to crack passwords and secrets, ask your instructor what is the secret or use hashcat as described below
 - After you get the secret construct the admin JWT. You can use the python script: 
 
@@ -12,6 +12,7 @@
 ```
 hashcat -m 16500 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM0NzQ4NzYsImlhdCI6MTc2MzQ3NDgxNiwic3ViIjoic3VwZXJnaXJsIn0.ExfWvqQK85Ufnt6f22Q0FvdmcZjIggFTtIpo2AlXKVg ../../../../../../Downloads/jwt.secrets.list
 ```
+
 
 
 
