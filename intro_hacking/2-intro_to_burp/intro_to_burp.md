@@ -24,24 +24,15 @@ Burp Suite works as an "interception proxy," sitting between your browser and th
 
 
 
-### Option 1: Use Burp's Built-in Browser (Recommended for Beginners)
 
 
 
-
-This is the simplest way. In Burp Suite, go to the Proxy tab, then the Intercept sub-tab.
-
-Click the "Open Browser" button. This launches a dedicated, pre-configured Chromium browser that automatically routes traffic through Burp.
+### Option 1: Configure an External Browser
 
 
+Install Firefox or open a new Google Chrome profile.
 
-
-### Option 2: Configure an External Browser
-
-
-
-
-Install a Proxy Switcher: For browsers like Firefox or Chrome, install an extension like FoxyProxy.
+Install  FoxyProxy browser extension.
 
 Set the Proxy: Configure the extension to use an HTTP Proxy on 127.0.0.1 and Port 8080.
 
@@ -53,6 +44,19 @@ Click the link to download the CA Certificate.
 
 Follow your browser's instructions to import this certificate as a trusted root authority. This allows Burp to decrypt and intercept HTTPS (secure) traffic.
 
+FireFox
+https://portswigger.net/burp/documentation/desktop/external-browser-config/certificate/ca-cert-firefox
+
+Google Chrome:
+https://portswigger.net/burp/documentation/desktop/external-browser-config/certificate/ca-cert-chrome-windows
+
+### Option 2: Use Burp's Built-in Browser (if the other options doesn't work)
+
+
+
+This is the simplest way. In Burp Suite, go to the Proxy tab, then the Intercept sub-tab.
+
+Click the "Open Browser" button. This launches a dedicated, pre-configured Chromium browser that automatically routes traffic through Burp.
 
 
 
