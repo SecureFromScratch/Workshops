@@ -45,5 +45,12 @@ curl http://localhost:5000
 - Go to Postman settings
 - Set Burp as a custom proxy
 
+##  VAmPI Exploitation
+
+- Go to VAmPI GitHub repo, learn about it's vulnerabilities and try to exploit them
+- If you find it difficult, explore the internet for walkthroughs
+
+
+
 
 
