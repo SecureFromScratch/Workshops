@@ -5,13 +5,13 @@
 **Overall Security Posture:**
 
 **Key Risks Identified:**
-•
-•
-•
+-
+-
+-
 
 **Most Critical Findings:**
-•
-•
+-
+-
 
 **Business Impact Summary:**
 
@@ -121,6 +121,7 @@ Critical / High / Medium / Low
 | 1  |       |          |        |      |
 | 2  |       |          |        |      |
 | 3  |       |          |        |      |
+
 
 
 
