@@ -45,9 +45,11 @@ Click the link to download the CA Certificate.
 Follow your browser's instructions to import this certificate as a trusted root authority. This allows Burp to decrypt and intercept HTTPS (secure) traffic.
 
 FireFox
+
 https://portswigger.net/burp/documentation/desktop/external-browser-config/certificate/ca-cert-firefox
 
 Google Chrome:
+
 https://portswigger.net/burp/documentation/desktop/external-browser-config/certificate/ca-cert-chrome-windows
 
 ### Option 2: Use Burp's Built-in Browser (if the other options doesn't work)
