@@ -41,3 +41,8 @@ curl http://localhost:5000
 - Click the Import button to import the openapi.json file
 - Explore the API
 
+## Burp And Postman
+- Go to Postman setting
+- Set Burp as a custom proxy
+
+
