@@ -24,6 +24,10 @@ curl http://localhost:5000
 }
 
 ```
+### Swagger
+
+Go to 
+[link] http://localhost:5000/ui/
 
 ## Postman
 
@@ -152,5 +156,6 @@ curl http://localhost:5000
 
 
 ```
+
 
 
