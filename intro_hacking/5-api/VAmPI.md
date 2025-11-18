@@ -31,7 +31,8 @@ curl http://localhost:5000
   http://localhost:5000/ui/
 
 - Use the API to create the database
-
+- Register to the API
+- Login 
 ## Postman
 
 - Click the Import button and paste the json file below
@@ -159,6 +160,7 @@ curl http://localhost:5000
 
 
 ```
+
 
 
 
