@@ -15,14 +15,15 @@ The core concept is to test a known input (a username or email) against a system
 
 ---
 
-##  Mitigation
-
-Preventing user enumeration is crucial because it allows attackers to build a list of valid accounts, which can then be used for brute-force attacks against passwords.
-
-The primary mitigation strategy is to ensure **consistent and generic error messages** for all authentication failures:
-
-* **Generic Response:** Whether the username is invalid, or the password is wrong, the system should always return the same message, such as: "**Invalid username or password.**"
-* **Consistent Timing:** Implement **constant-time algorithms** for all password verification steps to prevent timing-based attacks.
-* **Rate Limiting:** Aggressively limit the rate of login attempts from a single IP address to make large-scale dictionary testing impractical.
+##  Exploit in VAmPI
+- Register the following users: cyber_champion, quality_assurance, gov_il
+- Capture the login method in Burp
+- Send the request to Burp intruder using ctrl+i
+- Mark the user name and click the add button, this is going to be our variable
+- Go to the payload tab
+- Type different values and combine and users you created between them for example: aaaaa, bbbb, cccccc, cyber_champion ,eeeeee, quality_assurance, gov_il 
+- Click the start attack button
+- What do you learn? 
+  
 
 
