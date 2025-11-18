@@ -1,9 +1,3 @@
-Here is the **full improved internal penetration-testing finding template** with **Root Cause** and **Status** added, plus a clean manager summary.
-
-Short, practical, and ready to paste into any internal report.
-
----
-
 # Penetration Test Findings Report
 
 ## Executive Summary
@@ -125,9 +119,5 @@ Critical / High / Medium / Low
 | 2  |       |          |        |      |
 | 3  |       |          |        |      |
 
----
 
-If you want, I can generate:
-• a DOCX or PDF version
-• a version aligned with OWASP Top 10 categories
-• a version tailored specifically to web, mobile, API, or cloud apps
+
