@@ -32,11 +32,14 @@ curl http://localhost:5000
 
 - Use the API to create the database
 - Register to the API
-- Login 
+- Login
+- Explore the API
 ## Postman
 
-- Click the Import button and paste the json file below
-- Try to call the api methods 
+- Go to http://localhost:5000/openapi.json and save the file to your machine
+- Open Postman
+- Click the Import button to import the openapi.json file
+- Explore the API
 
 ```bash
 {
@@ -160,6 +163,7 @@ curl http://localhost:5000
 
 
 ```
+
 
 
 
