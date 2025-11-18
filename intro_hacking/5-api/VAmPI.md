@@ -42,7 +42,8 @@ curl http://localhost:5000
 - Explore the API
 
 ## Burp And Postman
-- Go to Postman setting
+- Go to Postman settings
 - Set Burp as a custom proxy
+
 
 
