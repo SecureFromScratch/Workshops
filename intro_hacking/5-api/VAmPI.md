@@ -26,8 +26,9 @@ curl http://localhost:5000
 ```
 ### Swagger
 
-Go to 
-[link] http://localhost:5000/ui/
+Go to swagger interface and try to call the api methods
+
+http://localhost:5000/ui/
 
 ## Postman
 
@@ -156,6 +157,7 @@ Go to
 
 
 ```
+
 
 
 
