@@ -1,7 +1,7 @@
 # Playing with VAmPI
 
 
-## Installation
+## Step 1 - Installation
 
 ``` bash 
 git clone https://github.com/erev0s/VAmPI.git
@@ -10,13 +10,13 @@ docker build -t vampi .
 docker run -p 5000:5000 vampi
 ```
 
-## Testing
-### Run
+## Step 2 - Testing
+### A. Basic Run
 
 ```bash
 curl http://localhost:5000
 ```
-### Expected Result
+Expected Result
 
 ```bash
 {
@@ -24,7 +24,7 @@ curl http://localhost:5000
 }
 
 ```
-### Swagger
+### B. Swagger
 
 - Go to swagger interface and try to call the api methods
 
@@ -35,7 +35,7 @@ curl http://localhost:5000
 - Login
 - Pay attention, for other requests you need to supplly the JWT you got from the log in process
 - Explore the API
-## Postman
+### C. Postman
 
 - Go to http://localhost:5000/openapi.json and save the file to your machine
 - Open Postman
@@ -51,6 +51,7 @@ curl http://localhost:5000
 - Find an endpoint the reveals a very sensitive information
 - Find a way to decide if users exist in the system or not
   
+
 
 
 
