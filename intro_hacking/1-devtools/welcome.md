@@ -42,8 +42,8 @@ Refer to juice shop repo for installation: [Juice Shop Repo](https://github.com/
 # Solutions 
 In the next pages will show the solution one after anohter
 
-- [Scoreboard](solutions/scoreboard.md)
-- [Others' orders](solutions/othersorders.md)
-- [Admin](solutions/admin.md)
-- [Confidential Information](solutions/sensitive.md)
-- [XSS](solutions/xss.md)
+- [Gain access to Scoreboard](solutions/scoreboard.md)
+- [Read Other users' baskets](solutions/othersorders.md)
+- [Gain access to the admin panel](solutions/admin.md)
+- [Look for Confidential Information](solutions/sensitive.md)
+- [Conduct XSS attack](solutions/xss.md)
