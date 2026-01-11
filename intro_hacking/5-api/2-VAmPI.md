@@ -48,9 +48,11 @@ Expected Result
 - Find an endpoint the reveals a very sensitive information
 - Find a way to decide if users exist in the system or not
 - Exploit mass assignment vulnerability to gain admin accesss
+- Change a password of another user  
   
 ## Spoiler
 https://zerodayhacker.com/vampi-walkthrough/
+
 
 
 
