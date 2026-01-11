@@ -26,42 +26,22 @@ aws --endpoint-url=http://localhost:4566 secretsmanager put-secret-value \
 
 ---
 
-## 3. Extend  `SecretsConfig` helper (no AWS noise in Program.cs)
+## 3. Extend  `SecretsConfig` helper 
 
 Install the JwtBearer package
 ```bash
 dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 8.*
 ```
 
-Add a record and a new method:
+Add a record and 2 new methods:
 
 ```csharp
-// SecretsConfig.cs
-using System;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Amazon;
-using Amazon.SecretsManager;
-using Amazon.SecretsManager.Model;
-using Microsoft.Extensions.Configuration;
 
 public record JwtConfig(string Secret, string Issuer, string Audience);
 
 public static class SecretsConfig
 {
-    public static async Task<string> GetDbConnectionStringAsync(IConfiguration configuration)
-    {
-        var secretsCfg = configuration.GetSection("Secrets");
-
-        string serviceUrl = secretsCfg["ServiceUrl"]
-            ?? throw new InvalidOperationException("Secrets:ServiceUrl is missing");
-        string regionName = secretsCfg["Region"] ?? RegionEndpoint.USEast1.SystemName;
-        string secretName = secretsCfg["DbConnectionSecretName"]
-            ?? throw new InvalidOperationException("Secrets:DbConnectionSecretName is missing");
-
-        return await GetSecretAsync(serviceUrl, regionName, secretName);
-    }
-
+    
     public static async Task<JwtConfig> GetJwtConfigAsync(IConfiguration configuration)
     {
         var secretsCfg = configuration.GetSection("Secrets");
@@ -117,47 +97,7 @@ public static class SecretsConfig
 
 ## 4. Hide JWT setup in an extension method
 
-Create `JwtAuthExtensions.cs`:
-
-```csharp
-using System;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-
-public static class JwtAuthExtensions
-{
-    public static IServiceCollection AddJwtAuth(this IServiceCollection services, JwtConfig jwt)
-    {
-        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Secret));
-
-        services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = jwt.Issuer,
-                    ValidateAudience = true,
-                    ValidAudience = jwt.Audience,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = signingKey,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromMinutes(2)
-                };
-            });
-
-        services.AddAuthorization();
-
-        // optional: expose config for other services/controllers
-        services.AddSingleton(jwt);
-
-        return services;
-    }
-}
-```
+Copy `JwtAuthExtensions.cs` from repo:
 
 ---
 
@@ -174,4 +114,3 @@ Everything “cloud-ish” lives in helpers and in Secret Manager, where it belo
 
 ---
 
-If you want, next step we can also move `JWT_SECRET` entirely out of config and into *another* LocalStack secret, and show students “both DB and JWT come from secret manager; appsettings only has secret **names**.”

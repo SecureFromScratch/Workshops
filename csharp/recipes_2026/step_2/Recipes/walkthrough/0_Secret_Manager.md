@@ -1,4 +1,5 @@
 # Secret Manager
+In this tutorial we'll learn how to use secret manager
 
 ## Why using secert manager?
 
@@ -103,21 +104,8 @@ sudo apt-get install -y powershell
 
 ```
 
-Create `start-db.ps1` next to `docker-compose.yml`:
-
-```powershell 
-# 1. Read SA password from LocalStack Secrets Manager
-$saSecret = aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value `
-    --secret-id recipes/dev/sa-password `
-    --query SecretString `
-    --output text
-
-# 2. Export it as env var for this process
-$env:MSSQL_SA_PASSWORD = $saSecret
-
-# 3. Start SQL Server
-docker compose up -d sqlserver
-```
+Copy from repo: `start-db.ps1` next to `docker-compose.yml`,
+and sql/init-db.sql file. 
 
 Run the powershell script
 
@@ -152,7 +140,8 @@ Now:
 ```
 
 Install the aws package
-````
+
+```
 dotnet add package AWSSDK.SecretsManager
 
 ```
@@ -170,20 +159,5 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 ```
 
 
-So final picture:
 
-* **Both** SA password and app DB password live in Secret Manager.
-* A small PowerShell script reads the SA secret and starts SQL Server.
-* The C# app reads only the app secret.
-
-If you want, I can next give you the exact SQL script to create `recipes_admin` and `recipes_app` and a minimal `RecipesDbContext` so the whole lab is copy paste runnable.
-
-
-If you don’t have `aws` CLI, you can also create this secret via C# once.
-
-Now the **only place** the app connection string lives is:
-
-* LocalStack Secret: `recipes/dev/db-connection`.
-
----
 

@@ -1,5 +1,6 @@
 
 # Authentication, the API part
+In this tutorial we'll use the secret manager for authentication.
 
 ## Install entity framework
 
