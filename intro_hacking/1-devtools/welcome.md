@@ -46,4 +46,4 @@ In the next pages will show the solution one after anohter
 - [Read Other users' baskets](solutions/othersorders.md)
 - [Gain access to the admin panel](solutions/admin.md)
 - [Look for Confidential Information](solutions/sensitive.md)
-- [Conduct XSS attack](solutions/xss.md)
+- [Perform a reflected XSS attack with <iframe src="javascript:alert(`xss`)">.](solutions/xss.md)
