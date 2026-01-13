@@ -169,13 +169,6 @@ logout(): Observable<void> {
 }
 ```
 
-## Security Benefits
-
-1. **XSS Protection:** Auth token is in HTTP-only cookie, inaccessible to JavaScript
-2. **CSRF Protection:** Your BFF server should implement CSRF tokens
-3. **Single Source of Truth:** Server session is authoritative
-4. **Automatic Cookie Management:** Browser handles cookie lifecycle
-
 ## Common Patterns
 
 ### Protecting Routes
@@ -212,16 +205,6 @@ canActivate(route: ActivatedRouteSnapshot) {
   return this.router.createUrlTree(['/unauthorized']);
 }
 ```
-
-## Important Considerations
-
-1. **Always use `withCredentials: true`** on authenticated requests
-2. **Initialize auth state in AppComponent** before routing
-3. **Handle logout errors gracefully** - always clear client state
-4. **Return URL preservation** - always save where user was trying to go
-5. **CORS Configuration** - BFF server must allow credentials from your Angular domain
-
-This pattern gives you secure, scalable authentication with minimal client-side complexity!
 
 ---
 
