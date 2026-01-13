@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: recipes-sqlserver
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD}"
+    ports:
+      - "14333:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+      - ./sql:/init
+    networks:
+      - recipes-net
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: recipes-localstack
+    restart: unless-stopped
+    environment:
+      - SERVICES=secretsmanager
+      - DEBUG=1
+    ports:
+      - "4566:4566"
+    volumes:
+      - localstack_data:/var/lib/localstack
+    networks:
+      - recipes-net
+
+networks:
+  recipes-net:
+
+volumes:
+  mssql_data:
+  localstack_data:
