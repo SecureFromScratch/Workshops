@@ -223,29 +223,42 @@ canActivate(route: ActivatedRouteSnapshot) {
 
 This pattern gives you secure, scalable authentication with minimal client-side complexity!
 
+---
 
-        modified:   ../proxy.conf.mjs
-        modified:   app/app.component.html
-        modified:   app/app.component.ts
-        modified:   app/app.config.ts
-        modified:   app/app.routes.ts
-        new file:   app/guards/auth.guard.spec.ts
-        new file:   app/guards/auth.guard.ts
-        new file:   app/interceptors/credentials.interceptor.ts
-        new file:   app/pages/home/home.component.css
-        new file:   app/pages/home/home.component.html
-        new file:   app/pages/home/home.component.spec.ts
-        new file:   app/pages/home/home.component.ts
-        new file:   app/pages/login/login.component.html
-        new file:   app/pages/login/login.component.ts
-        new file:   app/pages/recipes/recipe.component.html
-        new file:   app/pages/recipes/recipe.component.ts
-        new file:   app/pages/recipes/recipes.component.html
-        new file:   app/pages/recipes/recipes.component.ts
-        new file:   app/pages/register/register.component.html
-        new file:   app/pages/register/register.component.ts
-        new file:   app/pages/setup/setup.component.html
-        new file:   app/pages/setup/setup.component.ts
-        new file:   app/services/auth.service.ts
-        new file:   app/services/recipes.service.ts
+The following files have been changed to support lgoin, registration and so on.
+If you struggle, you can copy them from the repo. 
+        
+app/app.component.html
+
+app/app.component.ts
+
+app/app.config.ts
+
+app/app.routes.ts
+
+app/guards/auth.guard.ts
+
+app/interceptors/credentials.interceptor.ts
+
+app/pages/home/home.component.css
+
+app/pages/home/home.component.html
+
+app/pages/home/home.component.ts
+
+app/pages/login/login.component.html
+
+app/pages/login/login.component.ts
+
+app/pages/register/register.component.html
+
+app/pages/register/register.component.ts
+
+app/pages/setup/setup.component.html
+
+app/pages/setup/setup.component.ts
+
+app/services/auth.service.ts
+
+
         
