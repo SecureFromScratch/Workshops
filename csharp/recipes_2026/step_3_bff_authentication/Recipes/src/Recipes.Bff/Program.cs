@@ -28,7 +28,7 @@ app.MapControllers();
 app.MapGet("/health", async (IHttpClientFactory httpClientFactory, CancellationToken ct) =>
 {
     var client = httpClientFactory.CreateClient("Api");
-    var response = await client.GetAsync("/health", ct);
+    var response = await client.GetAsync("/api/health", ct);
 
     if (response.IsSuccessStatusCode)
     {
@@ -48,3 +48,4 @@ app.MapReverseProxy();
 
 
 app.Run();
+
