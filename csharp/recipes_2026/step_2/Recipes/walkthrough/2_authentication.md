@@ -45,13 +45,7 @@ From the repo, copy the API files into:
 * Controllers:
 
   * `Api/Controllers/AccountController.cs`
-  * `Api/Controllers/AdminController.cs`
-* Update Program.cs:
-
-```csharp
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
-```
+  * `Api/Controllers/AdminController.cs` 
 
 ----
 migrate
@@ -62,9 +56,61 @@ dotnet ef database update --connection "Server=localhost,14333;Database=Recipes;
 
 ```
 
+----
+## Dealing with the JWT secret 
+
+1. Put JWT config in Secret Manager (one secret)
+
+  In LocalStack:
+
+```bash
+aws --endpoint-url=http://localhost:4566 secretsmanager put-secret-value \
+  --secret-id recipes/dev/jwt-config \
+  --secret-string '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}'
+```
+
+2. Update configuration: 
+   In `appsettings.json` (already have the section, just add a key):
+
+```json
+{
+  "Secrets": {
+    "ServiceUrl": "http://localhost:4566",
+    "Region": "us-east-1",
+    "DbConnectionSecretName": "recipes/dev/app-db-connection",
+    "JwtConfigSecretName": "recipes/dev/jwt-config"
+  }
+}
+```
+
+---
+
+3. Update `SecretsConfig` helper 
+
+    Install the JwtBearer package
+    ```bash
+    dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 8.*
+    ```
+
+    Add funcionalty that gets the JWT.
+
+---
+
+4. Implement JWT setup in an extension method
+
+    Copy `JwtAuthExtensions.cs` from repo.
+
+---
+
+5. Copy the updated `Program.cs` from repo.
+
+
+
+
+
 ## Test
 1. Try to Regsiter
 2. Try to Login
-3. Authenticate, did you get an error? "JWT_SECRET is not set"
-4. Put the JWT secret in the secret manager and try again.
-5. Use the swagger authorize button to authenticate using the JWT.
+3. Copy the JWT
+4. Use the swagger authorize button to authenticate using the JWT.
+5. Access the me endpoint to verify that authentcation succeded. 
