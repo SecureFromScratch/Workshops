@@ -24,7 +24,7 @@ app.MapGet("/health", async (IHttpClientFactory httpClientFactory, CancellationT
     try
     {
         // BaseAddress is "http://localhost:7000/", so "health" -> "http://localhost:7000/health"
-        var response = await client.GetAsync("health", ct);
+        var response = await client.GetAsync("/api/health", ct);
 
         if (response.IsSuccessStatusCode)
         {
@@ -55,3 +55,4 @@ app.MapGet("/health", async (IHttpClientFactory httpClientFactory, CancellationT
 app.MapReverseProxy();
 
 app.Run();
+
