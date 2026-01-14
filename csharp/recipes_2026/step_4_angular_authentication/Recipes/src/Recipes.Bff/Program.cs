@@ -4,7 +4,7 @@ using Recipes.Bff.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddAntiforgery();
+//builder.Services.AddAntiforgery();
 
 builder.Services.Configure<ApiOptions>(options =>
 {
@@ -20,9 +20,29 @@ builder.Services
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:8888", "http://127.0.0.1:8888")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+              
+    });
+});
 
 
 var app = builder.Build();
+
+app.UseCors();
+
+// Your logging middleware
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"[BFF] {context.Request.Method} {context.Request.Path}");
+    await next();
+});
 app.MapControllers();
 // BFF /health that calls API /health
 app.MapGet("/health", async (IHttpClientFactory httpClientFactory, CancellationToken ct) =>
@@ -41,6 +61,8 @@ app.MapGet("/health", async (IHttpClientFactory httpClientFactory, CancellationT
         detail: $"API returned status code {(int)response.StatusCode}"
     );
 });
+
+
 
 // Important: map health BEFORE the proxy so it is not proxied
 app.MapReverseProxy();

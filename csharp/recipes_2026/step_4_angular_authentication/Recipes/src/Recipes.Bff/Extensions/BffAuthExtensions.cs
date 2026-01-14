@@ -22,12 +22,14 @@ namespace Recipes.Bff.Extensions
             });
 
             services.AddAuthentication("bff")
-                .AddCookie("bff", options =>
-                {
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                });
+            .AddCookie("bff", options =>
+            {
+                options.Cookie.Name = "bff";                 
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.Cookie.SameSite = SameSiteMode.Lax;           
+            });
+
 
             return services;
         }

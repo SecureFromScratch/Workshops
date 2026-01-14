@@ -13,20 +13,22 @@ namespace Recipes.Bff.Controllers;
 public sealed class AccountBffController : ControllerBase
 {
     private readonly IHttpClientFactory m_factory;
-    private readonly IAntiforgery _antiforgery;
+    //private readonly IAntiforgery _antiforgery;
 
     
-    public AccountBffController(IHttpClientFactory factory, IAntiforgery antiforgery) 
+    //public AccountBffController(IHttpClientFactory factory, IAntiforgery antiforgery) 
+    public AccountBffController(IHttpClientFactory factory) 
     { 
         m_factory = factory; 
-        _antiforgery = antiforgery;
+        //_antiforgery = antiforgery;
     }
 
     [HttpGet("/bff/unauthorized")]
     public IActionResult UnauthorizedEndpoint() => Unauthorized();
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest req, IAntiforgery antiforgery)
+    //public async Task<IActionResult> Login([FromBody] LoginRequest req, IAntiforgery antiforgery)
+    public async Task<IActionResult> Login([FromBody] LoginRequest req)
     {
         var http = HttpContext;
 
