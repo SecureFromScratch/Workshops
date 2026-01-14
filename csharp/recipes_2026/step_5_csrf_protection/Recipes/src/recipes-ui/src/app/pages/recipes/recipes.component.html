@@ -1,0 +1,26 @@
+<h2>Recipes</h2>
+
+<div *ngIf="error" style="color:red">{{ error }}</div>
+
+<button (click)="newRecipe()">New recipe</button>
+
+<table border="1" cellpadding="6" cellspacing="0" style="margin-top:10px">
+   <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Photo</th>
+      <th>Actions</th>
+   </tr>
+
+   <tr *ngFor="let r of recipes">
+      <td>{{ r.id }}</td>
+      <td>{{ r.name }}</td>
+      <td>
+         <img *ngIf="r.photo" [src]="r.photo" style="max-height:50px" />
+      </td>
+      <td>
+         <button (click)="edit(r.id)">Edit</button>
+         <button (click)="del(r.id)">Delete</button>
+      </td>
+   </tr>
+</table>

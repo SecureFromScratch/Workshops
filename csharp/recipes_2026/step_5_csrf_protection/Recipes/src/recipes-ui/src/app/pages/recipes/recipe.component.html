@@ -1,0 +1,58 @@
+<h2>{{ id === null ? 'New Recipe' : 'Edit Recipe' }}</h2>
+
+<div *ngIf="error" style="color:red">{{ error }}</div>
+
+<label>
+   Name
+   <input [(ngModel)]="dto.name" />
+</label>
+
+<br />
+
+<label>
+   Description
+   <textarea [(ngModel)]="dto.description"></textarea>
+</label>
+
+<br />
+
+<label>
+   Status
+   <select [(ngModel)]="dto.status">
+      <option [ngValue]="RecipeStatus.Draft">Draft</option>
+      <option [ngValue]="RecipeStatus.Published">Published</option>
+   </select>
+</label>
+
+<br /><br />
+
+<div>
+   <label>
+      <input type="radio" name="photoMode" [(ngModel)]="photoMode" value="url" />
+      Image URL
+   </label>
+
+   <label style="margin-left:12px">
+      <input type="radio" name="photoMode" [(ngModel)]="photoMode" value="upload" />
+      Upload file
+   </label>
+</div>
+
+<div *ngIf="photoMode === 'url'" style="margin-top:10px">
+   <label>
+      Photo URL
+      <input [(ngModel)]="dto.photo" />
+   </label>
+
+   <div *ngIf="dto.photo" style="margin-top:8px">
+      <img [src]="dto.photo" style="max-height:120px" />
+   </div>
+</div>
+
+<div *ngIf="photoMode === 'upload'" style="margin-top:10px">
+   <input type="file" accept="image/*" (change)="onFileChange($event)" />
+</div>
+
+<br />
+<button (click)="save()">Save</button>
+<button (click)="router.navigateByUrl('/recipes')" style="margin-left:8px">Cancel</button>
