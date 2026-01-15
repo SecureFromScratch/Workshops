@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Recipes.Api.Data;
 using Recipes.Api.Models;
 using Recipes.Api.Security;
+using Recipes.Api.Serrvices;
 using Recipes.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 JwtConfig jwtConfig       = await SecretsConfig.GetJwtConfigAsync(builder.Configuration);
+
+
+
+
 builder.Services.AddJwtAuth(jwtConfig);
 
 builder.Services.AddControllers();
@@ -23,6 +28,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
 
+//Items
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

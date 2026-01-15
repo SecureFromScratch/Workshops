@@ -117,24 +117,27 @@ public class AccountController : ControllerBase
 
    private string GenerateToken(string userName, string[] roles)
    {
-      var key = m_jwtConfig.Secret;
-      var issuer = m_jwtConfig.Issuer;
-      var audience = m_jwtConfig.Audience;
+      string key = m_jwtConfig.Secret;
+      string issuer = m_jwtConfig.Issuer;
+      string audience = m_jwtConfig.Audience;
 
-      var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-      var creds = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+      SymmetricSecurityKey signingKey =
+          new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
-      var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, userName)
-    };
+      SigningCredentials creds =
+          new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
-      foreach (var role in roles)
+      List<Claim> claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, userName)
+        };
+
+      foreach (string role in roles)
       {
          claims.Add(new Claim(ClaimTypes.Role, role));
       }
 
-      var token = new JwtSecurityToken(
+      JwtSecurityToken token = new JwtSecurityToken(
           issuer: issuer,
           audience: audience,
           claims: claims,
@@ -143,4 +146,5 @@ public class AccountController : ControllerBase
 
       return new JwtSecurityTokenHandler().WriteToken(token);
    }
+
 }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Recipes.Api.Security;
+
 public static class JwtAuthExtensions
 {
     public static IServiceCollection AddJwtAuth(this IServiceCollection services, JwtConfig jwt)
@@ -25,6 +26,15 @@ public static class JwtAuthExtensions
                     IssuerSigningKey = signingKey,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromMinutes(2)
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = ctx =>
+                    {
+                        Console.WriteLine("JWT auth failed: " + ctx.Exception);
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

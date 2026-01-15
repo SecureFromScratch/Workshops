@@ -1,4 +1,5 @@
 // Api/Services/RecipeService.cs
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Recipes.Api.Data;
 using Recipes.Api.Models;
@@ -15,9 +16,9 @@ namespace Recipes.Api.Serrvices
       {
          m_context = context;
          m_logger = logger;
-      }     
+      }
 
-      
+
       public async Task<Recipe> CreateAsync(Recipe recipe, string currentUser)
       {
          recipe.CreatedBy = currentUser;
@@ -58,14 +59,15 @@ namespace Recipes.Api.Serrvices
          return true;
       }
 
-        public Task<List<Recipe>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
+      public async Task<List<Recipe>> GetAllAsync()
+      {
+         return await m_context.Recipes.ToListAsync();
+      }
 
-        public Task<Recipe?> GetByIdAsync(long id)
-        {
-            throw new NotImplementedException();
-        }
-    }
+
+      public Task<Recipe?> GetByIdAsync(long id)
+      {
+         throw new NotImplementedException();
+      }
+   }
 }
