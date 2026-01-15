@@ -3,6 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { RouterOutlet } from "@angular/router";
 import { AuthService } from "./services/auth.service";
+import { firstValueFrom } from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit {
   constructor(private auth: AuthService) { }
 
   ngOnInit(): void {
+    firstValueFrom(this.auth.initCsrf());
     this.auth.refreshMe().subscribe();
   }
 }

@@ -16,7 +16,10 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = '/bff/account';
+
+  private csrfToken: string | null = null;
+  private readonly bffRoot = '/bff';
+  private readonly baseUrl = `${this.bffRoot}/account`;
 
   // Source of truth in the client: "me" returned from server (cookie-backed)
   private m_me$ = new BehaviorSubject<MeResponse | null>(null);
@@ -43,6 +46,23 @@ export class AuthService {
       { withCredentials: true }
     );
   }
+
+    initCsrf(): Observable<void> {
+        return this.http
+            .get<{ token: string }>(`${this.bffRoot}/antiforgery`, {
+                withCredentials: true
+            })
+            .pipe(
+                tap(r => {
+                    this.csrfToken = r.token;
+                }),
+                map(() => { })
+            );
+    }
+
+    getCsrfToken(): string | null {
+        return this.csrfToken;
+    }
 
   login(userName: string, password: string): Observable<MeResponse> {
     return this.http.post<MeResponse>(

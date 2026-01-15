@@ -1,10 +1,17 @@
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Mvc;
 using Recipes.Bff.Extensions;
 using Recipes.Bff.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-//builder.Services.AddAntiforgery();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
+
+builder.Services.AddBffAntiforgery();
+
 
 builder.Services.Configure<ApiOptions>(options =>
 {
@@ -24,7 +31,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:8888", "http://127.0.0.1:8888")
+        policy.WithOrigins("http://localhost:8888", "http://127.0.0.1:8888", "http://localhost:4200")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
@@ -37,36 +44,8 @@ var app = builder.Build();
 
 app.UseCors();
 
-// Your logging middleware
-app.Use(async (context, next) =>
-{
-    Console.WriteLine($"[BFF] {context.Request.Method} {context.Request.Path}");
-    await next();
-});
 app.MapControllers();
-// BFF /health that calls API /health
-app.MapGet("/health", async (IHttpClientFactory httpClientFactory, CancellationToken ct) =>
-{
-    var client = httpClientFactory.CreateClient("Api");
-    var response = await client.GetAsync("/api/health", ct);
 
-    if (response.IsSuccessStatusCode)
-    {
-        return Results.Ok(new { status = "ok", api = "up" });
-    }
-
-    return Results.Problem(
-        statusCode: StatusCodes.Status503ServiceUnavailable,
-        title: "API health check failed",
-        detail: $"API returned status code {(int)response.StatusCode}"
-    );
-});
-
-
-
-// Important: map health BEFORE the proxy so it is not proxied
 app.MapReverseProxy();
-
-
 
 app.Run();
