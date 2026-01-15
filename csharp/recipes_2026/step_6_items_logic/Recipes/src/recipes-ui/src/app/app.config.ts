@@ -6,6 +6,7 @@ import {
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { credentialsInterceptor } from './interceptors/credentials.interceptor';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 
 
@@ -24,7 +25,7 @@ export const appConfig: ApplicationConfig = {
     ),
 
     // This line makes *ngIf/*ngFor and [(ngModel)] available app-wide
-    importProvidersFrom(CommonModule, FormsModule, HttpClient )
+    importProvidersFrom(CommonModule, FormsModule, HttpClient, EditorModule )
   ]
 };
 

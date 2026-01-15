@@ -9,8 +9,20 @@ builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 });
+builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddTransient<ApiAccessTokenHandler>();
+
+builder.Services
+    .AddHttpClient("Api", client =>
+    {
+        client.BaseAddress = new Uri("http://localhost:7000/");
+    })
+    .AddHttpMessageHandler<ApiAccessTokenHandler>();
+
+//builder.Services.AddTransient<BffAccessTokenHandler>();
 builder.Services.AddBffAntiforgery();
+builder.Services.AddAuthorization();
 
 
 builder.Services.Configure<ApiOptions>(options =>
@@ -43,6 +55,9 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseCors();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

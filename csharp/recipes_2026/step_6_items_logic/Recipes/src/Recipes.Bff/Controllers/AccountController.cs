@@ -28,13 +28,10 @@ public sealed class AccountBffController : ControllerBase
 
     [HttpPost("login")]    
     
-    [ValidateAntiForgeryToken]   
-    //public async Task<IActionResult> Login([FromBody] LoginRequest req)
+    [ValidateAntiForgeryToken]       
     public async Task<IActionResult> Login([FromBody] LoginRequest req, IAntiforgery antiforgery)
     {
-        var http = HttpContext;
-
-        //await antiforgery.ValidateRequestAsync(http);
+        var http = HttpContext;        
 
         var client = m_factory.CreateClient("Api");
         var resp = await client.PostAsJsonAsync("api/account/login", req, HttpContext.RequestAborted);
