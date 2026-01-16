@@ -1,0 +1,565 @@
+/* ============================================
+   RECIPE APP - DARK MODE THEME
+   ============================================ */
+
+:root {
+  /* Primary Colors - Dark Mode */
+  --primary-blue: #60A5FA;
+  --primary-blue-light: #93C5FD;
+  --primary-blue-dark: #3B82F6;
+  
+  /* Secondary Colors */
+  --secondary-purple: #A78BFA;
+  --secondary-purple-light: #C4B5FD;
+  --secondary-purple-dark: #8B5CF6;
+  
+  /* Accent Colors */
+  --accent-cyan: #22D3EE;
+  --accent-green: #34D399;
+  
+  /* Dark Neutral Colors */
+  --gray-50: #18181B;
+  --gray-100: #27272A;
+  --gray-200: #3F3F46;
+  --gray-300: #52525B;
+  --gray-400: #71717A;
+  --gray-500: #A1A1AA;
+  --gray-600: #D4D4D8;
+  --gray-700: #E4E4E7;
+  --gray-800: #F4F4F5;
+  --gray-900: #FAFAFA;
+  
+  /* Semantic Colors */
+  --success: #10B981;
+  --error: #EF4444;
+  --warning: #F59E0B;
+  --info: #3B82F6;
+  
+  /* Background Colors */
+  --bg-primary: #18181B;
+  --bg-secondary: #27272A;
+  --bg-tertiary: #3F3F46;
+  --bg-card: #1F1F23;
+  
+  /* Text Colors */
+  --text-primary: #F4F4F5;
+  --text-secondary: #A1A1AA;
+  --text-tertiary: #71717A;
+  
+  /* Border & Shadow */
+  --border-color: #3F3F46;
+  --border-color-light: #52525B;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 20px rgba(96, 165, 250, 0.3);
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+}
+
+/* ============================================
+   GLOBAL RESETS & BASE STYLES
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-primary);
+  min-height: 100vh;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* ============================================
+   CONTAINER STYLES
+   ============================================ */
+
+.container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: var(--spacing-2xl);
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(96, 165, 250, 0.3);
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--primary-blue);
+}
+
+/* ============================================
+   FORM STYLES
+   ============================================ */
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+  background: var(--bg-tertiary);
+}
+
+input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+button[type="submit"],
+button:not([type]):not(.secondary):not(.danger) {
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+button[type="submit"]:hover,
+button:not([type]):not(.secondary):not(.danger):hover {
+  background: linear-gradient(135deg, var(--primary-blue-light), var(--primary-blue));
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+button[type="submit"]:active,
+button:not([type]):active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Secondary buttons */
+button.secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+button.secondary:hover {
+  background: var(--gray-300);
+  border-color: var(--border-color-light);
+}
+
+/* Danger buttons */
+button.danger {
+  background: var(--error);
+  color: white;
+}
+
+button.danger:hover {
+  background: #DC2626;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+/* ============================================
+   ALERT/MESSAGE STYLES
+   ============================================ */
+
+.error,
+.info,
+.success,
+.warning {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  font-weight: 500;
+  border-left: 3px solid;
+  background: var(--bg-secondary);
+}
+
+.error {
+  color: #FCA5A5;
+  border-left-color: var(--error);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.info {
+  color: #93C5FD;
+  border-left-color: var(--info);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.success {
+  color: #6EE7B7;
+  border-left-color: var(--success);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.warning {
+  color: #FCD34D;
+  border-left-color: var(--warning);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+/* ============================================
+   HINT/HELPER TEXT
+   ============================================ */
+
+.hint,
+small.hint {
+  display: block;
+  margin-top: var(--spacing-sm);
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+}
+
+.hint ul {
+  margin-top: var(--spacing-xs);
+  padding-left: 1.5rem;
+}
+
+.hint li {
+  margin-bottom: var(--spacing-xs);
+}
+
+/* ============================================
+   LINK STYLES
+   ============================================ */
+
+a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--primary-blue-light);
+  text-decoration: underline;
+}
+
+/* ============================================
+   TABLE STYLES
+   ============================================ */
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  margin-top: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+}
+
+th {
+  background: linear-gradient(135deg, var(--primary-blue-dark), var(--secondary-purple-dark));
+  color: white;
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+td {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: var(--bg-secondary);
+}
+
+td img {
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Table action buttons */
+td button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  margin-right: var(--spacing-sm);
+}
+
+/* ============================================
+   RADIO BUTTONS & CHECKBOXES
+   ============================================ */
+
+input[type="radio"],
+input[type="checkbox"] {
+  width: auto;
+  margin-right: var(--spacing-sm);
+  cursor: pointer;
+  accent-color: var(--primary-blue);
+}
+
+/* ============================================
+   IMAGE STYLES
+   ============================================ */
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================
+   RECIPE-SPECIFIC STYLES
+   ============================================ */
+
+/* Recipe List Page */
+.recipes-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: var(--spacing-xl);
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-color);
+}
+
+.recipes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 2px solid var(--primary-blue);
+}
+
+.recipes-header h2 {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Recipe Form Page */
+.recipe-form-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: var(--spacing-2xl);
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-color);
+}
+
+.form-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.form-section label {
+  display: block;
+  margin-bottom: var(--spacing-md);
+}
+
+.photo-mode-selector {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.photo-mode-selector label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  text-transform: none;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.photo-preview {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  text-align: center;
+  border: 1px solid var(--border-color);
+}
+
+.photo-preview img {
+  max-height: 200px;
+  margin: 0 auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+.form-actions button:last-child {
+  flex: 0.5;
+}
+
+/* Editor wrapper for TinyMCE */
+.editor-wrapper {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Status badge */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-badge.draft {
+  background: rgba(245, 158, 11, 0.2);
+  color: #FCD34D;
+  border: 1px solid var(--warning);
+}
+
+.status-badge.published {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6EE7B7;
+  border: 1px solid var(--success);
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+.text-center {
+  text-align: center;
+}
+
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+.mt-4 { margin-top: var(--spacing-xl); }
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mb-4 { margin-bottom: var(--spacing-xl); }
+
+.p-1 { padding: var(--spacing-sm); }
+.p-2 { padding: var(--spacing-md); }
+.p-3 { padding: var(--spacing-lg); }
+.p-4 { padding: var(--spacing-xl); }
+
+/* Scrollbar styling for dark mode */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}

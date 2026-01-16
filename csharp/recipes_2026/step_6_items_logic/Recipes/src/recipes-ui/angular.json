@@ -32,7 +32,10 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css",
+              "src/app/app.component.css",
+              "src/app/pages/recipes/recipe.component.css",
+              "src/app/pages/recipes/recipes.component.css"
             ],
             "scripts": []
           },
@@ -63,8 +66,7 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-              "proxyConfig": "proxy.conf.mjs"
-
+            "proxyConfig": "proxy.conf.mjs"
           },
           "configurations": {
             "production": {

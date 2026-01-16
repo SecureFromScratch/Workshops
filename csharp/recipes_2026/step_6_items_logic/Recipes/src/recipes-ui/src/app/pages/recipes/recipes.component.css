@@ -1,0 +1,130 @@
+/* ============================================
+   RECIPE-SPECIFIC STYLES
+   ============================================ */
+
+/* Recipe List Page */
+.recipes-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: var(--spacing-xl);
+}
+
+.recipes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 3px solid var(--primary-orange);
+}
+
+.recipes-header h2 {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Recipe Form Page */
+.recipe-form-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: var(--spacing-2xl);
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.form-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.form-section label {
+  display: block;
+  margin-bottom: var(--spacing-md);
+}
+
+.photo-mode-selector {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+}
+
+.photo-mode-selector label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  text-transform: none;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.photo-preview {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.photo-preview img {
+  max-height: 200px;
+  margin: 0 auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+.form-actions button:last-child {
+  flex: 0.5;
+}
+
+/* Editor wrapper for TinyMCE */
+.editor-wrapper {
+  margin-bottom: var(--spacing-lg);
+}
+
+.debug-info {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--gray-100);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-family: monospace;
+}
+
+/* Status badge */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-badge.draft {
+  background: var(--warning);
+  color: white;
+}
+
+.status-badge.published {
+  background: var(--success);
+  color: white;
+}
