@@ -10,8 +10,14 @@
 <br />
 
 <label>
-   Description
-   <textarea [(ngModel)]="dto.description"></textarea>
+   Description   
+   <editor apiKey="r1pdrmpmise3y7ifd61jlmc2mhc9grv2obgoh69mjnf0wagc" [(ngModel)]="dto.description" [init]="{
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
+    }">
+   </editor>
+   <p>Debug: {{ dto.description }}</p>
+
 </label>
 
 <br />

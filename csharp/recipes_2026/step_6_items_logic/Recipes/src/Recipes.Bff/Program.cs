@@ -5,10 +5,21 @@ using Recipes.Bff.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var apiAddress = builder.Configuration[
+    "ReverseProxy:Clusters:apiCluster:Destinations:api:Address"
+];
+if (string.IsNullOrWhiteSpace(apiAddress))
+{
+    throw new InvalidOperationException(
+        "API address is not configured at ReverseProxy:Clusters:apiCluster:Destinations:api:Address"
+    );
+}
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 });
+
+// Sending JWT to API
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<ApiAccessTokenHandler>();
@@ -16,20 +27,17 @@ builder.Services.AddTransient<ApiAccessTokenHandler>();
 builder.Services
     .AddHttpClient("Api", client =>
     {
-        client.BaseAddress = new Uri("http://localhost:7000/");
+        client.BaseAddress = new Uri(apiAddress);
     })
     .AddHttpMessageHandler<ApiAccessTokenHandler>();
 
-//builder.Services.AddTransient<BffAccessTokenHandler>();
 builder.Services.AddBffAntiforgery();
 builder.Services.AddAuthorization();
 
 
 builder.Services.Configure<ApiOptions>(options =>
 {
-    options.BaseAddress = builder.Configuration[
-        "ReverseProxy:Clusters:apiCluster:Destinations:api:Address"
-    ] ?? throw new InvalidOperationException("API address is not configured");
+    options.BaseAddress = apiAddress;
 });
 
 builder.Services.AddBffAuthAndApiClient(builder.Configuration);

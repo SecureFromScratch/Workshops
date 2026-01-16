@@ -3,13 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RecipesService, RecipeCreateUpdate, RecipeStatus } from '../../services/recipes.service';
 import { FormsModule } from '@angular/forms';  // Add this import
 import { CommonModule } from '@angular/common';
+import { EditorComponent } from '@tinymce/tinymce-angular';
 
 type PhotoMode = 'url' | 'upload';
 
 @Component({
     selector: 'app-recipe',
     standalone: true,
-    imports: [CommonModule, FormsModule],  // Add FormsModule here
+    imports: [CommonModule, FormsModule, EditorComponent],  // Add FormsModule here
 
     templateUrl: './recipe.component.html'
 })
