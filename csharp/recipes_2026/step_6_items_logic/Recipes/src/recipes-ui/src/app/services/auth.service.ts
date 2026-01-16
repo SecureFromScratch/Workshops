@@ -17,9 +17,10 @@ export interface LoginResponse {
 })
 export class AuthService {
 
-  private csrfToken: string | null = null;
   private readonly bffRoot = '/bff';
   private readonly baseUrl = `${this.bffRoot}/account`;
+  private requestToken: string | null = null;
+
 
   // Source of truth in the client: "me" returned from server (cookie-backed)
   private m_me$ = new BehaviorSubject<MeResponse | null>(null);
@@ -47,22 +48,8 @@ export class AuthService {
     );
   }
 
-    initCsrf(): Observable<void> {
-        return this.http
-            .get<{ token: string }>(`${this.bffRoot}/antiforgery`, {
-                withCredentials: true
-            })
-            .pipe(
-                tap(r => {
-                    this.csrfToken = r.token;
-                }),
-                map(() => { })
-            );
-    }
 
-    getCsrfToken(): string | null {
-        return this.csrfToken;
-    }
+
 
   login(userName: string, password: string): Observable<MeResponse> {
     return this.http.post<MeResponse>(
@@ -108,6 +95,23 @@ export class AuthService {
         return of(null);
       })
     );
+  }
+  initCsrf(): Observable<void> {
+    return this.http
+      .get<{ token: string }>(`${this.baseUrl}/antiforgery`, {
+        withCredentials: true
+      })
+      .pipe(
+        tap(response => {
+          this.requestToken = response.token;
+          console.log('CSRF request token stored:', this.requestToken);
+        }),
+        map(() => { })
+      );
+  }
+
+  getRequestToken(): string | null {
+    return this.requestToken;
   }
 
   // Keep your old me() name too, but make it cookie-based and update state

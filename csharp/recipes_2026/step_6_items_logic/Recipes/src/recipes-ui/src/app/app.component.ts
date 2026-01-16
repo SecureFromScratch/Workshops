@@ -33,8 +33,7 @@ export class AppComponent implements OnInit {
 
   constructor(private auth: AuthService) { }
 
-  ngOnInit(): void {
-    firstValueFrom(this.auth.initCsrf());
+  ngOnInit(): void {    
     this.auth.refreshMe().subscribe();
   }
 }

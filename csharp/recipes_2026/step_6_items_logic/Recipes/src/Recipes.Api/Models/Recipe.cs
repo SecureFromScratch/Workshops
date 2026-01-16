@@ -18,8 +18,7 @@ namespace Recipes.Api.Models
 
       [MaxLength(2000)]
       public string? Description { get; set; }
-
-      [Required]
+      
       [MaxLength(100)]
       public string CreatedBy { get; set; } = string.Empty;
 

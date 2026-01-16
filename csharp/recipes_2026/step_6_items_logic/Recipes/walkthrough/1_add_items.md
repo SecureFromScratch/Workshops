@@ -16,23 +16,9 @@
    - Recipes.Api/Services/IRecipesService.cs
 
 ## BFF
-   ### FACAD
-   Add a facad that call the api's CRUD
-   You can copy the following files from repo:
-   - Recipes.Bff/Controllers/RecipesController.cs
-   ### Add DelegatingHandler
-   Add a DelegatingHandler that sends to the API the jwt after sunsequenting calls after login.
-   You can copy the following files from repo:
-   - Recipes.Bff/Extensions/ApiAccessTokenHandler.cs
-   and resiter the extension in Program.cs
-   ```csharp
-   builder.Services.AddHttpContextAccessor();
-   builder.Services.AddTransient<ApiAccessTokenHandler>();
+   No need to add anything becasue it's a proxy
 
-   builder.Services
-    .AddHttpClient("Api", client =>
-    {
-        client.BaseAddress = new Uri(apiAddress);
-    })
-    .AddHttpMessageHandler<ApiAccessTokenHandler>();
-   ```
+## Angular
+Add Recipes UI
+Update routes
+Recirect to Recipes UI after login

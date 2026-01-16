@@ -53,7 +53,8 @@ namespace Recipes.Api.Controllers
             Name = recipe.Name,
             Description = recipe.Description,
             Photo = recipe.Photo,
-            Status = recipe.Status
+            Status = recipe.Status,
+            CreatedBy = userName
          };
 
          var created = await m_service.CreateAsync(entity, userName);

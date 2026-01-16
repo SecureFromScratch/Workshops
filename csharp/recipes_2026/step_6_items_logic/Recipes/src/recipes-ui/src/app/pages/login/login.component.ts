@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink], // Add this!
+  imports: [CommonModule, FormsModule, RouterLink], 
 })
 export class LoginComponent {
 
@@ -37,7 +37,7 @@ export class LoginComponent {
     this.info = '';
     this.auth.login(this.userName, this.password).subscribe({
       next: (me: MeResponse) => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['recipes']);
       },
       error: err => {
         this.error = err.error?.error ?? 'Login failed';

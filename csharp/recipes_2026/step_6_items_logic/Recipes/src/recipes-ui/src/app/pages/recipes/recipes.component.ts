@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RecipesService, Recipe } from '../../services/recipes.service';
 import { CommonModule } from '@angular/common';
-import { EditorComponent } from '@tinymce/tinymce-angular';
 
 
 @Component({
     selector: 'app-recipes',
     standalone: true,
-    imports: [CommonModule, EditorComponent],
+    imports: [CommonModule],
     templateUrl: './recipes.component.html'
 
 })
