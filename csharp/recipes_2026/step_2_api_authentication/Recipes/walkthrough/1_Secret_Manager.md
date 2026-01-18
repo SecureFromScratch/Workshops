@@ -125,7 +125,6 @@ pwsh -File ./start-db.ps1
 .\start-db.ps1           # on Windows (PowerShell)
 ```
 
-Now:
 
 * SA password source of truth is **Secret Manager**.
 * `.env` is not needed at all.
