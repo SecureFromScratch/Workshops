@@ -47,7 +47,6 @@ From that folder:
 docker compose up -d localstack
 ```
 
-* SQL Server is at `localhost,14333`
 * LocalStack (Secrets Manager) is at `http://localhost:4566`
 
 ---
@@ -125,7 +124,7 @@ pwsh -File ./start-db.ps1
 .\start-db.ps1           # on Windows (PowerShell)
 ```
 
-
+* SQL Server is at `localhost,14333`
 * SA password source of truth is **Secret Manager**.
 * `.env` is not needed at all.
 * Docker only sees `MSSQL_SA_PASSWORD` at runtime, injected by the script.
