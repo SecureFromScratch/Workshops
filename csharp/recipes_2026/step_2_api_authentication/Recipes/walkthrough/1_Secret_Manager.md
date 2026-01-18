@@ -78,7 +78,15 @@ After you create `recipes_app` in SQL Server:
 aws --endpoint-url=http://localhost:4566 secretsmanager create-secret --name recipes/dev/app-db-connection --secret-string "Server=localhost,14333;Database=Recipes;User Id=recipes_app;Password=StrongP4ssword123;TrustServerCertificate=true;"
 
 ```
-Verify
+3. jwt secret for later
+
+```bash
+aws --endpoint-url=http://localhost:4566 secretsmanager create-secret \
+  --name recipes/dev/jwt-config \
+  --secret-string '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}'
+```
+
+5. Verify
 ```
 aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/sa-password --query SecretString --output text
 aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/app-db-connection --query SecretString --output text
