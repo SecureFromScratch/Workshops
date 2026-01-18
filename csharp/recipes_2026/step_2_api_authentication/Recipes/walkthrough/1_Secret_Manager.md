@@ -90,6 +90,8 @@ aws --endpoint-url=http://localhost:4566 secretsmanager create-secret \
 ```
 aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/sa-password --query SecretString --output text
 aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/app-db-connection --query SecretString --output text
+aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/jwt-config  --query SecretString --output text
+
 ```
 
 Now **both** passwords live in Secret Manager.
