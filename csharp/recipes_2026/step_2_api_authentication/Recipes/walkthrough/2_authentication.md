@@ -61,8 +61,13 @@ dotnet ef database update --connection "Server=localhost,14333;Database=Recipes;
 
 1. Put JWT config in Secret Manager (one secret)
 
-  In LocalStack:
-
+  Create the secret in LocalStack:
+```bash
+aws --endpoint-url=http://localhost:4566 secretsmanager create-secret \
+  --name recipes/dev/jwt-config \
+  --secret-string '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}'
+```
+Or Update the secret
 ```bash
 aws --endpoint-url=http://localhost:4566 secretsmanager put-secret-value \
   --secret-id recipes/dev/jwt-config \
