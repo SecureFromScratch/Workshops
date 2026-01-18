@@ -1,5 +1,7 @@
 # Preparations
 
+## Clone the challanges folder using spars checkin
+
 ## Packages
 1. **Install the following nugets**
 Project 'Recipes.Api' has the following package references
