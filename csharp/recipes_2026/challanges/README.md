@@ -1,7 +1,7 @@
 # Preparation
 
 ## Packages
-1. Install the following nugets
+1. **Install the following nugets**
 Project 'Recipes.Api' has the following package references
    [net8.0]: 
    Top-level Package                                    Requested   Resolved
@@ -18,9 +18,9 @@ Project 'Recipes.Bff' has the following package references
    Top-level Package        Requested   Resolved
    > Yarp.ReverseProxy      2.3.0       2.3.0   
 
-2. Install the angular packages for this solution
+2. **Install the angular packages for this solution**
 
-4. Download Docker 
+4. **Download Docker** 
    - Go to: https://www.docker.com/products/docker-desktop
    - Click "Download for Windows"
    - Or direct link: https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe
