@@ -86,15 +86,13 @@ aws --endpoint-url=http://localhost:4566 secretsmanager create-secret \
   --secret-string '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}'
 ```
 
-5. Verify
+4. Verify
 ```
 aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/sa-password --query SecretString --output text
 aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/app-db-connection --query SecretString --output text
 aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/jwt-config  --query SecretString --output text
 
 ```
-
-Now **both** passwords live in Secret Manager.
 
 ---
 
