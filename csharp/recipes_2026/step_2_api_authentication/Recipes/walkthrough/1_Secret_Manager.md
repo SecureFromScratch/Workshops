@@ -114,6 +114,11 @@ sudo apt-get install -y powershell
 Copy from repo: `start-db.ps1` next to `docker-compose.yml`,
 and sql/init-db.sql file. 
 
+Run the entity framework migration
+```
+dotnet ef migrations add InitialCreate
+```
+
 Run the powershell script
 
 ```
