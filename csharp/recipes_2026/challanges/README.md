@@ -53,7 +53,7 @@ Project 'Recipes.Bff' has the following package references
    Docker version 24.0.x, build xxxxx
    Docker Compose version v2.x.x
    ```
-8. Follow the secret manager walkthrough: [Secret Manager](csharp/recipes_2026/challanges/Recipes/walkthrough/1_Secret_Manager.md)
+8. Follow the secret manager walkthrough: [Secret Manager](Recipes/walkthrough/1_Secret_Manager.md)
 
 
 ---
