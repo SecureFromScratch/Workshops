@@ -1,0 +1,125 @@
+# Secret Manager
+In this tutorial we'll learn how to use secret manager
+
+## Why using secert manager?
+
+Storing application secrets in a secret manager eliminates the need to hard-code sensitive values like database passwords, API keys, or JWT signing keys in source code, config files, or container images. This prevents accidental leaks through version control and reduces the blast radius of credential exposure. Secret managers also support secure rotation, centralized auditing, and environment-specific overrides without code changes. Instead of attempting to “hide” secrets in the application, the app retrieves them securely at runtime, allowing the same build artifacts to be safely deployed across development, staging, and production environments. In short, secret managers separate secrets from code, enforce least-privilege access, and make credential management an operational task rather than a developer responsibility.
+
+
+## LocalStack
+LocalStack is a tool that emulates many AWS cloud services on your local machine so you can build and test cloud applications without talking to real AWS. It runs as a local environment (often in Docker) and exposes AWS‑compatible endpoints, so your code, CLI, Terraform, or CDK commands work almost exactly as they would against real AWS, just faster and without cost. This lets teams iterate on things like S3, Lambda, DynamoDB, and API Gateway integrations offline, then switch the same code and configs to real AWS when ready to deploy.
+
+## How to integrate secret manager into the api
+
+### Creaing sqlserver, and localstack docker
+
+Copy `docker-compose.yml` from the repo.
+
+
+---
+### Install AWS CLI
+
+1. Go to:
+   [https://awscli.amazonaws.com/AWSCLIV2.msi](https://awscli.amazonaws.com/AWSCLIV2.msi)
+
+2. Run the installer (Next, Next, Finish)
+
+3. Open a new terminal (PowerShell or CMD):
+
+```powershell
+aws --version
+```
+If you see something like `aws-cli/2.x`, you're done.
+
+---
+
+### Start LocalStack
+
+From that folder:
+
+```bash
+docker compose up -d localstack
+```
+
+* LocalStack (Secrets Manager) is at `http://localhost:4566`
+
+---
+
+### Put the **DB connection string** in LocalStack
+
+Configure aws access key, (localstack doesn't check those, unlike aws real enviroment):
+
+```bash
+aws configure set aws_access_key_id localstack
+aws configure set aws_secret_access_key localstack
+aws configure set default.region us-east-1
+```
+1. SA password, to start SQL Server
+   Replace the secret
+
+```bash
+aws --endpoint-url=http://localhost:4566 secretsmanager create-secret --name recipes/dev/sa-password --secret-string "StrongP4ssword123"
+
+
+```
+
+2. app user connection string
+
+After you create `recipes_app` in SQL Server:
+
+```bash
+aws --endpoint-url=http://localhost:4566 secretsmanager create-secret --name recipes/dev/app-db-connection --secret-string "Server=localhost,14333;Database=Recipes;User Id=recipes_app;Password=StrongP4ssword123;TrustServerCertificate=true;"
+
+```
+3. jwt secret for later
+
+```bash
+aws --endpoint-url=http://localhost:4566 secretsmanager create-secret \
+  --name recipes/dev/jwt-config \
+  --secret-string '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}'
+```
+
+4. Verify
+```
+aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/sa-password --query SecretString --output text
+aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/app-db-connection --query SecretString --output text
+aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value --secret-id recipes/dev/jwt-config  --query SecretString --output text
+
+```
+
+---
+
+## 3. Bootstrap script: get SA password from secret, start DB
+
+Run the entity framework migration
+```
+dotnet ef migrations add InitialCreate
+```
+
+Run the powershell script
+
+```
+.\start-db.ps1           
+```
+
+In Linux
+```
+pwsh -File ./start-db.ps1
+```
+
+
+* SQL Server is at `localhost,14333`
+* SA password source of truth is **Secret Manager**.
+* `.env` is not needed at all.
+* Docker only sees `MSSQL_SA_PASSWORD` at runtime, injected by the script.
+
+---
+
+Install the aws package
+
+```
+dotnet add package AWSSDK.SecretsManager
+```
+
+
+
