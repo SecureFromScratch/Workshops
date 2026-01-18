@@ -1,0 +1,30 @@
+<main class="app-main">
+    <div class="app-background"></div>
+
+    <div class="app-shell">
+        <aside class="app-brand">
+            <div class="brand-logo">
+                <span class="brand-badge">R</span>
+                <div class="brand-text">
+                    <h1>RecipeRealm</h1>
+                    <p>Secure, tasty recipe management</p>
+                </div>
+            </div>
+
+            <nav class="side-nav">
+                <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+                <a routerLink="/recipes" routerLinkActive="active">Recipes</a>
+                <a routerLink="/login" routerLinkActive="active">Login</a>
+                <a routerLink="/register" routerLinkActive="active">Register</a>
+            </nav>
+
+            <p class="brand-footer">Built with Angular</p>
+        </aside>
+
+        <section class="app-content">
+            <div class="app-card">
+                <router-outlet></router-outlet>
+            </div>
+        </section>
+    </div>
+</main>

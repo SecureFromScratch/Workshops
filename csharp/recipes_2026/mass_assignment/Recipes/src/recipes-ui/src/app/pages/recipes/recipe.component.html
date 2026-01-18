@@ -1,0 +1,124 @@
+<div class="container">
+    <div class="form-title">
+        <h2>{{ id === null ? 'New recipe' : 'Edit recipe' }}</h2>
+        <p *ngIf="id === null; else editText">
+            Capture a new dish with description, status, and an optional photo.
+        </p>
+        <ng-template #editText>
+            <p>Update details, adjust description, or change the recipe status.</p>
+        </ng-template>
+    </div>
+
+    <div *ngIf="error" class="error">
+        {{ error }}
+    </div>
+
+    <form class="form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input
+                    id="name"
+                    class="form-control"
+                    [(ngModel)]="dto.name"
+                    name="name"
+                    placeholder="Chocolate chip cookies"
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select
+                    id="status"
+                    class="form-select"
+                    [(ngModel)]="dto.status"
+                    name="status"
+                >
+                    <option [ngValue]="RecipeStatus.Draft">Draft</option>
+                    <option [ngValue]="RecipeStatus.Published">Published</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <div class="rich-text-wrapper">
+                <editor
+                    apiKey="r1pdrmpmise3y7ifd61jlmc2mhc9grv2obgoh69mjnf0wagc"
+                    [(ngModel)]="dto.description"
+                    name="description"
+                    [init]="{
+                        menubar: false,
+                        height: 260,
+                        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                        toolbar: 'undo redo | blocks | bold italic underline | link image | align | bullist numlist | removeformat'
+                    }"
+                >
+                </editor>
+            </div>
+            <p class="hint" style="margin-top: 0.35rem;">
+                Use the editor to describe ingredients, steps, and serving suggestions.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label>Photo</label>
+            <div class="radio-group">
+                <label>
+                    <input
+                        type="radio"
+                        name="photoMode"
+                        [(ngModel)]="photoMode"
+                        value="url"
+                    />
+                    Image URL
+                </label>
+
+                <label>
+                    <input
+                        type="radio"
+                        name="photoMode"
+                        [(ngModel)]="photoMode"
+                        value="upload"
+                    />
+                    Upload file
+                </label>
+            </div>
+
+            <div *ngIf="photoMode === 'url'" style="margin-top: 0.6rem;">
+                <input
+                    class="form-control"
+                    [(ngModel)]="dto.photo"
+                    name="photoUrl"
+                    placeholder="https://example.com/photo.jpg"
+                />
+
+                <div *ngIf="dto.photo" class="recipe-photo-preview">
+                    <img [src]="dto.photo" alt="Preview" />
+                    <span class="hint">Live preview</span>
+                </div>
+            </div>
+
+            <div *ngIf="photoMode === 'upload'" style="margin-top: 0.6rem;">
+                <input
+                    type="file"
+                    accept="image/*"
+                    (change)="onFileChange($event)"
+                />
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button type="button" class="btn btn-primary" (click)="save()">
+                Save
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="router.navigateByUrl('/recipes')"
+            >
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

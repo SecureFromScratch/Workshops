@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="form-title">
+        <h2>Recipes</h2>
+        <p>Browse and manage your saved recipes.</p>
+    </div>
+
+    <div *ngIf="error" class="error">
+        {{ error }}
+    </div>
+
+    <div class="btn-row">
+        <button class="btn btn-primary" (click)="newRecipe()">
+            New recipe
+        </button>
+    </div>
+
+    <div class="table-wrapper" *ngIf="recipes?.length; else noRecipes">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 70px;">ID</th>
+                    <th>Name</th>
+                    <th style="width: 120px;">Photo</th>
+                    <th style="width: 150px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let r of recipes">
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.name }}</td>
+                    <td>
+                        <img
+                            *ngIf="r.photo"
+                            [src]="r.photo"
+                            alt="Recipe photo"
+                            style="max-height: 50px; border-radius: 0.5rem;"
+                        />
+                    </td>
+                    <td>
+                        <div class="btn-row">
+                            <button class="btn btn-secondary" (click)="edit(r.id)">
+                                Edit
+                            </button>
+                            <button class="btn btn-secondary" (click)="del(r.id)">
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #noRecipes>
+        <p class="auth-footer">
+            No recipes yet.
+            <a (click)="newRecipe()">Create your first one</a>
+        </p>
+    </ng-template>
+</div>

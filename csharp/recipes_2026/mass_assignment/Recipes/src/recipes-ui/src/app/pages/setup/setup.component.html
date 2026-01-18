@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="form-title">
+        <h1>First time setup</h1>
+        <p>Create the first admin account to get started.</p>
+    </div>
+
+    <div class="info">
+        <strong>Note:</strong> this user will have administrator permissions.
+    </div>
+
+    <div *ngIf="error" class="error">
+        {{ error }}
+    </div>
+
+    <form class="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="userName">Admin username</label>
+            <input
+                id="userName"
+                name="userName"
+                class="form-control"
+                [(ngModel)]="userName"
+                required
+                placeholder="admin"
+            />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Admin password</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                class="form-control"
+                [(ngModel)]="password"
+                required
+                minlength="8"
+                placeholder="Strong password"
+            />
+            <small class="hint">
+                Password must include at least 8 characters, one uppercase, one lowercase, one digit, and one special character.
+            </small>
+        </div>
+
+        <div class="btn-row">
+            <button type="submit" class="btn btn-primary">
+                Create admin account
+            </button>
+        </div>
+    </form>
+</div>

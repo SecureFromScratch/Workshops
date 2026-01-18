@@ -1,0 +1,41 @@
+/* Center the content nicely */
+.app-content {
+    align-items: center;
+}
+
+/* Make the card a bright glassy panel on top of the dark gradient */
+.app-card {
+    max-width: 440px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.96);
+    color: #0f172a;
+    border-radius: 1.5rem;
+    padding: 2rem 2.25rem 2.25rem;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+/* Stronger title + body text inside the card */
+.app-card h1,
+.app-card h2 {
+    color: #0f172a;
+}
+
+.app-card p,
+.app-card .auth-footer,
+.app-card .form-group label,
+.app-card .hint {
+    color: #4b5563;
+}
+
+/* Inputs stay dark for contrast */
+.app-card .form-control {
+    background: #020617;
+    color: #e5e7eb;
+    border-radius: 999px;
+}
+
+/* Slightly calmer background glow so it doesn’t wash the card */
+.app-background {
+    opacity: 0.35;
+    filter: blur(60px);
+}
