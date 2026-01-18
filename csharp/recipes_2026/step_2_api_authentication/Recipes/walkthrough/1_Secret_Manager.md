@@ -39,12 +39,12 @@ If you see something like `aws-cli/2.x`, you're done.
 
 ---
 
-### Start DB + LocalStack
+### Start LocalStack
 
 From that folder:
 
 ```bash
-docker compose up -d
+docker compose up -d localstack
 ```
 
 * SQL Server is at `localhost,14333`
