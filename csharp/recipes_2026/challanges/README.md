@@ -1,6 +1,7 @@
 # Preparations
 
-## Clone the challanges folder using spars checkin
+## Clone
+Clone the challanges folder using spars checkin
 
 ## Packages
 1. **Install the following nugets**
