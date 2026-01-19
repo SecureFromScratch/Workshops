@@ -4,7 +4,7 @@ namespace Recipes.Api.Models
    public enum RecipeStatus
    {
       Draft,
-      Active,
+      Published,
       Deleted
    }
 }
