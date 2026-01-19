@@ -4,7 +4,7 @@ Project 'Recipes.Api' has the following package references
    [net8.0]: 
 Top-level Package                                    Requested   Resolved
    > AWSSDK.SecretsManager                              4.0.4.3     4.0.4.3
-   > 
+    
    > Azure.AI.OpenAI                                    2.1.0       2.1.0   
    > Microsoft.AspNetCore.Authentication.JwtBearer      8.*         8.0.23  
    > Microsoft.AspNetCore.OpenApi                       8.0.16      8.0.16  
