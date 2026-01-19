@@ -16,7 +16,7 @@ if (string.IsNullOrWhiteSpace(apiAddress))
         "API address is not configured at ReverseProxy:Clusters:apiCluster:Destinations:api:Address"
     );
 }
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthorization();

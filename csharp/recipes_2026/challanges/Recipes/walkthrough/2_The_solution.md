@@ -7,7 +7,6 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 });
 
-builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAntiforgery(options =>
 {
@@ -19,6 +18,11 @@ builder.Services.AddAntiforgery(options =>
 });
 
 ```
+Remove the following code
+```
+builder.Services.AddControllersWithViews();
+```
+
 The Angular part already exists.
 Can you identify what the Angular code actually does?
 On one hand, without it the CSRF solution will not work.
