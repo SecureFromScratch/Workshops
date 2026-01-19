@@ -11,14 +11,14 @@ export interface Recipe {
     id: number;
     name: string;
     description?: string;
-    photo?: string;   // URL or /uploads/... path
+    photo?: string;
     status: RecipeStatus;
 }
 
 export interface RecipeCreateUpdate {
     name: string;
     description?: string;
-    photo?: string;   // used when mode=url
+    photo?: string;
     status: RecipeStatus;
 }
 
@@ -50,8 +50,14 @@ export class RecipesService {
         const fd = new FormData();
         fd.append('photoFile', file);
         return this.http.post<Recipe>(`/api/recipes/${id}/photo`, fd, { withCredentials: true });
+    }
 
-    }       
+    // New method for SSRF + Path Traversal attack
+    fetchPhotoFromUrl(id: number, url: string, filename?: string): Observable<any> {
+        return this.http.post<Recipe>(
+            `/api/recipes/${id}/photo-from-url`,
+            { url, filename },
+            { withCredentials: true }
+        );
+    }
 }
-
-

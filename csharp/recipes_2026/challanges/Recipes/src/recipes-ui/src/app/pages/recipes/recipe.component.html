@@ -56,7 +56,7 @@
                         type="radio"
                         name="photoMode"
                         [(ngModel)]="photoMode"
-                        value="url"
+                        value="fetch"
                     />
                     Image URL
                 </label>
@@ -70,8 +70,10 @@
                     />
                     Upload file
                 </label>
+                
             </div>
 
+            <!-- Image URL mode -->
             <div *ngIf="photoMode === 'url'" style="margin-top: 0.6rem;">
                 <input
                     class="form-control"
@@ -86,6 +88,7 @@
                 </div>
             </div>
 
+            <!-- Upload file mode -->
             <div *ngIf="photoMode === 'upload'" style="margin-top: 0.6rem;">
                 <input
                     type="file"
@@ -102,6 +105,36 @@
                     <img [src]="imagePreview" alt="Upload preview" />
                     <span class="hint">Upload preview</span>
                 </div>
+            </div>
+            
+            <div *ngIf="photoMode === 'fetch'" style="margin-top: 0.6rem;">
+                <div class="form-group" style="margin-bottom: 0.8rem;">
+                    <label for="fetchUrl" style="font-size: 0.9rem; margin-bottom: 0.3rem; display: block;">
+                        URL to fetch 
+                    </label>
+                    <input
+                        id="fetchUrl"
+                        class="form-control"
+                        [(ngModel)]="fetchUrl"
+                        name="fetchUrl"
+                        placeholder="http://localhost:4566/_localstack/diagnose"                        
+                    />
+                    
+                </div>
+
+                <div class="form-group">
+                    <label for="fetchFilename" style="font-size: 0.9rem; margin-bottom: 0.3rem; display: block;">
+                        Save as filename 
+                    </label>
+                    <input
+                        id="fetchFilename"
+                        class="form-control"
+                        [(ngModel)]="fetchFilename"
+                        name="fetchFilename"
+                        placeholder="recipe.jpg"
+                    />                    
+                </div>
+                
             </div>
         </div>
 

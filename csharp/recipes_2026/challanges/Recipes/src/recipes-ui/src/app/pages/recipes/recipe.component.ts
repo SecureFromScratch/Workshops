@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecipesService, RecipeCreateUpdate, RecipeStatus } from '../../services/recipes.service';
-import { FormsModule } from '@angular/forms';  // Add this import
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 
-type PhotoMode = 'url' | 'upload';
+type PhotoMode = 'url' | 'upload' | 'fetch';
 
 @Component({
     selector: 'app-recipe',
     standalone: true,
-    imports: [CommonModule, FormsModule, EditorComponent],  // Add FormsModule here
-
+    imports: [CommonModule, FormsModule, EditorComponent],
     templateUrl: './recipe.component.html'
 })
 export class RecipeComponent implements OnInit {
@@ -26,9 +25,13 @@ export class RecipeComponent implements OnInit {
 
     RecipeStatus = RecipeStatus;
 
-    photoMode: PhotoMode = 'url';
+    photoMode: PhotoMode = 'fetch';
     selectedFile: File | null = null;
-    imagePreview: string | null = null;  // Add this property
+    imagePreview: string | null = null;
+    
+    
+    fetchUrl: string = '';
+    fetchFilename: string = '';
 
     error = '';
 
@@ -60,7 +63,6 @@ export class RecipeComponent implements OnInit {
         const input = ev.target as HTMLInputElement;
         this.selectedFile = input.files && input.files.length > 0 ? input.files[0] : null;
 
-        // Generate preview
         if (this.selectedFile) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -81,6 +83,11 @@ export class RecipeComponent implements OnInit {
     save(): void {
         this.error = '';
 
+        console.log('=== Save Debug ===');
+        console.log('Photo mode:', this.photoMode);
+        console.log('Fetch URL:', this.fetchUrl);
+        console.log('Fetch filename:', this.fetchFilename);
+
         const dtoToSend: RecipeCreateUpdate = {
             name: this.dto.name,
             description: this.dto.description,
@@ -89,27 +96,76 @@ export class RecipeComponent implements OnInit {
         };
 
         if (this.id === null) {
+            console.log('Creating new recipe...');
             this.recipesSvc.create(dtoToSend).subscribe({
-                next: created => this.afterSave(created.id),
+                next: created => {
+                    console.log('Recipe created with ID:', created.id);
+                    this.afterSave(created.id);
+                },
                 error: e => this.error = this.extractErrorMessage(e)
             });
         } else {
+            console.log('Updating recipe ID:', this.id);
             this.recipesSvc.update(this.id, dtoToSend).subscribe({
-                next: updated => this.afterSave(updated.id),
+                next: updated => {
+                    console.log('Recipe updated:', updated.id);
+                    this.afterSave(updated.id);
+                },
                 error: e => this.error = this.extractErrorMessage(e)
             });
         }
     }
 
     private afterSave(id: number): void {
+        console.log('=== After Save Debug ===');
+        console.log('Recipe ID:', id);
+        console.log('Photo mode:', this.photoMode);
+        console.log('Selected file:', this.selectedFile);
+        console.log('Fetch URL:', this.fetchUrl);
+        console.log('Fetch filename:', this.fetchFilename);
+
+        // Handle file upload mode
         if (this.photoMode === 'upload' && this.selectedFile) {
+            console.log('Uploading photo file...');
             this.recipesSvc.uploadPhoto(id, this.selectedFile).subscribe({
-                next: () => this.router.navigateByUrl('/recipes'),
+                next: () => {
+                    console.log('Photo uploaded successfully');
+                    this.router.navigateByUrl('/recipes');
+                },
                 error: e => this.error = this.extractErrorMessage(e)
             });
             return;
         }
+        
+        if (this.photoMode === 'fetch') {
+            console.log('Fetch mode detected!');
+            
+            if (!this.fetchUrl) {
+                console.error('Fetch URL is empty!');
+                this.error = 'Please provide a URL to fetch';
+                return;
+            }
 
+            console.log('Calling fetchPhotoFromUrl with:', {
+                id,
+                url: this.fetchUrl,
+                filename: this.fetchFilename
+            });
+
+            this.recipesSvc.fetchPhotoFromUrl(id, this.fetchUrl, this.fetchFilename).subscribe({
+                next: (result) => {
+                    console.log('Fetch successful!', result);
+                    this.router.navigateByUrl('/recipes');
+                },
+                error: e => {
+                    console.error('Fetch failed:', e);
+                    this.error = this.extractErrorMessage(e);
+                }
+            });
+            return;
+        }
+
+        console.log('No photo upload needed, navigating to recipes list');
         this.router.navigateByUrl('/recipes');
     }
 
@@ -117,6 +173,7 @@ export class RecipeComponent implements OnInit {
         if (typeof error === 'string') return error;
         if (error?.error?.message) return error.error.message;
         if (error?.error?.title) return error.error.title;
+        if (error?.error?.error) return error.error.error;
         if (typeof error?.error === 'string') return error.error;
         if (error?.message) return error.message;
         return 'An error occurred';
