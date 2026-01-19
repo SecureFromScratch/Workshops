@@ -46,10 +46,12 @@ export class RecipesService {
         return this.http.delete<void>(`/api/recipes/${id}`, { withCredentials: true });
     }
 
-    uploadPhoto(id: number, file: File): Observable<Recipe> {
+    uploadPhoto(id: number, file: File): Observable<any> {
         const fd = new FormData();
-        fd.append('file', file);
+        fd.append('photoFile', file);
         return this.http.post<Recipe>(`/api/recipes/${id}/photo`, fd, { withCredentials: true });
 
-    }
+    }       
 }
+
+

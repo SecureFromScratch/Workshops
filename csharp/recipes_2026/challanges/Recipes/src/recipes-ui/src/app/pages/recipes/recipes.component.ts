@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RecipesService, Recipe } from '../../services/recipes.service';
 import { CommonModule } from '@angular/common';
+// In your environment file or service
+    const API_BASE = 'http://localhost:7000';
 
 
 @Component({
@@ -42,5 +44,12 @@ export class RecipesComponent implements OnInit {
             next: () => this.load(),
             error: e => this.error = e?.error ?? 'Delete failed'
         });
+    }
+    
+    // When displaying images, use the full URL:
+    getImageUrl(photoPath: string): string {
+        if (!photoPath) return '';
+        if (photoPath.startsWith('http')) return photoPath;
+        return API_BASE + photoPath;
     }
 }

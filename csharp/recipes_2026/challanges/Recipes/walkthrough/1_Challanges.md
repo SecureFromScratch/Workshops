@@ -16,4 +16,5 @@ An attacker can determine whether a user exists in the system or not.
 Write a program that demonstrates how this user-enumeration vulnerability can be exploited.
 What can you do to prevent it?
 
-### 
+### Denial of service
+It's possible to overwrite an important system file, which can cause a denial of service. Can you do it?

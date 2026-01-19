@@ -128,3 +128,149 @@
   background: var(--success);
   color: white;
 }
+.recipes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.recipe-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 1rem;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    align-items: stretch;
+}
+
+.recipe-image img {
+    display: block;
+    width: 160px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 0.75rem;
+}
+
+.recipe-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.recipe-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.recipe-description {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.card-actions {
+    margin-top: auto;
+    justify-content: flex-start;
+    gap: 0.75rem;
+}
+.recipe-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.recipe-image {
+    flex-shrink: 0;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.recipe-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.placeholder-image {
+    width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.recipe-content {
+    flex: 1;
+}
+.recipes-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.recipe-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-image {
+    width: 160px;
+    height: 120px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #f5f5f5;
+}
+
+.recipe-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.placeholder-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5e5e5;
+    color: #999;
+    font-size: 0.875rem;
+}
+
+.recipe-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.recipe-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+}
+
+.recipe-description {
+    flex: 1;
+    margin: 0 0 1rem 0;
+    color: #666;
+}
+
+.card-actions {
+    margin-top: auto;
+}

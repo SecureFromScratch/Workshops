@@ -65,9 +65,10 @@ namespace Recipes.Api.Serrvices
       }
 
 
-      public Task<Recipe?> GetByIdAsync(long id)
+      public async Task<Recipe?> GetByIdAsync(long id)
       {
-         throw new NotImplementedException();
+         return await m_context.Recipes
+             .FirstOrDefaultAsync(r => r.Id == id);
       }
    }
 }

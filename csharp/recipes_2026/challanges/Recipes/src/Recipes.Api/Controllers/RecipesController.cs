@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Recipes.Api.Controllers
 {
    [ApiController]
-   [Route("api/recipes")]   
+   [Route("api/recipes")]
    [Authorize]
    public class RecipesController : ControllerBase
    {
@@ -41,7 +41,7 @@ namespace Recipes.Api.Controllers
          }
 
          return Ok(task);
-      }      
+      }
 
       [HttpPost]
       public async Task<ActionResult<Recipe>> Create([FromBody] Recipe recipe)
@@ -93,46 +93,49 @@ namespace Recipes.Api.Controllers
          return NoContent();
       }
 
+
       [HttpPost("{id:long}/photo")]
       public async Task<IActionResult> UploadPhoto(long id, IFormFile photoFile)
       {
          if (photoFile == null || photoFile.Length == 0)
-            return BadRequest("Missing file.");
-
-         const long maxBytes = 5 * 1024 * 1024;
-         if (photoFile.Length > maxBytes)
-            return BadRequest("File too large.");
+            return BadRequest(new { error = "Missing file." });
+         
 
          var ct = photoFile.ContentType ?? "";
-         if (ct != "image/jpeg" && ct != "image/png" && ct != "image/webp")
-            return BadRequest("Unsupported image type.");
-
+         
          var recipe = await m_service.GetByIdAsync(id);
          if (recipe is null)
-            return NotFound();
+            return NotFound(new { error = "Recipe not found." });
 
+         // Determine file extension
          var ext = ct switch
          {
             "image/jpeg" => ".jpg",
             "image/png" => ".png",
             "image/webp" => ".webp",
-            _ => ""
+            _ => ".jpg"
          };
 
-         var fileName = $"{Guid.NewGuid():N}{ext}";
-         var relDir = Path.Combine("uploads", "recipes", id.ToString());
-         var absDir = Path.Combine(Environment.CurrentDirectory, relDir);
-         Directory.CreateDirectory(absDir);
+         // Create directory structure: wwwroot/uploads/recipes/{id}/
+         var relativeDir = Path.Combine("uploads", "recipes", id.ToString());
+         var absoluteDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativeDir);
+         Directory.CreateDirectory(absoluteDir);
 
-         var absPath = Path.Combine(absDir, fileName);
-         await using (var fs = System.IO.File.Create(absPath))
+                 
+         var absolutePath = Path.Combine(absoluteDir, photoFile.FileName);
+
+         // Save file
+         await using (var fs = System.IO.File.Create(absolutePath))
+         {
             await photoFile.CopyToAsync(fs, HttpContext.RequestAborted);
+         }
 
-         recipe.Photo = "/" + Path.Combine(relDir, fileName).Replace('\\', '/');
+         // Update recipe with web-accessible path
+         recipe.Photo = "/" + Path.Combine(relativeDir, photoFile.FileName).Replace('\\', '/');
 
          var updated = await m_service.UpdateAsync(id, recipe);
+
          return Ok(updated);
       }
-
    }
 }
