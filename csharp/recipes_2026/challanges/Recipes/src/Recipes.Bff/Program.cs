@@ -17,21 +17,8 @@ if (string.IsNullOrWhiteSpace(apiAddress))
     );
 }
 
-builder.Services.AddControllersWithViews(options =>
-{
-    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-});
+builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddAntiforgery(options =>
-{
-    options.HeaderName = "X-XSRF-TOKEN";
-    options.Cookie.Name = "XSRF-TOKEN"; // Change from "bff-xsrf" to "XSRF-TOKEN"
-    options.Cookie.HttpOnly = false; // CRITICAL: Angular must read this cookie
-    options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-});
 builder.Services.AddAuthorization();
 
 builder.Services.Configure<ApiOptions>(options =>

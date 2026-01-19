@@ -1,14 +1,25 @@
-# Dealing with Antiforgery Tokens in Angular
+# Preventing CSRF 
+To enable CSRF protection in BFF add the following code to the Program.cs
 
-Support CSRF in the authentication service.
-There should be one method that fetches the token from the BFF and a getter.
-You can copy `app/services/auth.service.ts` from the repo.
+```csharp 
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
 
-Call the CSRF initialization from `app.component.ts` in `OnInit`:
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-XSRF-TOKEN";
+    options.Cookie.Name = "XSRF-TOKEN"; 
+    options.Cookie.HttpOnly = false; 
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+});
 
 ```
-firstValueFrom(this.auth.initCsrf());
-```
-
-Use the CSRF interceptor so every request sends the CSRF cookie token and header.
-You can copy it from `/interceptors/csrf.interceptor.ts` and register it under `providers` in `app.config.ts`.
+The Angular part already exists.
+Can you identify what the Angular code actually does?
+On one hand, without it the CSRF solution will not work.
+On the other hand, by itself it does nothing.

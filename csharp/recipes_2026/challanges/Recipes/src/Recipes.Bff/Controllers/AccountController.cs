@@ -36,30 +36,10 @@ public sealed class AccountBffController : ControllerBase
         return Ok(new { token = tokens.RequestToken });
     }
 
-    [HttpPost("login")]
-    [AllowAnonymous]
-    [IgnoreAntiforgeryToken] // Temporarily ignore to validate manually
-
+    [HttpPost("login")]    
+    [AllowAnonymous]   
     public async Task<IActionResult> Login([FromBody] LoginRequest req)
-    {
-        try
-        {
-            await _antiforgery.ValidateRequestAsync(HttpContext);
-            Console.WriteLine("✅ CSRF validation passed!");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"❌ CSRF validation failed: {ex.GetType().Name}");
-            Console.WriteLine($"Message: {ex.Message}");
-            Console.WriteLine($"InnerException: {ex.InnerException?.Message}");
-
-            return BadRequest(new
-            {
-                error = "CSRF validation failed",
-                type = ex.GetType().Name,
-                message = ex.Message
-            });
-        }
+    {       
 
         // Check what name AddBffAuthAndApiClient uses - might be "BffApiClient" or "Api"
         var client = m_factory.CreateClient("Api");
