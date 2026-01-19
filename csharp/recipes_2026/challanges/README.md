@@ -13,7 +13,7 @@ Install [API, BFF Client packages](preps/2_packages.md)
 Install [docker & docker compose](preps/3_docker.md) 
 
 ### 5. Secret manager
-Follow the secret manager walkthrough: [Secret Manager](Recipes/walkthrough/1_Secret_Manager.md)
+Follow the secret manager walkthrough: [Secret Manager](Recipes/preps/4_Secret_Manager.md)
 
 
 ---
