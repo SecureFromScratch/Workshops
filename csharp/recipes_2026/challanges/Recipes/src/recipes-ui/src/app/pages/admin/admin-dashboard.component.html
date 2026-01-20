@@ -1,0 +1,15 @@
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+
+    <div *ngIf="loading">
+        Loading...
+    </div>
+
+    <div *ngIf="error">
+        {{ error }}
+    </div>
+
+    <div *ngIf="dashboardData">
+        <p>{{ dashboardData.message }}</p>
+    </div>
+</div>

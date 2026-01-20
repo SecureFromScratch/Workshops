@@ -6,9 +6,11 @@ import { HomeComponent } from './pages/home/home.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RecipesComponent } from './pages/recipes/recipes.component';
 import { RecipeComponent } from './pages/recipes/recipe.component';
+import { AdminDashboardComponent } from './pages/admin/admin-dashboard.component';
 
 
 export const routes: Routes = [
+  { path: 'admin', component: AdminDashboardComponent },
   { path: 'setup', component: SetupComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },

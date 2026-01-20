@@ -1,0 +1,20 @@
+.admin-dashboard {
+    padding: 20px;
+}
+
+.loading {
+    color: #666;
+    font-style: italic;
+}
+
+.error-message {
+    color: #d32f2f;
+    padding: 10px;
+    background-color: #ffebee;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.dashboard-content {
+    margin-top: 20px;
+}
