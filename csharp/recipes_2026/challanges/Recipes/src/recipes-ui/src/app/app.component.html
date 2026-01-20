@@ -41,6 +41,12 @@
                     </svg>
                     Register
                 </a>
+                <a href="#" (click)="onLogout($event)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path>
+                    </svg>
+                    Logout
+                </a>
             </nav>
 
             <!-- Simple cooking pot -->
@@ -53,27 +59,32 @@
                             <stop offset="100%" stop-color="#6366f1" />
                         </linearGradient>
                     </defs>
-                    
+
                     <!-- Simple pot -->
-                    <rect x="30" y="40" width="60" height="45" rx="5" fill="none" stroke="url(#gradient)" stroke-width="2.5"/>
-                    <line x1="30" y1="40" x2="90" y2="40" stroke="url(#gradient)" stroke-width="3"/>
-                    <circle cx="60" cy="35" r="3" fill="url(#gradient)"/>
-                    
+                    <rect x="30" y="40" width="60" height="45" rx="5" fill="none" stroke="url(#gradient)"
+                        stroke-width="2.5" />
+                    <line x1="30" y1="40" x2="90" y2="40" stroke="url(#gradient)" stroke-width="3" />
+                    <circle cx="60" cy="35" r="3" fill="url(#gradient)" />
+
                     <!-- Steam -->
-                    <path d="M 45 25 Q 43 18 45 12" stroke="url(#gradient)" stroke-width="2" fill="none" opacity="0.6"/>
-                    <path d="M 60 22 Q 58 15 60 8" stroke="url(#gradient)" stroke-width="2" fill="none" opacity="0.7"/>
-                    <path d="M 75 25 Q 77 18 75 12" stroke="url(#gradient)" stroke-width="2" fill="none" opacity="0.6"/>
-                    
+                    <path d="M 45 25 Q 43 18 45 12" stroke="url(#gradient)" stroke-width="2" fill="none"
+                        opacity="0.6" />
+                    <path d="M 60 22 Q 58 15 60 8" stroke="url(#gradient)" stroke-width="2" fill="none" opacity="0.7" />
+                    <path d="M 75 25 Q 77 18 75 12" stroke="url(#gradient)" stroke-width="2" fill="none"
+                        opacity="0.6" />
+
                     <!-- Handles -->
-                    <path d="M 25 55 Q 20 55 20 60 Q 20 65 25 65" stroke="url(#gradient)" stroke-width="2" fill="none"/>
-                    <path d="M 95 55 Q 100 55 100 60 Q 100 65 95 65" stroke="url(#gradient)" stroke-width="2" fill="none"/>
+                    <path d="M 25 55 Q 20 55 20 60 Q 20 65 25 65" stroke="url(#gradient)" stroke-width="2"
+                        fill="none" />
+                    <path d="M 95 55 Q 100 55 100 60 Q 100 65 95 65" stroke="url(#gradient)" stroke-width="2"
+                        fill="none" />
                 </svg>
             </div>
 
             <div class="brand-footer" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem;">
-                <img src="https://securefromscratch.com/secure-from-scratch/images/a326fc611a4319f983afacc8bb8c0c6f.svg" 
-                     alt="Secure From Scratch" 
-                     style="width: 24px; height: 24px; filter: brightness(0) invert(1) opacity(0.7);">
+                <img src="https://securefromscratch.com/secure-from-scratch/images/a326fc611a4319f983afacc8bb8c0c6f.svg"
+                    alt="Secure From Scratch"
+                    style="width: 24px; height: 24px; filter: brightness(0) invert(1) opacity(0.7);">
                 <span style="font-size: 0.8rem;">Created by Secure From Scratch</span>
             </div>
         </aside>
