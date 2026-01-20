@@ -57,7 +57,7 @@ public class UserService : IUserService
       var user = new AppUser
       {
          UserName = userName,
-         Roles = isAdmin ? "ADMIN,USER" : "USER",
+         Roles = isAdmin ? "Admin,User" : "User",
          Enabled = true
       };
 

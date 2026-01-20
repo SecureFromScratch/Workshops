@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Recipes.Api.Extensions;
 
 namespace Recipes.Api.Security;
 
@@ -38,7 +39,9 @@ public static class JwtAuthExtensions
                 };
             });
 
-        services.AddAuthorization();
+        //services.AddAuthorization();
+        services.AddAuthorizationPolicies();
+
 
         // optional: expose config for other services/controllers
         services.AddSingleton(jwt);

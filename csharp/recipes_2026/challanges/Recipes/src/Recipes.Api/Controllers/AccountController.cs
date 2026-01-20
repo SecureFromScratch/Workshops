@@ -62,7 +62,17 @@ public class AccountController : ControllerBase
    {
       try
       {
-         await m_userService.RegisterUserAsync(req.UserName, req.Password, isAdmin: false);
+
+         if (await m_userService.IsFirstUserAsync())
+         {
+            // Automatically create as admin
+            await m_userService.RegisterFirstAdminAsync(req.UserName, req.Password);
+         }
+         else
+         {
+
+            await m_userService.RegisterUserAsync(req.UserName, req.Password, isAdmin: false);
+         }
          return NoContent();
       }
       catch (ArgumentException ex)
