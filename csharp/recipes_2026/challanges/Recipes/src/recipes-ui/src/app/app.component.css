@@ -98,7 +98,7 @@ body {
     gap: 0.35rem;
 }
 
-.side-nav a {
+/*.side-nav a {
     display: block;
     padding: 0.45rem 0.85rem;
     border-radius: 999px;
@@ -109,7 +109,33 @@ body {
     transition: background 0.18s ease, transform 0.12s ease,
         color 0.18s ease, opacity 0.15s ease;
 }
-
+.side-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    color: #e5e7eb;
+    text-decoration: none;
+    opacity: 0.9;
+    transition: background 0.18s ease, transform 0.12s ease,
+        color 0.18s ease, opacity 0.15s ease;
+}
+*/
+.side-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    color: #e5e7eb;
+    text-decoration: none;
+    opacity: 0.9;
+    transition: background 0.18s ease, transform 0.12s ease,
+        color 0.18s ease, opacity 0.15s ease;
+}
 .side-nav a:hover {
     background: rgba(148, 163, 184, 0.2);
     transform: translateX(2px);
