@@ -20,7 +20,8 @@ export class RecipeComponent implements OnInit {
         name: '',
         description: '',
         photo: '',
-        status: RecipeStatus.Draft
+        status: RecipeStatus.Draft,
+        createdBy: ''
     };
 
     RecipeStatus = RecipeStatus;
@@ -52,7 +53,8 @@ export class RecipeComponent implements OnInit {
                     name: r.name,
                     description: r.description ?? '',
                     photo: r.photo ?? '',
-                    status: r.status
+                    status: r.status,
+                    createdBy: r.createdBy
                 };
             },
             error: e => this.error = this.extractErrorMessage(e)
@@ -92,7 +94,8 @@ export class RecipeComponent implements OnInit {
             name: this.dto.name,
             description: this.dto.description,
             status: this.dto.status,
-            photo: this.photoMode === 'url' ? (this.dto.photo ?? '') : ''
+            photo: this.photoMode === 'url' ? (this.dto.photo ?? '') : '',
+            createdBy: this.dto.createdBy
         };
 
         if (this.id === null) {

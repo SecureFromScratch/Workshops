@@ -27,7 +27,7 @@
 
             <div class="recipe-content">
                 <h3 class="recipe-title">
-                    {{ r.name }}
+                    {{ r.name }} , Created By {{ r.createdBy }}
                 </h3>
 
                 <p class="recipe-description" [innerHTML]="r.description || 'No description yet.'"></p>

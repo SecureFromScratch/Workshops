@@ -1,14 +1,16 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { RouterLinkActive, RouterOutlet } from "@angular/router";
+import { RouterLinkActive, RouterOutlet, RouterLink } from "@angular/router";
 import { AuthService } from "./services/auth.service";
 import { firstValueFrom } from "rxjs";
+
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, FormsModule,RouterLinkActive   
+  imports: [RouterOutlet, CommonModule, FormsModule,RouterLinkActive , RouterLink  
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

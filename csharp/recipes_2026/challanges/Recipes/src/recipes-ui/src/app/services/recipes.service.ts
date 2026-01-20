@@ -13,6 +13,7 @@ export interface Recipe {
     description?: string;
     photo?: string;
     status: RecipeStatus;
+    createdBy: string;
 }
 
 export interface RecipeCreateUpdate {
@@ -20,6 +21,7 @@ export interface RecipeCreateUpdate {
     description?: string;
     photo?: string;
     status: RecipeStatus;
+    createdBy: string;
 }
 
 @Injectable({ providedIn: 'root' })
