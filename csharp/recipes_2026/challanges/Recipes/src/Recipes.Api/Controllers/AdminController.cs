@@ -5,7 +5,7 @@ namespace Recipes.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Policy = "AdminOnly")]
+//[Authorize(Policy = "AdminOnly")]
 public class AdminController : ControllerBase
 {
    [HttpGet("dashboard")]
