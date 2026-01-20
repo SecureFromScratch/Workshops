@@ -49,6 +49,20 @@ public static class SecretsConfig
         return cfg;
     }
 
+    // YOUR EXISTING CODE - DON'T CHANGE THIS
+    public static async Task<string> GetOpenAIApiKeyAsync(IConfiguration configuration)
+    {
+        var secretsCfg = configuration.GetSection("Secrets");
+
+        string serviceUrl = secretsCfg["ServiceUrl"]
+            ?? throw new InvalidOperationException("Secrets:ServiceUrl is missing");
+        string regionName = secretsCfg["Region"] ?? RegionEndpoint.USEast1.SystemName;
+        string secretName = secretsCfg["OpenaiApiKey"]
+            ?? throw new InvalidOperationException("Secrets:OpenaiApiKey is missing");
+
+        return await GetSecretAsync(serviceUrl, regionName, secretName);
+    }
+
     private static async Task<string> GetSecretAsync(
         string serviceUrl,
         string regionName,

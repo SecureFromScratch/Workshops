@@ -24,6 +24,7 @@ JwtConfig jwtConfig       = await SecretsConfig.GetJwtConfigAsync(builder.Config
 builder.Services.AddJwtAuth(jwtConfig);
 
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 // Authentication
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
