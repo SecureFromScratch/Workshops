@@ -43,9 +43,6 @@ The browser’s **Developer Tools** can be used to inspect the network request s
 
 ---
 
-If you want it more **formal**, **academic**, or **CTF-style**, say which tone to use.
-
-
 Example payload sent by the attacker:
 
 ```json
@@ -74,71 +71,3 @@ A recipe that should be created as **Draft** is immediately **Published**, bypas
 
 ---
 
-### Why Swagger Helps the Attacker
-
-Swagger exposes:
-
-* Full request schemas
-* Hidden fields
-* Enum values
-
-Swagger is not the vulnerability.
-**Trusting the client is.**
-
----
-
-### How to Detect Mass Assignment
-
-Ask:
-
-* Can I send fields the UI doesn’t send?
-* Does the server silently accept them?
-* Does application state change because of it?
-
-If yes → mass assignment exists.
-
----
-
-### How to Prevent (Best Practice)
-
-Golden rule:
-
-> **Never bind request bodies directly to database entities**
-
-#### Correct Pattern
-
-* Use request DTOs with only allowed fields
-* Server sets protected fields explicitly
-
-For example:
-
-* Client can send: `Name`, `Description`, `Photo`
-* Server always sets:
-
-  * `Status = Draft`
-  * `CreatedBy = current user`
-  * `CreateDate = now`
-
-Optional hardening:
-
-* Reject unknown JSON properties
-* Separate “create” and “publish” endpoints
-* Authorization checks on state transitions
-
----
-
-### Key Takeaway
-
-Mass assignment is not about hacking tools.
-It is about **broken trust boundaries**.
-
-If the client can control fields it should not,
-**your business logic is already compromised**.
-
----
-
-If you want, I can:
-
-* convert this into **slides**
-* add a **secure refactor lab**
-* or turn it into a **graded exercise with hints**
