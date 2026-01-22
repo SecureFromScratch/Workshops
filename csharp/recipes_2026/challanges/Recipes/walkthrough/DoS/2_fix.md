@@ -32,14 +32,6 @@ Only when all of these controls are applied together can file uploads be conside
 
 ---
 
-If you want, I can next:
-
-* merge this into the **fix tutorial**
-* map each item to **code-level checks**
-* or compress it into a **one-slide summary**
-
----
-
 ```csharp
 [HttpPost("{id:long}/photo")]
 public async Task<IActionResult> UploadPhoto(long id, IFormFile photoFile)
@@ -125,6 +117,7 @@ private async Task<ImageType?> DetectImageTypeAsync(IFormFile file)
 
 private record ImageType(string Extension, string MimeType);
 ```
+
 
 
 
