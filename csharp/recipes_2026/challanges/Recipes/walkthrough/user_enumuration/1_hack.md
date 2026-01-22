@@ -2,5 +2,11 @@
 ## What is it?
 User enumeration is a vulnerability where an application reveals whether a specific user account exists, usually through different error messages, response codes, timings, or UI behavior during login, password reset, or registration. Attackers exploit this to build valid user lists, which then enables targeted brute-force, credential stuffing, phishing, or social engineering attacks. Best practice is to make authentication and recovery flows indistinguishable for existing and non-existing users, with uniform messages, timing, and responses, plus rate limiting and monitoring.
 
+---
 
-## How To exploit it?
+## How To Exploit It?
+
+In the recipes client, if a user exists, the registration page will give a useful message. To get a list of users, prepare a list of possible usernames. Go to the Developer toolbar, navigate to the Network tab, and copy the register request. Create a script in a language of your choice to get a list of confirmed users.
+
+---
+
