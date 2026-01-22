@@ -50,7 +50,7 @@ What needs to be changed in the code to prevent this?
 
 ---
 
-### Create a Recipe in someonelses name
+### Create a Recipe in Someone Else’s Name
 One scenario is when an attacker can host a page on the same domain.
 Another scenario is when the page is hosted on a different domain.
 
