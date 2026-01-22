@@ -22,7 +22,8 @@ Follow the secret manager walkthrough: [Secret Manager](preps/4_secret_manager.m
 ### 7. Run!
 1. Make sure the vscode root is Recipes with the Recipes.sln
 2. Go to Run & Debug (ctrl+shift+d)
-3. Chose API + BFF and click run 
+3. Chose API + BFF and click run
+4. After the serice is up open [swagger](http://localhost:7000/swagger/index.html)
 ---
 
 
