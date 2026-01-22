@@ -26,7 +26,12 @@ These endpoints are intentionally restricted to localhost for security, but SSRF
 
 ## Execute the Attack
 Enter the AWS diagnostic endpoint URL as the recipe picture.
+You need to exploit the **mass assignment vulnerability** again and resend two requests:
+one to create the recipe and one to retrieve the photo.
 
 ## Retrieve the Stolen Data
-Open the browser’s Developer Tools, go to the **Network** tab, and locate the fetched data.
+Watch the Developer Tools **Network** tab, identify the URL, and use `curl` to retrieve the sensitive information.
+
+
+
 
