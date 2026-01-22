@@ -1,4 +1,4 @@
-## 0. What is a BFF?
+## What is a BFF?
 
 **BFF = Backend For Frontend**
 
