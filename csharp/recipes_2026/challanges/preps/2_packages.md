@@ -26,9 +26,9 @@ dotnet restore
 
 ### 2) Install the Angular packages
 
-Paste this from your Angular project folder (the one that has `package.json`):
 
 ```bash
+cd src/recipes-ui/
 npm install
 ```
 
