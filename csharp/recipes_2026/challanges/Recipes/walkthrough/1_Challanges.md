@@ -5,6 +5,11 @@ This application contain a vulnerabilities
 Your goal is to exploit them, fix them and verify.
 
 ---
+### Stroll around
+Before trying any tricks or fixes, take a deep breath and try to register, log in, and add some recipes.
+Explore the solution.
+
+---
 
 ### User enumuration
 An attacker can determine whether a user exists in the system or not.
