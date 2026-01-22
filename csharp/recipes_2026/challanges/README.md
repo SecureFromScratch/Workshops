@@ -19,7 +19,10 @@ Install [docker & docker compose](preps/3_docker.md)
 ### 6. Secret manager
 Follow the secret manager walkthrough: [Secret Manager](preps/4_secret_manager.md)
 
-
+### 7. Run!
+1. Make sure the vscode root is Recipes with the Recipes.sln
+2. Go to Run & Debug (ctrl+shift+d)
+3. Chose API + BFF and click run 
 ---
 
 
