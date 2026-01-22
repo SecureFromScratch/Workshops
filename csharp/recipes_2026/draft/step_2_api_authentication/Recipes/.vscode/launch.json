@@ -1,0 +1,45 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "API (http://localhost:7000)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-api",
+      "program": "${workspaceFolder}/src/Recipes.Api/bin/Debug/net8.0/Recipes.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Recipes.Api",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:7000"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": "BFF (http://localhost:7001)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-bff",
+      "program": "${workspaceFolder}/src/Recipes.Bff/bin/Debug/net8.0/Recipes.Bff.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Recipes.Bff",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:7001"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "API + BFF (Both Services)",
+      "configurations": ["API (http://localhost:7000)", "BFF (http://localhost:7001)"],
+      "stopAll": true,
+      "preLaunchTask": "build-all"
+    }
+  ]
+}
