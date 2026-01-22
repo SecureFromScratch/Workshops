@@ -6,8 +6,8 @@ Your goal is to exploit them, fix them and verify.
 
 ---
 ### Stroll around
-Before trying any tricks or fixes, take a deep breath and try to register, log in, and add some recipes.
-Explore the solution.
+Before trying any tricks or fixes, take a deep breath and explore the application as a normal user. Register, log in, and add a few recipes to understand the expected flow. Make sure you understand the BFF architecture and how the frontend and backend interact. Also, pay close attention to how the first user is registered.
+
 
 ---
 
