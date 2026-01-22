@@ -55,9 +55,10 @@ Extension: .json
 Content-Type: image/png
 Actual Content: configuration file
 ```
-
+Click for A full [PoC](../../test/path_traversal.html)
 The server accepts the upload despite mismatches between declared type, extension, and content.
 
 ---
+
 
 
