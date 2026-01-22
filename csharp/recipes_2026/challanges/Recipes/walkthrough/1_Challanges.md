@@ -31,7 +31,7 @@ It's possible to overwrite an important system file, which can cause a denial of
 ---
 
 ### Access to internal sysem
-It’s possible to retrieve AWS information only from localhost. How could an attacker trick the system into exposing this information?
+It’s possible to retrieve AWS information only from localhost. How could an attacker trick the system into exposing this information to the outside world?
 1. Check service health
 curl http://localhost:4566/_localstack/health
 
@@ -50,7 +50,7 @@ What needs to be changed in the code to prevent this?
 
 ---
 
-### Create a Recipe in someonelses name
+### Create a Recipe in Someone Else’s Name
 One scenario is when an attacker can host a page on the same domain.
 Another scenario is when the page is hosted on a different domain.
 
