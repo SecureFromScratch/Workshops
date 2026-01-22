@@ -40,26 +40,16 @@ namespace Recipes.Api.Controllers
                     return _cachedApiKey;
                 }
 
-                var secretJson = await SecretsConfig.GetOpenAIApiKeyAsync(_configuration);
+                // AWS Secrets Manager now returns just the plain API key string
+                var apiKey = await SecretsConfig.GetOpenAIApiKeyAsync(_configuration);
 
-                // ✅ Remove newlines BEFORE parsing
-                if (!string.IsNullOrEmpty(secretJson))
+                if (string.IsNullOrEmpty(apiKey))
                 {
-                    secretJson = secretJson.Replace("\r", "").Replace("\n", "");
+                    throw new InvalidOperationException("API key is empty");
                 }
 
-                using var doc = JsonDocument.Parse(secretJson);
-                var root = doc.RootElement;
-
-                if (root.TryGetProperty("Secret", out var secretElement))
-                {
-                    _cachedApiKey = secretElement.GetString();
-                    _logger.LogInformation("✅ API key extracted");
-                }
-                else
-                {
-                    throw new InvalidOperationException("Secret property not found");
-                }
+                _cachedApiKey = apiKey.Trim();
+                _logger.LogInformation("✅ API key retrieved successfully");
 
                 return _cachedApiKey;
             }
@@ -110,7 +100,7 @@ Include sections for Ingredients and Instructions.";
 
                 var openAiRequest = new
                 {
-                    model = "gpt-4o",
+                    model = "gpt-3.5-turbo",  // Cheapest OpenAI model
                     messages = new[]
                     {
                         new { role = "system", content = systemPrompt },
@@ -139,7 +129,13 @@ Include sections for Ingredients and Instructions.";
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var openAiResponse = JsonSerializer.Deserialize<OpenAiResponse>(responseContent);
+                
+                var jsonOptions = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                
+                var openAiResponse = JsonSerializer.Deserialize<OpenAiResponse>(responseContent, jsonOptions);
 
                 var recipeJson = openAiResponse?.Choices?.FirstOrDefault()?.Message?.Content;
 
@@ -148,7 +144,7 @@ Include sections for Ingredients and Instructions.";
                     return BadRequest(new { error = "No recipe generated" });
                 }
 
-                var recipe = JsonSerializer.Deserialize<GeneratedRecipe>(recipeJson);
+                var recipe = JsonSerializer.Deserialize<GeneratedRecipe>(recipeJson, jsonOptions);
                 return Ok(recipe);
             }
             catch (Exception ex)
@@ -177,7 +173,7 @@ Include sections for Ingredients and Instructions.";
 
                 var openAiRequest = new
                 {
-                    model = "gpt-4o",
+                    model = "gpt-3.5-turbo",  // Cheapest OpenAI model
                     messages = new[]
                     {
                         new { role = "system", content = "You are a creative recipe naming assistant. Return only a JSON array of recipe name strings." },
@@ -204,10 +200,16 @@ Include sections for Ingredients and Instructions.";
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var openAiResponse = JsonSerializer.Deserialize<OpenAiResponse>(responseContent);
+                
+                var jsonOptions = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                
+                var openAiResponse = JsonSerializer.Deserialize<OpenAiResponse>(responseContent, jsonOptions);
                 var suggestionsJson = openAiResponse?.Choices?.FirstOrDefault()?.Message?.Content;
 
-                return Ok(new { suggestions = JsonSerializer.Deserialize<string[]>(suggestionsJson) });
+                return Ok(new { suggestions = JsonSerializer.Deserialize<string[]>(suggestionsJson, jsonOptions) });
             }
             catch (Exception ex)
             {

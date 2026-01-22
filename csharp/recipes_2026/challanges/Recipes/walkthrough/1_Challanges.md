@@ -67,3 +67,11 @@ What needs to be changed in the code to prevent this?
 ### Login with Attacker credentails
 A hacker can trick the user into logging in under the hacker’s identity. Later, the user might provide sensitive information that the hacker will be able to access.
 In this exercise, prepare an HTML page that runs from `http://localhost:8888` and demonstrates how the user can be tricked into logging in.
+
+---
+
+### Prompt Injection Against the RecipeAI Controller
+The RecipeAI controller is vulnerable.
+As an attacker, manipulate the prompt to make the controller perform non-recipe actions.
+Demonstrate the misuse.
+Then fix the controller to prevent prompt-based exploitation.
