@@ -16,7 +16,8 @@ Uploaded files can be used to:
 * Exhaust disk space or memory
 * Bypass file-type restrictions
 * Break application startup or runtime behavior
-* System take over
+* Stored malicious content, Files later served to users, enabling XSS or client-side attacks
+* Persistence, Attacker-controlled files remaining on disk across restarts
 
 This can lead to **denial of service (DoS)** or broader compromise.
 
@@ -58,4 +59,5 @@ Actual Content: configuration file
 The server accepts the upload despite mismatches between declared type, extension, and content.
 
 ---
+
 
