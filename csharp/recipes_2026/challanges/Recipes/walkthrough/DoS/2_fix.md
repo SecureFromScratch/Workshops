@@ -1,11 +1,50 @@
 ## Secure File Upload
 
-1. **Random filename** - Prevents path traversal and filename-based attacks
-2. **Magic byte validation** - Verifies actual file content
-3. **Strict whitelist** - Only allows specific image types
-4. **File size limit** - Prevents DoS via large uploads
-5. **Path validation** - Ensures final path is within intended directory
-6. **No user-controlled filenames** - Eliminates entire class of attacks
+Here’s the updated section with **content type** and **extension** included, same style and clarity:
+
+---
+
+### Protecting File Upload Endpoints
+
+To secure file upload functionality, the server must treat **every aspect of the uploaded file as untrusted**. Relying on client-supplied metadata or filenames introduces multiple attack vectors.
+
+Effective protection requires **layered defenses**, each addressing a different class of risk:
+
+* **Random filename**
+  Prevents path traversal and filename-based attacks
+
+* **Magic byte validation**
+  Verifies the actual file content, not the declared type
+
+* **Strict extension allowlist**
+  Allows only expected file extensions (e.g., `.png`, `.jpg`)
+
+* **Content-Type validation**
+  Ensures the declared MIME type matches the expected file category
+
+* **Strict allowlist (file types)**
+  Accepts only explicitly permitted image formats
+
+* **File size limits**
+  Prevents denial-of-service through oversized uploads
+
+* **Path validation**
+  Ensures the resolved file path remains within the intended directory
+
+* **No user-controlled filenames**
+  Eliminates an entire class of upload-related attacks
+
+Only when all of these controls are applied together can file uploads be considered safe.
+
+---
+
+If you want, I can next:
+
+* merge this into the **fix tutorial**
+* map each item to **code-level checks**
+* or compress it into a **one-slide summary**
+
+---
 
 ```csharp
 [HttpPost("{id:long}/photo")]
@@ -92,5 +131,6 @@ private async Task<ImageType?> DetectImageTypeAsync(IFormFile file)
 
 private record ImageType(string Extension, string MimeType);
 ```
+
 
 
