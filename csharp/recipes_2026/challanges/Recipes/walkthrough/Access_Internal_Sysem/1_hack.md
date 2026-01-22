@@ -24,20 +24,9 @@ LocalStack exposes sensitive AWS configuration endpoints on `localhost:4566`:
 
 These endpoints are intentionally restricted to localhost for security, but SSRF bypasses this restriction.
 
-## Exploitation Steps
-
-### Craft SSRF Payloads
-
-#### Payload 3: Get Diagnostic Information (Most Sensitive)
-```json
-{
-  "url": "http://localhost:4566/_localstack/diagnose",
-  "filename": "diagnose.txt"
-}
-```
-
-### Execute the Attack
+## Execute the Attack
 Enter the AWS diagnostic endpoint URL as the recipe picture.
 
-### Retrieve the Stolen Data
+## Retrieve the Stolen Data
 Open the browser’s Developer Tools, go to the **Network** tab, and locate the fetched data.
+
