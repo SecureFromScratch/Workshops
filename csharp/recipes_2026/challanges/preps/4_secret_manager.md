@@ -35,7 +35,7 @@ If you see something like `aws-cli/2.x`, you're done.
 
 ### Start LocalStack
 
-From the folder where the solution (.sln) is located.
+From the  src/Recipes.Api Folder.
 
 ```bash
 docker compose up -d localstack
