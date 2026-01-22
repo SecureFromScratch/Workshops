@@ -21,12 +21,7 @@ What can you do to prevent it?
 ### Approve the Recipe
 When creating a new recipe, its status is set to **Draft**. Only an administrator should be able to change a recipe from **Draft** to **Published**, but the system is vulnerable.
 A user can manipulate the process to get their recipe approved. Can you figure out how?
-
-
----
-
-### Denial of service
-It's possible to overwrite an important system file, which can cause a denial of service. Can you do it?
+Before you fix this vulnerability exploit the next challange
 
 ---
 
@@ -40,6 +35,10 @@ curl http://localhost:4566/_localstack/info
 
 3. Diagnostics
 curl http://localhost:4566/_localstack/diagnose
+
+---
+### Denial of service
+It's possible to overwrite an important system file, which can cause a denial of service. Can you do it?
 
 ---
 
