@@ -8,7 +8,6 @@ cd Workshops
 git sparse-checkout init --cone
 
 ### Set sparse checkout to only include the Recipes directory
-# Note: typo fixed - "challenges" not "challanges"
 git sparse-checkout set csharp/recipes_2026/challanges/Recipes
 
 ### Checkout the main branch
