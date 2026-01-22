@@ -19,8 +19,7 @@ export class RecipeComponent implements OnInit {
     dto: RecipeCreateUpdate = {
         name: '',
         description: '',
-        photo: '',
-        status: RecipeStatus.Draft,
+        photo: '',        
         createdBy: ''
     };
 
@@ -52,8 +51,7 @@ export class RecipeComponent implements OnInit {
                 this.dto = {
                     name: r.name,
                     description: r.description ?? '',
-                    photo: r.photo ?? '',
-                    status: r.status,
+                    photo: r.photo ?? '',                    
                     createdBy: r.createdBy
                 };
             },
@@ -92,8 +90,7 @@ export class RecipeComponent implements OnInit {
 
         const dtoToSend: RecipeCreateUpdate = {
             name: this.dto.name,
-            description: this.dto.description,
-            status: this.dto.status,
+            description: this.dto.description,            
             photo: this.photoMode === 'url' ? (this.dto.photo ?? '') : '',
             createdBy: this.dto.createdBy
         };

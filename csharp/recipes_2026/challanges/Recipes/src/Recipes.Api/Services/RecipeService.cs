@@ -61,8 +61,12 @@ namespace Recipes.Api.Serrvices
 
       public async Task<List<Recipe>> GetAllAsync()
       {
-         return await m_context.Recipes.ToListAsync();
+         return await m_context.Recipes
+             .AsNoTracking()
+             .Where(r => r.Status == RecipeStatus.Published)
+             .ToListAsync();
       }
+
 
 
       public async Task<Recipe?> GetByIdAsync(long id)

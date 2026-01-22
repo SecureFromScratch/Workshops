@@ -19,8 +19,7 @@ export interface Recipe {
 export interface RecipeCreateUpdate {
     name: string;
     description?: string;
-    photo?: string;
-    status: RecipeStatus;
+    photo?: string;    
     createdBy: string;
 }
 
