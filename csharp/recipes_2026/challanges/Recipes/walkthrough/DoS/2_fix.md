@@ -1,11 +1,5 @@
 ## Secure File Upload
 
-Here’s the updated section with **content type** and **extension** included, same style and clarity:
-
----
-
-### Protecting File Upload Endpoints
-
 To secure file upload functionality, the server must treat **every aspect of the uploaded file as untrusted**. Relying on client-supplied metadata or filenames introduces multiple attack vectors.
 
 Effective protection requires **layered defenses**, each addressing a different class of risk:
@@ -131,6 +125,7 @@ private async Task<ImageType?> DetectImageTypeAsync(IFormFile file)
 
 private record ImageType(string Extension, string MimeType);
 ```
+
 
 
 
