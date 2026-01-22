@@ -7,7 +7,6 @@ Open Visual code terminal:
 #### Recipes.APi
 
 ```bash
-cd cd src/Recipes.Api/
 dotnet add ./Recipes.Api/Recipes.Api.csproj package AWSSDK.SecretsManager --version 4.0.4.3
 dotnet add ./Recipes.Api/Recipes.Api.csproj package Azure.AI.OpenAI --version 2.1.0
 dotnet add ./Recipes.Api/Recipes.Api.csproj package Microsoft.AspNetCore.Authentication.JwtBearer --version 8.0.23
@@ -17,12 +16,10 @@ dotnet add ./Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCor
 dotnet add ./Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore.Tools --version 8.0.23
 dotnet add ./Recipes.Api/Recipes.Api.csproj package OpenAI --version 2.8.0
 dotnet add ./Recipes.Api/Recipes.Api.csproj package Swashbuckle.AspNetCore --version 6.6.2
-dotnet restore
 ```
 
 #### Recipes.Bff
 ```
-cd ../Recipes.Bff/
 dotnet add ./Recipes.Bff/Recipes.Bff.csproj package Yarp.ReverseProxy --version 2.3.0
 dotnet restore
 ```
