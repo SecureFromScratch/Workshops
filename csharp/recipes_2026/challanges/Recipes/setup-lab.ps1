@@ -408,11 +408,23 @@ if (-not $secretsOk) {
 Write-Success "All secrets configured successfully!"
 
 # ============================================================================
-# STEP 6: Install NuGet Packages
+# STEP 6: Install NuGet Packages and EF Tools
 # ============================================================================
-Write-Step "STEP 6: Installing NuGet Packages"
+Write-Step "STEP 6: Installing NuGet Packages and EF Tools"
 
 Set-Location "..\..\"
+
+Write-Info "Installing Entity Framework Core tools..."
+dotnet tool install --global dotnet-ef 2>&1 | Out-Null
+if ($LASTEXITCODE -ne 0) {
+    # Tool might already be installed, try to update
+    dotnet tool update --global dotnet-ef 2>&1 | Out-Null
+}
+
+# Refresh path to include dotnet tools
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+
+Write-Success "EF Core tools ready"
 
 Write-Info "Installing Recipes.Api packages..."
 dotnet add ./src/Recipes.Api/Recipes.Api.csproj package AWSSDK.SecretsManager --version 4.0.4.3 2>&1 | Out-Null
@@ -436,7 +448,7 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Success "NuGet packages installed!"
+Write-Success "All packages installed!"
 
 # ============================================================================
 # STEP 7: Install Angular Packages
