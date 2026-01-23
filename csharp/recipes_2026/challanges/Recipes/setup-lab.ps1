@@ -487,13 +487,31 @@ Set-Location "..\Recipes.Api"
 # ============================================================================
 Write-Step "STEP 8: Setting up Database"
 
+# Navigate back to Recipes.Api from recipes-ui
+Set-Location "..\Recipes.Api"
+
+# Verify we're in the right place
+$currentPath = Get-Location
+Write-Info "Current directory: $currentPath"
+
 if (-not (Test-Path "start-db.ps1")) {
-    Write-ErrorMsg "start-db.ps1 not found in current directory"
-    Write-Host "Expected at: $(Get-Location)\start-db.ps1" -ForegroundColor Yellow
-    exit 1
+    Write-ErrorMsg "start-db.ps1 not found!"
+    Write-Host "Expected at: $currentPath\start-db.ps1" -ForegroundColor Yellow
+    Write-Host "Looking for it..." -ForegroundColor Yellow
+    
+    # Try to find it
+    $scriptPath = Get-ChildItem -Path "..\..\" -Recurse -Filter "start-db.ps1" -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($scriptPath) {
+        Write-Info "Found at: $($scriptPath.FullName)"
+        Set-Location $scriptPath.DirectoryName
+        Write-Info "Changed to: $(Get-Location)"
+    } else {
+        Write-ErrorMsg "Cannot find start-db.ps1 anywhere"
+        exit 1
+    }
 }
 
-Write-Info "Running start-db.ps1..."
+Write-Info "Running start-db.ps1 from: $(Get-Location)"
 Write-Host "`n--- start-db.ps1 output ---" -ForegroundColor Gray
 
 & .\start-db.ps1
