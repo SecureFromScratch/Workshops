@@ -483,47 +483,33 @@ Write-Success "Angular packages installed!"
 Set-Location "..\Recipes.Api"
 
 # ============================================================================
-# STEP 8: Setup Database
+# STEP 8: Setup Database (using start-db.ps1)
 # ============================================================================
 Write-Step "STEP 8: Setting up Database"
 
 # Navigate back to Recipes.Api from recipes-ui
 Set-Location "..\Recipes.Api"
 
-# Verify we're in the right place
-$currentPath = Get-Location
-Write-Info "Current directory: $currentPath"
+Write-Info "Current directory: $(Get-Location)"
 
 if (-not (Test-Path "start-db.ps1")) {
-    Write-ErrorMsg "start-db.ps1 not found!"
-    Write-Host "Expected at: $currentPath\start-db.ps1" -ForegroundColor Yellow
-    Write-Host "Looking for it..." -ForegroundColor Yellow
-    
-    # Try to find it
-    $scriptPath = Get-ChildItem -Path "..\..\" -Recurse -Filter "start-db.ps1" -ErrorAction SilentlyContinue | Select-Object -First 1
-    if ($scriptPath) {
-        Write-Info "Found at: $($scriptPath.FullName)"
-        Set-Location $scriptPath.DirectoryName
-        Write-Info "Changed to: $(Get-Location)"
-    } else {
-        Write-ErrorMsg "Cannot find start-db.ps1 anywhere"
-        exit 1
-    }
+    Write-ErrorMsg "start-db.ps1 not found at: $(Get-Location)"
+    exit 1
 }
 
-Write-Info "Running start-db.ps1 from: $(Get-Location)"
+Write-Info "Running start-db.ps1 (handles SQL Server, init-db.sql, and migrations)..."
 Write-Host "`n--- start-db.ps1 output ---" -ForegroundColor Gray
 
+# Just run start-db.ps1 - it handles everything
 & .\start-db.ps1
 
 Write-Host "--- end of start-db.ps1 ---`n" -ForegroundColor Gray
 
 if ($LASTEXITCODE -ne 0) {
-    Write-ErrorMsg "Database setup encountered errors"
-    Write-Host "`nThe database setup script had issues. Common causes:" -ForegroundColor Yellow
-    Write-Host "1. SQL Server took too long to start - try running: .\start-db.ps1" -ForegroundColor Yellow
-    Write-Host "2. Password mismatch - check LocalStack secret" -ForegroundColor Yellow
-    Write-Host "3. Port 14333 in use - check: netstat -ano | findstr :14333" -ForegroundColor Yellow
+    Write-ErrorMsg "Database setup had issues"
+    Write-Host "`nYou can retry manually:" -ForegroundColor Yellow
+    Write-Host "  cd src\Recipes.Api" -ForegroundColor Yellow
+    Write-Host "  .\start-db.ps1" -ForegroundColor Yellow
 } else {
     Write-Success "Database setup complete!"
 }
