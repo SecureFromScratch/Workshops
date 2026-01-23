@@ -1,12 +1,14 @@
-# SecureFromScratch Lab Setup Script
-# This script automates the complete lab environment setup
+# SecureFromScratch Lab Setup Script - COMPLETE VERSION
+# This script handles all edge cases and provides clear feedback
 
 param(
     [switch]$SkipPrerequisites,
-    [switch]$SkipClone
+    [switch]$SkipClone,
+    [switch]$CleanStart
 )
 
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
+$script:hasErrors = $false
 
 function Write-Step {
     param([string]$Message)
@@ -25,18 +27,72 @@ function Write-Info {
     Write-Host "[INFO] $Message" -ForegroundColor Yellow
 }
 
+function Write-ErrorMsg {
+    param([string]$Message)
+    Write-Host "[ERROR] $Message" -ForegroundColor Red
+    $script:hasErrors = $true
+}
+
 function Test-Command {
     param([string]$Command)
     $null = Get-Command $Command -ErrorAction SilentlyContinue
     return $?
 }
 
+function Wait-ForLocalStack {
+    param([int]$MaxSeconds = 60)
+    
+    Write-Info "Waiting for LocalStack to be ready (max $MaxSeconds seconds)..."
+    $endpoint = "http://localhost:4566"
+    $elapsed = 0
+    $interval = 5
+    
+    while ($elapsed -lt $MaxSeconds) {
+        try {
+            $response = Invoke-WebRequest -Uri "$endpoint/_localstack/health" -TimeoutSec 3 -UseBasicParsing -ErrorAction SilentlyContinue
+            if ($response.StatusCode -eq 200) {
+                $health = $response.Content | ConvertFrom-Json
+                if ($health.services.secretsmanager -eq "running" -or $health.services.secretsmanager -eq "available") {
+                    Write-Success "LocalStack is ready!"
+                    return $true
+                }
+            }
+        } catch {
+            # Still starting
+        }
+        
+        Write-Host "." -NoNewline
+        Start-Sleep -Seconds $interval
+        $elapsed += $interval
+    }
+    
+    Write-ErrorMsg "LocalStack did not become ready in $MaxSeconds seconds"
+    return $false
+}
+
 # Check if running as Administrator
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $isAdmin) {
-    Write-Warning "This script should be run as Administrator for best results."
+    Write-Warning "This script works best when run as Administrator."
     Write-Info "Some installations may prompt for elevation."
     Start-Sleep -Seconds 3
+}
+
+# Clean start option
+if ($CleanStart) {
+    Write-Step "CLEAN START: Removing Previous Setup"
+    
+    if (Test-Path "Workshops") {
+        Write-Info "Removing Workshops directory..."
+        Remove-Item -Recurse -Force "Workshops" -ErrorAction SilentlyContinue
+    }
+    
+    Write-Info "Stopping and removing Docker containers..."
+    Push-Location "Workshops\csharp\recipes_2026\challanges\Recipes\src\Recipes.Api" -ErrorAction SilentlyContinue
+    docker compose down -v 2>&1 | Out-Null
+    Pop-Location -ErrorAction SilentlyContinue
+    
+    Write-Success "Clean start complete"
 }
 
 # ============================================================================
@@ -45,16 +101,21 @@ if (-not $isAdmin) {
 if (-not $SkipPrerequisites) {
     Write-Step "STEP 1: Installing Prerequisites"
 
-    # Check for winget
-    if (-not (Test-Command "winget")) {
-        Write-Warning "winget not found. Please install it from Microsoft Store or update Windows."
-        Write-Info "Continuing with manual checks..."
-    }
-
     # Install .NET 8 SDK
     if (-not (Test-Command "dotnet")) {
         Write-Info "Installing .NET 8 SDK..."
-        winget install Microsoft.DotNet.SDK.8 --silent --accept-package-agreements --accept-source-agreements
+        if (Test-Command "winget") {
+            winget install Microsoft.DotNet.SDK.8 --silent --accept-package-agreements --accept-source-agreements 2>&1 | Out-Null
+        } else {
+            Write-Info "Downloading .NET 8 SDK..."
+            $dotnetUrl = "https://download.visualstudio.microsoft.com/download/pr/93961dfb-d1e0-49c8-9230-abcba1ebab5a/811ed1eb63d7652325727720edda26a8/dotnet-sdk-8.0.404-win-x64.exe"
+            $dotnetInstaller = "$env:TEMP\dotnet-sdk.exe"
+            Invoke-WebRequest -Uri $dotnetUrl -OutFile $dotnetInstaller -UseBasicParsing
+            Start-Process -FilePath $dotnetInstaller -ArgumentList "/quiet" -Wait
+            Remove-Item $dotnetInstaller -ErrorAction SilentlyContinue
+        }
+        # Refresh path
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
         Write-Success ".NET 8 SDK installed"
     } else {
         $dotnetVersion = dotnet --version
@@ -64,7 +125,17 @@ if (-not $SkipPrerequisites) {
     # Install Node.js
     if (-not (Test-Command "node")) {
         Write-Info "Installing Node.js LTS..."
-        winget install OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements
+        if (Test-Command "winget") {
+            winget install OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements 2>&1 | Out-Null
+        } else {
+            Write-Info "Downloading Node.js..."
+            $nodeUrl = "https://nodejs.org/dist/v20.11.0/node-v20.11.0-x64.msi"
+            $nodeInstaller = "$env:TEMP\nodejs.msi"
+            Invoke-WebRequest -Uri $nodeUrl -OutFile $nodeInstaller -UseBasicParsing
+            Start-Process msiexec.exe -ArgumentList "/i `"$nodeInstaller`" /qn" -Wait
+            Remove-Item $nodeInstaller -ErrorAction SilentlyContinue
+        }
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
         Write-Success "Node.js installed"
     } else {
         $nodeVersion = node --version
@@ -76,24 +147,44 @@ if (-not $SkipPrerequisites) {
         Write-Info "Installing Git..."
         $gitUrl = "https://github.com/git-for-windows/git/releases/download/v2.52.0.windows.1/Git-2.52.0-64-bit.exe"
         $gitInstaller = "$env:TEMP\Git-Setup.exe"
-        Invoke-WebRequest -Uri $gitUrl -OutFile $gitInstaller
+        Invoke-WebRequest -Uri $gitUrl -OutFile $gitInstaller -UseBasicParsing
         Start-Process -FilePath $gitInstaller -ArgumentList "/VERYSILENT" -Wait
-        Remove-Item $gitInstaller
+        Remove-Item $gitInstaller -ErrorAction SilentlyContinue
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
         Write-Success "Git installed"
     } else {
         $gitVersion = git --version
         Write-Success "Git already installed ($gitVersion)"
     }
 
-    # Install Docker Desktop
+    # Check Docker Desktop
     if (-not (Test-Command "docker")) {
-        Write-Info "Installing Docker Desktop..."
-        winget install Docker.DockerDesktop --silent --accept-package-agreements --accept-source-agreements
-        Write-Warning "Docker Desktop installed. You may need to restart your computer and rerun this script."
-        Write-Info "Press any key to continue or Ctrl+C to exit and restart..."
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Write-ErrorMsg "Docker Desktop is not installed!"
+        Write-Host "`nPlease install Docker Desktop:" -ForegroundColor Yellow
+        Write-Host "1. Download from: https://www.docker.com/products/docker-desktop" -ForegroundColor Yellow
+        Write-Host "2. Install and restart your computer" -ForegroundColor Yellow
+        Write-Host "3. Start Docker Desktop and wait for the whale icon" -ForegroundColor Yellow
+        Write-Host "4. Rerun this script`n" -ForegroundColor Yellow
+        exit 1
     } else {
-        Write-Success "Docker already installed"
+        # Check if Docker is actually running
+        try {
+            docker ps 2>&1 | Out-Null
+            if ($LASTEXITCODE -ne 0) {
+                Write-ErrorMsg "Docker Desktop is installed but not running!"
+                Write-Host "`nPlease:" -ForegroundColor Yellow
+                Write-Host "1. Start Docker Desktop" -ForegroundColor Yellow
+                Write-Host "2. Wait for the whale icon in system tray" -ForegroundColor Yellow
+                Write-Host "3. Verify: docker ps" -ForegroundColor Yellow
+                Write-Host "4. Rerun this script`n" -ForegroundColor Yellow
+                exit 1
+            }
+            Write-Success "Docker Desktop is running"
+        } catch {
+            Write-ErrorMsg "Cannot connect to Docker!"
+            Write-Host "Please start Docker Desktop and wait for it to be ready." -ForegroundColor Yellow
+            exit 1
+        }
     }
 
     # Install AWS CLI
@@ -101,19 +192,17 @@ if (-not $SkipPrerequisites) {
         Write-Info "Installing AWS CLI..."
         $awsUrl = "https://awscli.amazonaws.com/AWSCLIV2.msi"
         $awsInstaller = "$env:TEMP\AWSCLIV2.msi"
-        Invoke-WebRequest -Uri $awsUrl -OutFile $awsInstaller
+        Invoke-WebRequest -Uri $awsUrl -OutFile $awsInstaller -UseBasicParsing
         Start-Process msiexec.exe -ArgumentList "/i `"$awsInstaller`" /qn" -Wait
-        Remove-Item $awsInstaller
-        
-        # Refresh environment variables
+        Remove-Item $awsInstaller -ErrorAction SilentlyContinue
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
         Write-Success "AWS CLI installed"
     } else {
-        $awsVersion = aws --version
+        $awsVersion = aws --version 2>&1
         Write-Success "AWS CLI already installed ($awsVersion)"
     }
 
-    Write-Success "All prerequisites installed!"
+    Write-Success "All prerequisites ready!"
 }
 
 # ============================================================================
@@ -130,7 +219,7 @@ if (-not $SkipClone) {
         if ($response -eq 'y' -or $response -eq 'Y') {
             Remove-Item -Recurse -Force $repoPath
         } else {
-            Write-Info "Skipping clone. Using existing repository."
+            Write-Info "Using existing repository."
             Set-Location $repoPath
             $SkipClone = $true
         }
@@ -138,23 +227,27 @@ if (-not $SkipClone) {
     
     if (-not $SkipClone) {
         Write-Info "Cloning repository with blob filtering..."
-        git clone --no-checkout --filter=blob:none https://github.com/SecureFromScratch/Workshops.git
+        git clone --no-checkout --filter=blob:none https://github.com/SecureFromScratch/Workshops.git 2>&1 | Out-Null
+        
+        if ($LASTEXITCODE -ne 0) {
+            Write-ErrorMsg "Failed to clone repository"
+            exit 1
+        }
         
         Set-Location $repoPath
         
         Write-Info "Setting up sparse checkout..."
-        git sparse-checkout init --cone
-        git sparse-checkout set csharp/recipes_2026/challanges/Recipes
+        git sparse-checkout init --cone 2>&1 | Out-Null
+        git sparse-checkout set csharp/recipes_2026/challanges/Recipes 2>&1 | Out-Null
         
         Write-Info "Checking out main branch..."
-        git checkout main
+        git checkout main 2>&1 | Out-Null
         
         Write-Success "Repository cloned successfully!"
     }
 } else {
-    # If skipping clone, assume we're already in the right directory
     if (-not (Test-Path "Workshops")) {
-        Write-Error "Workshops directory not found. Please run without -SkipClone or navigate to the correct directory."
+        Write-ErrorMsg "Workshops directory not found. Cannot skip clone."
         exit 1
     }
     Set-Location Workshops
@@ -163,49 +256,40 @@ if (-not $SkipClone) {
 # Navigate to Recipes folder
 $recipesPath = "csharp\recipes_2026\challanges\Recipes"
 if (-not (Test-Path $recipesPath)) {
-    Write-Error "Recipes folder not found at $recipesPath"
+    Write-ErrorMsg "Recipes folder not found at $recipesPath"
     exit 1
 }
 Set-Location $recipesPath
 Write-Info "Working directory: $(Get-Location)"
 
 # ============================================================================
-# STEP 3: Start LocalStack
+# STEP 3: Start LocalStack and Clean Previous State
 # ============================================================================
 Write-Step "STEP 3: Starting LocalStack"
 
-# Navigate to API folder for docker-compose
 Set-Location "src\Recipes.Api"
 
+# Stop any existing containers and clean volumes
+Write-Info "Cleaning up any previous Docker state..."
+docker compose down -v 2>&1 | Out-Null
+
 Write-Info "Starting LocalStack container..."
-docker compose up -d localstack
+docker compose up -d localstack 2>&1 | Out-Null
 
-Write-Info "Waiting for LocalStack to be ready..."
-$maxAttempts = 30
-$attempt = 0
-$ready = $false
-
-while ($attempt -lt $maxAttempts -and -not $ready) {
-    try {
-        $response = Invoke-WebRequest -Uri "http://localhost:4566/_localstack/health" -TimeoutSec 2 -ErrorAction SilentlyContinue
-        if ($response.StatusCode -eq 200) {
-            $ready = $true
-        }
-    } catch {
-        # LocalStack not ready yet
-    }
-    
-    if (-not $ready) {
-        $attempt++
-        Write-Host "." -NoNewline
-        Start-Sleep -Seconds 2
-    }
+if ($LASTEXITCODE -ne 0) {
+    Write-ErrorMsg "Failed to start LocalStack"
+    Write-Host "Check Docker Desktop is running and try: docker compose up -d localstack" -ForegroundColor Yellow
+    exit 1
 }
 
-if ($ready) {
-    Write-Success "LocalStack is ready!"
-} else {
-    Write-Warning "LocalStack health check timeout. Continuing anyway..."
+# Wait for LocalStack with timeout
+if (-not (Wait-ForLocalStack -MaxSeconds 60)) {
+    Write-ErrorMsg "LocalStack failed to start properly"
+    Write-Host "`nTroubleshooting:" -ForegroundColor Yellow
+    Write-Host "1. Check logs: docker logs localstack" -ForegroundColor Yellow
+    Write-Host "2. Restart: docker compose restart localstack" -ForegroundColor Yellow
+    Write-Host "3. Check Docker Desktop has enough resources" -ForegroundColor Yellow
+    exit 1
 }
 
 # ============================================================================
@@ -214,155 +298,105 @@ if ($ready) {
 Write-Step "STEP 4: Configuring AWS CLI"
 
 Write-Info "Setting AWS credentials for LocalStack..."
-aws configure set aws_access_key_id localstack
-aws configure set aws_secret_access_key localstack
-aws configure set default.region us-east-1
+aws configure set aws_access_key_id localstack 2>&1 | Out-Null
+aws configure set aws_secret_access_key localstack 2>&1 | Out-Null
+aws configure set default.region us-east-1 2>&1 | Out-Null
 
 Write-Success "AWS CLI configured for LocalStack"
 
 # ============================================================================
-# STEP 5: Seed Secrets into LocalStack
+# STEP 5: Create Secrets in LocalStack (BULLETPROOF VERSION)
 # ============================================================================
 Write-Step "STEP 5: Creating Secrets in LocalStack"
 
 $endpoint = "http://localhost:4566"
 
-# Verify LocalStack is actually responding to Secrets Manager requests
-Write-Info "Testing LocalStack Secrets Manager endpoint..."
-try {
-    $testResponse = Invoke-WebRequest -Uri "$endpoint/_localstack/health" -TimeoutSec 5 -UseBasicParsing
-    Write-Success "LocalStack is responding"
-} catch {
-    Write-Warning "LocalStack may not be fully ready. Waiting 10 more seconds..."
-    Start-Sleep -Seconds 10
-}
-
-# Create secrets with proper error handling
-Write-Info "Creating sa-password secret..."
-try {
-    $result = aws --endpoint-url=$endpoint secretsmanager create-secret `
-        --name recipes/dev/sa-password `
-        --secret-string "StrongP4ssword123" 2>&1
+function Set-Secret {
+    param(
+        [string]$Name,
+        [string]$Value
+    )
     
-    if ($LASTEXITCODE -ne 0) {
-        # Secret might already exist, try to update it instead
-        Write-Info "Secret may exist, attempting to update..."
-        aws --endpoint-url=$endpoint secretsmanager put-secret-value `
-            --secret-id recipes/dev/sa-password `
-            --secret-string "StrongP4ssword123" 2>&1 | Out-Null
-    }
-    Write-Success "sa-password secret configured"
-} catch {
-    Write-Warning "Error with sa-password: $_"
-}
-
-Write-Info "Creating app-db-connection secret..."
-try {
-    $result = aws --endpoint-url=$endpoint secretsmanager create-secret `
-        --name recipes/dev/app-db-connection `
-        --secret-string "Server=localhost,14333;Database=Recipes;User Id=recipes_app;Password=StrongP4ssword123;TrustServerCertificate=true;" 2>&1
+    Write-Info "Configuring secret: $Name"
     
-    if ($LASTEXITCODE -ne 0) {
-        Write-Info "Secret may exist, attempting to update..."
-        aws --endpoint-url=$endpoint secretsmanager put-secret-value `
-            --secret-id recipes/dev/app-db-connection `
-            --secret-string "Server=localhost,14333;Database=Recipes;User Id=recipes_app;Password=StrongP4ssword123;TrustServerCertificate=true;" 2>&1 | Out-Null
-    }
-    Write-Success "app-db-connection secret configured"
-} catch {
-    Write-Warning "Error with app-db-connection: $_"
-}
-
-Write-Info "Creating jwt-config secret..."
-try {
-    $result = aws --endpoint-url=$endpoint secretsmanager create-secret `
-        --name recipes/dev/jwt-config `
-        --secret-string '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}' 2>&1
+    # Try to delete if exists
+    aws --endpoint-url=$endpoint secretsmanager delete-secret `
+        --secret-id $Name `
+        --force-delete-without-recovery 2>&1 | Out-Null
     
-    if ($LASTEXITCODE -ne 0) {
-        Write-Info "Secret may exist, attempting to update..."
-        aws --endpoint-url=$endpoint secretsmanager put-secret-value `
-            --secret-id recipes/dev/jwt-config `
-            --secret-string '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}' 2>&1 | Out-Null
-    }
-    Write-Success "jwt-config secret configured"
-} catch {
-    Write-Warning "Error with jwt-config: $_"
-}
-
-# Verify secrets
-Write-Info "Verifying secrets..."
-$secretsVerified = $true
-try {
-    $saPassword = aws --endpoint-url=$endpoint secretsmanager get-secret-value --secret-id recipes/dev/sa-password --query SecretString --output text 2>&1
-    if ($LASTEXITCODE -eq 0 -and $saPassword) {
-        Write-Success "sa-password verified"
+    # Wait a moment
+    Start-Sleep -Seconds 1
+    
+    # Create new
+    $result = aws --endpoint-url=$endpoint secretsmanager create-secret `
+        --name $Name `
+        --secret-string $Value 2>&1
+    
+    if ($LASTEXITCODE -eq 0) {
+        # Verify
+        $retrieved = aws --endpoint-url=$endpoint secretsmanager get-secret-value `
+            --secret-id $Name `
+            --query SecretString `
+            --output text 2>&1
+        
+        if ($LASTEXITCODE -eq 0 -and $retrieved -eq $Value) {
+            Write-Success "Secret '$Name' created and verified"
+            return $true
+        } else {
+            Write-ErrorMsg "Secret '$Name' created but verification failed"
+            Write-Host "  Expected: $Value" -ForegroundColor Gray
+            Write-Host "  Got: $retrieved" -ForegroundColor Gray
+            return $false
+        }
     } else {
-        Write-Warning "Could not verify sa-password"
-        $secretsVerified = $false
+        Write-ErrorMsg "Failed to create secret '$Name'"
+        Write-Host "  Error: $result" -ForegroundColor Gray
+        return $false
     }
-} catch {
-    Write-Warning "Error verifying sa-password: $_"
-    $secretsVerified = $false
 }
 
-try {
-    $appConnection = aws --endpoint-url=$endpoint secretsmanager get-secret-value --secret-id recipes/dev/app-db-connection --query SecretString --output text 2>&1
-    if ($LASTEXITCODE -eq 0 -and $appConnection) {
-        Write-Success "app-db-connection verified"
-    } else {
-        Write-Warning "Could not verify app-db-connection"
-        $secretsVerified = $false
-    }
-} catch {
-    Write-Warning "Error verifying app-db-connection: $_"
-    $secretsVerified = $false
+# Create all secrets
+$secretsOk = $true
+$secretsOk = $secretsOk -and (Set-Secret "recipes/dev/sa-password" "StrongP4ssword123")
+$secretsOk = $secretsOk -and (Set-Secret "recipes/dev/app-db-connection" "Server=localhost,14333;Database=Recipes;User Id=recipes_app;Password=StrongP4ssword123;TrustServerCertificate=true;")
+$secretsOk = $secretsOk -and (Set-Secret "recipes/dev/jwt-config" '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}')
+
+if (-not $secretsOk) {
+    Write-ErrorMsg "Some secrets failed to create properly"
+    Write-Host "`nCheck LocalStack logs: docker logs localstack" -ForegroundColor Yellow
+    exit 1
 }
 
-try {
-    $jwtConfig = aws --endpoint-url=$endpoint secretsmanager get-secret-value --secret-id recipes/dev/jwt-config --query SecretString --output text 2>&1
-    if ($LASTEXITCODE -eq 0 -and $jwtConfig) {
-        Write-Success "jwt-config verified"
-    } else {
-        Write-Warning "Could not verify jwt-config"
-        $secretsVerified = $false
-    }
-} catch {
-    Write-Warning "Error verifying jwt-config: $_"
-    $secretsVerified = $false
-}
-
-if ($secretsVerified) {
-    Write-Success "All secrets created and verified!"
-} else {
-    Write-Warning "Some secrets could not be verified. The setup may still work, but check LocalStack logs if issues occur."
-    Write-Info "You can check LocalStack logs with: docker logs localstack"
-}
+Write-Success "All secrets configured successfully!"
 
 # ============================================================================
 # STEP 6: Install NuGet Packages
 # ============================================================================
 Write-Step "STEP 6: Installing NuGet Packages"
 
-# Go back to solution root
 Set-Location "..\..\"
 
 Write-Info "Installing Recipes.Api packages..."
-dotnet add ./src/Recipes.Api/Recipes.Api.csproj package AWSSDK.SecretsManager --version 4.0.4.3
-dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Azure.AI.OpenAI --version 2.1.0
-dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.AspNetCore.Authentication.JwtBearer --version 8.0.23
-dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.AspNetCore.OpenApi --version 8.0.16
-dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore --version 8.0.23
-dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.23
-dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore.Tools --version 8.0.23
-dotnet add ./src/Recipes.Api/Recipes.Api.csproj package OpenAI --version 2.8.0
-dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Swashbuckle.AspNetCore --version 6.6.2
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package AWSSDK.SecretsManager --version 4.0.4.3 2>&1 | Out-Null
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Azure.AI.OpenAI --version 2.1.0 2>&1 | Out-Null
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.AspNetCore.Authentication.JwtBearer --version 8.0.23 2>&1 | Out-Null
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.AspNetCore.OpenApi --version 8.0.16 2>&1 | Out-Null
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore --version 8.0.23 2>&1 | Out-Null
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.23 2>&1 | Out-Null
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore.Tools --version 8.0.23 2>&1 | Out-Null
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package OpenAI --version 2.8.0 2>&1 | Out-Null
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Swashbuckle.AspNetCore --version 6.6.2 2>&1 | Out-Null
 
 Write-Info "Installing Recipes.Bff packages..."
-dotnet add ./src/Recipes.Bff/Recipes.Bff.csproj package Yarp.ReverseProxy --version 2.3.0
+dotnet add ./src/Recipes.Bff/Recipes.Bff.csproj package Yarp.ReverseProxy --version 2.3.0 2>&1 | Out-Null
 
 Write-Info "Restoring all packages..."
-dotnet restore
+dotnet restore 2>&1 | Out-Null
+
+if ($LASTEXITCODE -ne 0) {
+    Write-ErrorMsg "Package installation failed"
+    exit 1
+}
 
 Write-Success "NuGet packages installed!"
 
@@ -372,30 +406,44 @@ Write-Success "NuGet packages installed!"
 Write-Step "STEP 7: Installing Angular Packages"
 
 Set-Location "src\recipes-ui"
-Write-Info "Running npm install..."
-npm install
+Write-Info "Running npm install (this may take a few minutes)..."
+npm install 2>&1 | Out-Null
+
+if ($LASTEXITCODE -ne 0) {
+    Write-ErrorMsg "npm install failed"
+    exit 1
+}
 
 Write-Success "Angular packages installed!"
 
-# Go back to API folder for database setup
 Set-Location "..\Recipes.Api"
 
 # ============================================================================
-# STEP 8: Start SQL Server and Run Migrations
+# STEP 8: Setup Database
 # ============================================================================
 Write-Step "STEP 8: Setting up Database"
 
-Write-Info "Starting SQL Server and running migrations with start-db.ps1..."
-if (Test-Path "start-db.ps1") {
-    & .\start-db.ps1
-    if ($LASTEXITCODE -eq 0) {
-        Write-Success "SQL Server started and migrations applied!"
-    } else {
-        Write-Warning "Database setup encountered issues. Check the output above."
-    }
+if (-not (Test-Path "start-db.ps1")) {
+    Write-ErrorMsg "start-db.ps1 not found in current directory"
+    Write-Host "Expected at: $(Get-Location)\start-db.ps1" -ForegroundColor Yellow
+    exit 1
+}
+
+Write-Info "Running start-db.ps1..."
+Write-Host "`n--- start-db.ps1 output ---" -ForegroundColor Gray
+
+& .\start-db.ps1
+
+Write-Host "--- end of start-db.ps1 ---`n" -ForegroundColor Gray
+
+if ($LASTEXITCODE -ne 0) {
+    Write-ErrorMsg "Database setup encountered errors"
+    Write-Host "`nThe database setup script had issues. Common causes:" -ForegroundColor Yellow
+    Write-Host "1. SQL Server took too long to start - try running: .\start-db.ps1" -ForegroundColor Yellow
+    Write-Host "2. Password mismatch - check LocalStack secret" -ForegroundColor Yellow
+    Write-Host "3. Port 14333 in use - check: netstat -ano | findstr :14333" -ForegroundColor Yellow
 } else {
-    Write-Warning "start-db.ps1 not found. You may need to set up the database manually."
-    Write-Info "Expected location: $(Get-Location)\start-db.ps1"
+    Write-Success "Database setup complete!"
 }
 
 # ============================================================================
@@ -403,18 +451,17 @@ if (Test-Path "start-db.ps1") {
 # ============================================================================
 Write-Step "SETUP COMPLETE!"
 
-Write-Host @"
+if ($script:hasErrors) {
+    Write-Host "[WARNING] Setup completed with some errors" -ForegroundColor Yellow
+    Write-Host "Review the messages above and address any issues" -ForegroundColor Yellow
+    Write-Host "`n"
+} else {
+    Write-Host @"
 
-[SUCCESS] Setup Complete!
+[SUCCESS] All Steps Completed Successfully!
 
-All prerequisites installed
-Repository cloned (sparse checkout)
-LocalStack running at http://localhost:4566
-Secrets configured in LocalStack
-NuGet packages installed
-Angular packages installed
-Database migration created
-SQL Server running at localhost,14333
+LocalStack: http://localhost:4566
+SQL Server: localhost,14333
 
 NEXT STEPS:
 1. Open VS Code in the Recipes folder (with Recipes.sln)
@@ -422,9 +469,8 @@ NEXT STEPS:
 
 2. Run the backend (API + BFF):
    - Press Ctrl+Shift+D
-   - Select "API + BFF" 
-   - Press F5 or click green play button
-   - Open Swagger: http://localhost:5000/swagger
+   - Select "API + BFF"
+   - Press F5
 
 3. Run the frontend:
    - Open new terminal (Ctrl+`)
@@ -432,12 +478,10 @@ NEXT STEPS:
    - ng s
    - Open http://localhost:4200
 
-To verify setup:
-  .\verify-setup.ps1
-
-To stop services:
-  docker compose down
+VERIFY: .\verify-setup.ps1
+STOP SERVICES: docker compose down
 
 "@ -ForegroundColor Green
+}
 
-Write-Info "Setup log saved to: setup-log.txt"
+Write-Info "Setup complete! $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
