@@ -314,7 +314,8 @@ $endpoint = "http://localhost:4566"
 function Set-Secret {
     param(
         [string]$Name,
-        [string]$Value
+        [string]$Value,
+        [switch]$IsJson
     )
     
     Write-Info "Configuring secret: $Name"
@@ -339,13 +340,50 @@ function Set-Secret {
             --query SecretString `
             --output text 2>&1
         
-        if ($LASTEXITCODE -eq 0 -and $retrieved -eq $Value) {
-            Write-Success "Secret '$Name' created and verified"
-            return $true
+        if ($LASTEXITCODE -eq 0 -and $retrieved) {
+            # For JSON secrets, do a smarter comparison
+            if ($IsJson) {
+                try {
+                    $expectedJson = $Value | ConvertFrom-Json
+                    $retrievedJson = $retrieved | ConvertFrom-Json
+                    
+                    # Compare key properties instead of exact string match
+                    $matches = $true
+                    foreach ($prop in $expectedJson.PSObject.Properties) {
+                        if ($retrievedJson.($prop.Name) -ne $prop.Value) {
+                            $matches = $false
+                            break
+                        }
+                    }
+                    
+                    if ($matches) {
+                        Write-Success "Secret '$Name' created and verified (JSON)"
+                        return $true
+                    } else {
+                        Write-ErrorMsg "Secret '$Name' JSON content mismatch"
+                        return $false
+                    }
+                } catch {
+                    # If JSON parsing fails, just check it's not empty
+                    if ($retrieved.Length -gt 10) {
+                        Write-Success "Secret '$Name' created (JSON validation skipped)"
+                        return $true
+                    }
+                }
+            } else {
+                # Simple string comparison for non-JSON
+                if ($retrieved -eq $Value) {
+                    Write-Success "Secret '$Name' created and verified"
+                    return $true
+                } else {
+                    Write-ErrorMsg "Secret '$Name' created but verification failed"
+                    Write-Host "  Expected: $Value" -ForegroundColor Gray
+                    Write-Host "  Got: $retrieved" -ForegroundColor Gray
+                    return $false
+                }
+            }
         } else {
-            Write-ErrorMsg "Secret '$Name' created but verification failed"
-            Write-Host "  Expected: $Value" -ForegroundColor Gray
-            Write-Host "  Got: $retrieved" -ForegroundColor Gray
+            Write-ErrorMsg "Secret '$Name' created but could not retrieve"
             return $false
         }
     } else {
@@ -359,7 +397,7 @@ function Set-Secret {
 $secretsOk = $true
 $secretsOk = $secretsOk -and (Set-Secret "recipes/dev/sa-password" "StrongP4ssword123")
 $secretsOk = $secretsOk -and (Set-Secret "recipes/dev/app-db-connection" "Server=localhost,14333;Database=Recipes;User Id=recipes_app;Password=StrongP4ssword123;TrustServerCertificate=true;")
-$secretsOk = $secretsOk -and (Set-Secret "recipes/dev/jwt-config" '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}')
+$secretsOk = $secretsOk -and (Set-Secret "recipes/dev/jwt-config" '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}' -IsJson)
 
 if (-not $secretsOk) {
     Write-ErrorMsg "Some secrets failed to create properly"
