@@ -8,9 +8,16 @@ USE Recipes;
 GO
 
 -- Admin login/user for migrations
-IF EXISTS (SELECT 1 FROM sys.sql_logins WHERE name = 'recipes_admin')
+-- Drop USER first (must be in database context)
+IF EXISTS (SELECT 1 FROM sys.database_principals WHERE name = 'recipes_admin' AND type = 'S')
 BEGIN
     DROP USER recipes_admin;
+END
+GO
+
+-- Drop LOGIN second (server level)
+IF EXISTS (SELECT 1 FROM sys.sql_logins WHERE name = 'recipes_admin')
+BEGIN
     DROP LOGIN recipes_admin;
 END
 GO
@@ -25,9 +32,16 @@ ALTER ROLE db_owner ADD MEMBER recipes_admin;
 GO
 
 -- App login/user for the running API
-IF EXISTS (SELECT 1 FROM sys.sql_logins WHERE name = 'recipes_app')
+-- Drop USER first (must be in database context)
+IF EXISTS (SELECT 1 FROM sys.database_principals WHERE name = 'recipes_app' AND type = 'S')
 BEGIN
     DROP USER recipes_app;
+END
+GO
+
+-- Drop LOGIN second (server level)
+IF EXISTS (SELECT 1 FROM sys.sql_logins WHERE name = 'recipes_app')
+BEGIN
     DROP LOGIN recipes_app;
 END
 GO
