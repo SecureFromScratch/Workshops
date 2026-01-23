@@ -3,7 +3,7 @@ Please follow the instructions below to install the lab.
 Detailed explanations are linked to each step.
 ### 1. Install .net8
 
-### 2. Nodejs
+### 2. Install Nodejs
 
 ### 3. Install git
 https://github.com/git-for-windows/git/releases/download/v2.52.0.windows.1/Git-2.52.0-64-bit.exe
