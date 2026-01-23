@@ -62,7 +62,7 @@ if ($retryCount -eq $maxRetries) {
 Write-Host "`nRunning init-db.sql inside container..."
 docker exec -i recipes-sqlserver /opt/mssql-tools18/bin/sqlcmd `
     -S localhost -U sa -P $saPassword -C `
-    -i /sql/init-db.sql
+    -i /init/init-db.sql
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Database and users created successfully!" -ForegroundColor Green
