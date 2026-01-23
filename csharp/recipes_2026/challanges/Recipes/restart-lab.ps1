@@ -12,12 +12,12 @@ function Write-Step {
 
 function Write-Success {
     param([string]$Message)
-    Write-Host "✓ $Message" -ForegroundColor Green
+    Write-Host "[OK] $Message" -ForegroundColor Green
 }
 
 function Write-Info {
     param([string]$Message)
-    Write-Host "ℹ $Message" -ForegroundColor Yellow
+    Write-Host "[INFO] $Message" -ForegroundColor Yellow
 }
 
 Write-Step "Restarting Lab Environment"
@@ -152,9 +152,11 @@ Write-Step "Environment Ready!"
 
 Write-Host @"
 
-✓ LocalStack running at http://localhost:4566
-✓ SQL Server running at localhost,14333
-✓ All secrets configured
+[SUCCESS] Environment Ready!
+
+LocalStack running at http://localhost:4566
+SQL Server running at localhost,14333
+All secrets configured
 
 READY TO CODE!
 
@@ -162,7 +164,7 @@ To run the application:
 1. Open VS Code (make sure root is Recipes folder with .sln)
    
 2. Run backend (API + BFF):
-   - Ctrl+Shift+D → Select "API + BFF" → F5
+   - Ctrl+Shift+D -> Select "API + BFF" -> F5
    - Open Swagger: http://localhost:5000/swagger
    
 3. Run frontend:

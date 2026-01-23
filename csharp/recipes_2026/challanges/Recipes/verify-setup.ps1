@@ -17,7 +17,7 @@ function Write-Check {
     )
     
     if ($Passed) {
-        Write-Host "✓ " -ForegroundColor Green -NoNewline
+        Write-Host "[OK] " -ForegroundColor Green -NoNewline
         Write-Host "$Name" -NoNewline
         if ($Details) {
             Write-Host " - $Details" -ForegroundColor Gray
@@ -25,7 +25,7 @@ function Write-Check {
             Write-Host ""
         }
     } else {
-        Write-Host "✗ " -ForegroundColor Red -NoNewline
+        Write-Host "[FAIL] " -ForegroundColor Red -NoNewline
         Write-Host "$Name" -NoNewline
         if ($Details) {
             Write-Host " - $Details" -ForegroundColor Yellow
@@ -238,7 +238,7 @@ if ($repoExists -and (Test-Path $recipesPath)) {
 Write-Host "`n================================" -ForegroundColor Cyan
 
 if ($allPassed) {
-    Write-Host "✓ ALL CHECKS PASSED!" -ForegroundColor Green
+    Write-Host "[SUCCESS] ALL CHECKS PASSED!" -ForegroundColor Green
     Write-Host "`nYour lab environment is ready to use!" -ForegroundColor Green
     Write-Host "`nTo run the application:" -ForegroundColor Yellow
     Write-Host "1. Open VS Code in the Recipes folder (with Recipes.sln)"
@@ -248,7 +248,7 @@ if ($allPassed) {
     Write-Host "5. Open app: http://localhost:4200"
     Write-Host "`nSee QUICK-REFERENCE.md for a handy cheat sheet!" -ForegroundColor Cyan
 } else {
-    Write-Host "✗ SOME CHECKS FAILED" -ForegroundColor Red
+    Write-Host "[FAILED] SOME CHECKS FAILED" -ForegroundColor Red
     Write-Host "`nPlease review the failed checks above." -ForegroundColor Yellow
     Write-Host "`nTo fix issues:" -ForegroundColor Yellow
     Write-Host "1. Rerun setup-lab.ps1 for full setup"

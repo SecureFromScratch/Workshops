@@ -17,12 +17,12 @@ function Write-Step {
 
 function Write-Success {
     param([string]$Message)
-    Write-Host "✓ $Message" -ForegroundColor Green
+    Write-Host "[OK] $Message" -ForegroundColor Green
 }
 
 function Write-Info {
     param([string]$Message)
-    Write-Host "ℹ $Message" -ForegroundColor Yellow
+    Write-Host "[INFO] $Message" -ForegroundColor Yellow
 }
 
 function Test-Command {
@@ -320,14 +320,16 @@ Write-Step "SETUP COMPLETE!"
 
 Write-Host @"
 
-✓ All prerequisites installed
-✓ Repository cloned (sparse checkout)
-✓ LocalStack running at http://localhost:4566
-✓ Secrets configured in LocalStack
-✓ NuGet packages installed
-✓ Angular packages installed
-✓ Database migration created
-✓ SQL Server running at localhost,14333
+[SUCCESS] Setup Complete!
+
+All prerequisites installed
+Repository cloned (sparse checkout)
+LocalStack running at http://localhost:4566
+Secrets configured in LocalStack
+NuGet packages installed
+Angular packages installed
+Database migration created
+SQL Server running at localhost,14333
 
 NEXT STEPS:
 1. Open VS Code in the Recipes folder (with Recipes.sln)
