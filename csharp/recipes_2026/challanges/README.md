@@ -29,7 +29,7 @@ Follow the secret manager walkthrough: [Secret Manager](preps/4_secret_manager.m
 1. Go to src/recipes-ui folder
 2. run
 ```bash
-ng s
+npm run ng s
 ```
 ---
 
