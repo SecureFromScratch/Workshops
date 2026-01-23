@@ -1,154 +1,443 @@
-# LocalStack & AWS CLI Diagnostic Script
-# Run this if you're having issues with secret creation
+# SecureFromScratch Lab Setup Script
+# This script automates the complete lab environment setup
 
-Write-Host "`n=== LocalStack & AWS CLI Diagnostics ===" -ForegroundColor Cyan
+param(
+    [switch]$SkipPrerequisites,
+    [switch]$SkipClone
+)
 
-# Test 1: Check if AWS CLI is installed
-Write-Host "`n1. Checking AWS CLI..." -ForegroundColor Yellow
-try {
-    $awsVersion = aws --version 2>&1
-    Write-Host "[OK] AWS CLI installed: $awsVersion" -ForegroundColor Green
-} catch {
-    Write-Host "[FAIL] AWS CLI not found" -ForegroundColor Red
-    Write-Host "Install from: https://awscli.amazonaws.com/AWSCLIV2.msi" -ForegroundColor Yellow
-    exit 1
+$ErrorActionPreference = "Stop"
+
+function Write-Step {
+    param([string]$Message)
+    Write-Host "`n================================" -ForegroundColor Cyan
+    Write-Host $Message -ForegroundColor Cyan
+    Write-Host "================================`n" -ForegroundColor Cyan
 }
 
-# Test 2: Check AWS CLI configuration
-Write-Host "`n2. Checking AWS CLI configuration..." -ForegroundColor Yellow
-$accessKey = aws configure get aws_access_key_id 2>&1
-$secretKey = aws configure get aws_secret_access_key 2>&1
-$region = aws configure get default.region 2>&1
+function Write-Success {
+    param([string]$Message)
+    Write-Host "[OK] $Message" -ForegroundColor Green
+}
 
-if ($accessKey -eq "localstack" -and $secretKey -eq "localstack" -and $region -eq "us-east-1") {
-    Write-Host "[OK] AWS CLI configured for LocalStack" -ForegroundColor Green
-} else {
-    Write-Host "[WARN] AWS CLI not configured properly" -ForegroundColor Yellow
-    Write-Host "  Access Key: $accessKey (should be 'localstack')" -ForegroundColor Gray
-    Write-Host "  Secret Key: $secretKey (should be 'localstack')" -ForegroundColor Gray
-    Write-Host "  Region: $region (should be 'us-east-1')" -ForegroundColor Gray
+function Write-Info {
+    param([string]$Message)
+    Write-Host "[INFO] $Message" -ForegroundColor Yellow
+}
+
+function Test-Command {
+    param([string]$Command)
+    $null = Get-Command $Command -ErrorAction SilentlyContinue
+    return $?
+}
+
+# Check if running as Administrator
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+if (-not $isAdmin) {
+    Write-Warning "This script should be run as Administrator for best results."
+    Write-Info "Some installations may prompt for elevation."
+    Start-Sleep -Seconds 3
+}
+
+# ============================================================================
+# STEP 1: Install Prerequisites
+# ============================================================================
+if (-not $SkipPrerequisites) {
+    Write-Step "STEP 1: Installing Prerequisites"
+
+    # Check for winget
+    if (-not (Test-Command "winget")) {
+        Write-Warning "winget not found. Please install it from Microsoft Store or update Windows."
+        Write-Info "Continuing with manual checks..."
+    }
+
+    # Install .NET 8 SDK
+    if (-not (Test-Command "dotnet")) {
+        Write-Info "Installing .NET 8 SDK..."
+        winget install Microsoft.DotNet.SDK.8 --silent --accept-package-agreements --accept-source-agreements
+        Write-Success ".NET 8 SDK installed"
+    } else {
+        $dotnetVersion = dotnet --version
+        Write-Success ".NET SDK already installed (version: $dotnetVersion)"
+    }
+
+    # Install Node.js
+    if (-not (Test-Command "node")) {
+        Write-Info "Installing Node.js LTS..."
+        winget install OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements
+        Write-Success "Node.js installed"
+    } else {
+        $nodeVersion = node --version
+        Write-Success "Node.js already installed (version: $nodeVersion)"
+    }
+
+    # Install Git
+    if (-not (Test-Command "git")) {
+        Write-Info "Installing Git..."
+        $gitUrl = "https://github.com/git-for-windows/git/releases/download/v2.52.0.windows.1/Git-2.52.0-64-bit.exe"
+        $gitInstaller = "$env:TEMP\Git-Setup.exe"
+        Invoke-WebRequest -Uri $gitUrl -OutFile $gitInstaller
+        Start-Process -FilePath $gitInstaller -ArgumentList "/VERYSILENT" -Wait
+        Remove-Item $gitInstaller
+        Write-Success "Git installed"
+    } else {
+        $gitVersion = git --version
+        Write-Success "Git already installed ($gitVersion)"
+    }
+
+    # Install Docker Desktop
+    if (-not (Test-Command "docker")) {
+        Write-Info "Installing Docker Desktop..."
+        winget install Docker.DockerDesktop --silent --accept-package-agreements --accept-source-agreements
+        Write-Warning "Docker Desktop installed. You may need to restart your computer and rerun this script."
+        Write-Info "Press any key to continue or Ctrl+C to exit and restart..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    } else {
+        Write-Success "Docker already installed"
+    }
+
+    # Install AWS CLI
+    if (-not (Test-Command "aws")) {
+        Write-Info "Installing AWS CLI..."
+        $awsUrl = "https://awscli.amazonaws.com/AWSCLIV2.msi"
+        $awsInstaller = "$env:TEMP\AWSCLIV2.msi"
+        Invoke-WebRequest -Uri $awsUrl -OutFile $awsInstaller
+        Start-Process msiexec.exe -ArgumentList "/i `"$awsInstaller`" /qn" -Wait
+        Remove-Item $awsInstaller
+        
+        # Refresh environment variables
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+        Write-Success "AWS CLI installed"
+    } else {
+        $awsVersion = aws --version
+        Write-Success "AWS CLI already installed ($awsVersion)"
+    }
+
+    Write-Success "All prerequisites installed!"
+}
+
+# ============================================================================
+# STEP 2: Clone Repository with Sparse Checkout
+# ============================================================================
+if (-not $SkipClone) {
+    Write-Step "STEP 2: Cloning Repository (Sparse Checkout)"
+
+    $repoPath = "Workshops"
     
-    Write-Host "`nConfiguring now..." -ForegroundColor Cyan
-    aws configure set aws_access_key_id localstack
-    aws configure set aws_secret_access_key localstack
-    aws configure set default.region us-east-1
-    Write-Host "[OK] Configuration updated" -ForegroundColor Green
-}
-
-# Test 3: Check if LocalStack container is running
-Write-Host "`n3. Checking LocalStack container..." -ForegroundColor Yellow
-$containers = docker ps --format "{{.Names}}" 2>&1
-if ($containers -match "localstack") {
-    Write-Host "[OK] LocalStack container is running" -ForegroundColor Green
-} else {
-    Write-Host "[FAIL] LocalStack container not found" -ForegroundColor Red
-    Write-Host "Start it with: docker compose up -d localstack" -ForegroundColor Yellow
-    exit 1
-}
-
-# Test 4: Check LocalStack health endpoint
-Write-Host "`n4. Checking LocalStack health..." -ForegroundColor Yellow
-try {
-    $healthResponse = Invoke-WebRequest -Uri "http://localhost:4566/_localstack/health" -TimeoutSec 5 -UseBasicParsing
-    if ($healthResponse.StatusCode -eq 200) {
-        Write-Host "[OK] LocalStack is responding" -ForegroundColor Green
-        
-        # Parse health data
-        $health = $healthResponse.Content | ConvertFrom-Json
-        Write-Host "`nServices status:" -ForegroundColor Gray
-        $health.services.PSObject.Properties | ForEach-Object {
-            $service = $_.Name
-            $status = $_.Value
-            if ($status -eq "running" -or $status -eq "available") {
-                Write-Host "  $service : $status" -ForegroundColor Green
-            } else {
-                Write-Host "  $service : $status" -ForegroundColor Yellow
-            }
-        }
-    } else {
-        Write-Host "[WARN] LocalStack responded with status: $($healthResponse.StatusCode)" -ForegroundColor Yellow
-    }
-} catch {
-    Write-Host "[FAIL] Cannot reach LocalStack at http://localhost:4566" -ForegroundColor Red
-    Write-Host "Error: $_" -ForegroundColor Gray
-    Write-Host "`nTroubleshooting:" -ForegroundColor Yellow
-    Write-Host "1. Make sure Docker Desktop is running"
-    Write-Host "2. Check container: docker ps | findstr localstack"
-    Write-Host "3. Check logs: docker logs localstack"
-    exit 1
-}
-
-# Test 5: Test Secrets Manager endpoint specifically
-Write-Host "`n5. Testing Secrets Manager endpoint..." -ForegroundColor Yellow
-try {
-    # Try to list secrets (should work even if empty)
-    $listResult = aws --endpoint-url=http://localhost:4566 secretsmanager list-secrets 2>&1
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "[OK] Secrets Manager endpoint is working" -ForegroundColor Green
-        
-        # Show existing secrets if any
-        $secrets = $listResult | ConvertFrom-Json
-        if ($secrets.SecretList.Count -gt 0) {
-            Write-Host "`nExisting secrets:" -ForegroundColor Gray
-            $secrets.SecretList | ForEach-Object {
-                Write-Host "  - $($_.Name)" -ForegroundColor Gray
-            }
+    if (Test-Path $repoPath) {
+        Write-Info "Repository already exists at .\$repoPath"
+        $response = Read-Host "Do you want to delete and re-clone? (y/N)"
+        if ($response -eq 'y' -or $response -eq 'Y') {
+            Remove-Item -Recurse -Force $repoPath
         } else {
-            Write-Host "  No secrets exist yet (this is normal for first run)" -ForegroundColor Gray
+            Write-Info "Skipping clone. Using existing repository."
+            Set-Location $repoPath
+            $SkipClone = $true
         }
-    } else {
-        Write-Host "[FAIL] Secrets Manager endpoint not responding" -ForegroundColor Red
-        Write-Host "Output: $listResult" -ForegroundColor Gray
     }
-} catch {
-    Write-Host "[FAIL] Error testing Secrets Manager" -ForegroundColor Red
-    Write-Host "Error: $_" -ForegroundColor Gray
-}
-
-# Test 6: Try to create a test secret
-Write-Host "`n6. Testing secret creation..." -ForegroundColor Yellow
-$testSecretName = "test/diagnostic-secret"
-try {
-    # Try to create test secret
-    $createResult = aws --endpoint-url=http://localhost:4566 secretsmanager create-secret `
-        --name $testSecretName `
-        --secret-string "test-value" 2>&1
     
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "[OK] Successfully created test secret" -ForegroundColor Green
+    if (-not $SkipClone) {
+        Write-Info "Cloning repository with blob filtering..."
+        git clone --no-checkout --filter=blob:none https://github.com/SecureFromScratch/Workshops.git
         
-        # Try to retrieve it
-        $getValue = aws --endpoint-url=http://localhost:4566 secretsmanager get-secret-value `
-            --secret-id $testSecretName `
-            --query SecretString `
-            --output text 2>&1
+        Set-Location $repoPath
         
-        if ($LASTEXITCODE -eq 0 -and $getValue -eq "test-value") {
-            Write-Host "[OK] Successfully retrieved test secret" -ForegroundColor Green
-        } else {
-            Write-Host "[WARN] Could not retrieve test secret" -ForegroundColor Yellow
-        }
+        Write-Info "Setting up sparse checkout..."
+        git sparse-checkout init --cone
+        git sparse-checkout set csharp/recipes_2026/challanges/Recipes
         
-        # Clean up test secret
-        aws --endpoint-url=http://localhost:4566 secretsmanager delete-secret `
-            --secret-id $testSecretName `
-            --force-delete-without-recovery 2>&1 | Out-Null
-        Write-Host "[OK] Test secret cleaned up" -ForegroundColor Green
-    } else {
-        Write-Host "[FAIL] Could not create test secret" -ForegroundColor Red
-        Write-Host "Output: $createResult" -ForegroundColor Gray
+        Write-Info "Checking out main branch..."
+        git checkout main
+        
+        Write-Success "Repository cloned successfully!"
     }
-} catch {
-    Write-Host "[FAIL] Error during secret test" -ForegroundColor Red
-    Write-Host "Error: $_" -ForegroundColor Gray
+} else {
+    # If skipping clone, assume we're already in the right directory
+    if (-not (Test-Path "Workshops")) {
+        Write-Error "Workshops directory not found. Please run without -SkipClone or navigate to the correct directory."
+        exit 1
+    }
+    Set-Location Workshops
 }
 
-# Summary
-Write-Host "`n=== Diagnostic Summary ===" -ForegroundColor Cyan
-Write-Host "If all tests passed, you can run: .\setup-lab.ps1" -ForegroundColor Green
-Write-Host "`nIf tests failed:" -ForegroundColor Yellow
-Write-Host "1. Make sure Docker Desktop is running"
-Write-Host "2. Check LocalStack logs: docker logs localstack"
-Write-Host "3. Restart LocalStack: docker compose restart localstack"
-Write-Host "4. Wait 30 seconds and run this diagnostic again"
-Write-Host "`n"
+# Navigate to Recipes folder
+$recipesPath = "csharp\recipes_2026\challanges\Recipes"
+if (-not (Test-Path $recipesPath)) {
+    Write-Error "Recipes folder not found at $recipesPath"
+    exit 1
+}
+Set-Location $recipesPath
+Write-Info "Working directory: $(Get-Location)"
+
+# ============================================================================
+# STEP 3: Start LocalStack
+# ============================================================================
+Write-Step "STEP 3: Starting LocalStack"
+
+# Navigate to API folder for docker-compose
+Set-Location "src\Recipes.Api"
+
+Write-Info "Starting LocalStack container..."
+docker compose up -d localstack
+
+Write-Info "Waiting for LocalStack to be ready..."
+$maxAttempts = 30
+$attempt = 0
+$ready = $false
+
+while ($attempt -lt $maxAttempts -and -not $ready) {
+    try {
+        $response = Invoke-WebRequest -Uri "http://localhost:4566/_localstack/health" -TimeoutSec 2 -ErrorAction SilentlyContinue
+        if ($response.StatusCode -eq 200) {
+            $ready = $true
+        }
+    } catch {
+        # LocalStack not ready yet
+    }
+    
+    if (-not $ready) {
+        $attempt++
+        Write-Host "." -NoNewline
+        Start-Sleep -Seconds 2
+    }
+}
+
+if ($ready) {
+    Write-Success "LocalStack is ready!"
+} else {
+    Write-Warning "LocalStack health check timeout. Continuing anyway..."
+}
+
+# ============================================================================
+# STEP 4: Configure AWS CLI for LocalStack
+# ============================================================================
+Write-Step "STEP 4: Configuring AWS CLI"
+
+Write-Info "Setting AWS credentials for LocalStack..."
+aws configure set aws_access_key_id localstack
+aws configure set aws_secret_access_key localstack
+aws configure set default.region us-east-1
+
+Write-Success "AWS CLI configured for LocalStack"
+
+# ============================================================================
+# STEP 5: Seed Secrets into LocalStack
+# ============================================================================
+Write-Step "STEP 5: Creating Secrets in LocalStack"
+
+$endpoint = "http://localhost:4566"
+
+# Verify LocalStack is actually responding to Secrets Manager requests
+Write-Info "Testing LocalStack Secrets Manager endpoint..."
+try {
+    $testResponse = Invoke-WebRequest -Uri "$endpoint/_localstack/health" -TimeoutSec 5 -UseBasicParsing
+    Write-Success "LocalStack is responding"
+} catch {
+    Write-Warning "LocalStack may not be fully ready. Waiting 10 more seconds..."
+    Start-Sleep -Seconds 10
+}
+
+# Create secrets with proper error handling
+Write-Info "Creating sa-password secret..."
+try {
+    $result = aws --endpoint-url=$endpoint secretsmanager create-secret `
+        --name recipes/dev/sa-password `
+        --secret-string "StrongP4ssword123" 2>&1
+    
+    if ($LASTEXITCODE -ne 0) {
+        # Secret might already exist, try to update it instead
+        Write-Info "Secret may exist, attempting to update..."
+        aws --endpoint-url=$endpoint secretsmanager put-secret-value `
+            --secret-id recipes/dev/sa-password `
+            --secret-string "StrongP4ssword123" 2>&1 | Out-Null
+    }
+    Write-Success "sa-password secret configured"
+} catch {
+    Write-Warning "Error with sa-password: $_"
+}
+
+Write-Info "Creating app-db-connection secret..."
+try {
+    $result = aws --endpoint-url=$endpoint secretsmanager create-secret `
+        --name recipes/dev/app-db-connection `
+        --secret-string "Server=localhost,14333;Database=Recipes;User Id=recipes_app;Password=StrongP4ssword123;TrustServerCertificate=true;" 2>&1
+    
+    if ($LASTEXITCODE -ne 0) {
+        Write-Info "Secret may exist, attempting to update..."
+        aws --endpoint-url=$endpoint secretsmanager put-secret-value `
+            --secret-id recipes/dev/app-db-connection `
+            --secret-string "Server=localhost,14333;Database=Recipes;User Id=recipes_app;Password=StrongP4ssword123;TrustServerCertificate=true;" 2>&1 | Out-Null
+    }
+    Write-Success "app-db-connection secret configured"
+} catch {
+    Write-Warning "Error with app-db-connection: $_"
+}
+
+Write-Info "Creating jwt-config secret..."
+try {
+    $result = aws --endpoint-url=$endpoint secretsmanager create-secret `
+        --name recipes/dev/jwt-config `
+        --secret-string '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}' 2>&1
+    
+    if ($LASTEXITCODE -ne 0) {
+        Write-Info "Secret may exist, attempting to update..."
+        aws --endpoint-url=$endpoint secretsmanager put-secret-value `
+            --secret-id recipes/dev/jwt-config `
+            --secret-string '{"Secret":"ThisIsAStrongJwtSecretKey1234567","Issuer":"recipes-api","Audience":"recipes-client"}' 2>&1 | Out-Null
+    }
+    Write-Success "jwt-config secret configured"
+} catch {
+    Write-Warning "Error with jwt-config: $_"
+}
+
+# Verify secrets
+Write-Info "Verifying secrets..."
+$secretsVerified = $true
+try {
+    $saPassword = aws --endpoint-url=$endpoint secretsmanager get-secret-value --secret-id recipes/dev/sa-password --query SecretString --output text 2>&1
+    if ($LASTEXITCODE -eq 0 -and $saPassword) {
+        Write-Success "sa-password verified"
+    } else {
+        Write-Warning "Could not verify sa-password"
+        $secretsVerified = $false
+    }
+} catch {
+    Write-Warning "Error verifying sa-password: $_"
+    $secretsVerified = $false
+}
+
+try {
+    $appConnection = aws --endpoint-url=$endpoint secretsmanager get-secret-value --secret-id recipes/dev/app-db-connection --query SecretString --output text 2>&1
+    if ($LASTEXITCODE -eq 0 -and $appConnection) {
+        Write-Success "app-db-connection verified"
+    } else {
+        Write-Warning "Could not verify app-db-connection"
+        $secretsVerified = $false
+    }
+} catch {
+    Write-Warning "Error verifying app-db-connection: $_"
+    $secretsVerified = $false
+}
+
+try {
+    $jwtConfig = aws --endpoint-url=$endpoint secretsmanager get-secret-value --secret-id recipes/dev/jwt-config --query SecretString --output text 2>&1
+    if ($LASTEXITCODE -eq 0 -and $jwtConfig) {
+        Write-Success "jwt-config verified"
+    } else {
+        Write-Warning "Could not verify jwt-config"
+        $secretsVerified = $false
+    }
+} catch {
+    Write-Warning "Error verifying jwt-config: $_"
+    $secretsVerified = $false
+}
+
+if ($secretsVerified) {
+    Write-Success "All secrets created and verified!"
+} else {
+    Write-Warning "Some secrets could not be verified. The setup may still work, but check LocalStack logs if issues occur."
+    Write-Info "You can check LocalStack logs with: docker logs localstack"
+}
+
+# ============================================================================
+# STEP 6: Install NuGet Packages
+# ============================================================================
+Write-Step "STEP 6: Installing NuGet Packages"
+
+# Go back to solution root
+Set-Location "..\..\"
+
+Write-Info "Installing Recipes.Api packages..."
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package AWSSDK.SecretsManager --version 4.0.4.3
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Azure.AI.OpenAI --version 2.1.0
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.AspNetCore.Authentication.JwtBearer --version 8.0.23
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.AspNetCore.OpenApi --version 8.0.16
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore --version 8.0.23
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.23
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Microsoft.EntityFrameworkCore.Tools --version 8.0.23
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package OpenAI --version 2.8.0
+dotnet add ./src/Recipes.Api/Recipes.Api.csproj package Swashbuckle.AspNetCore --version 6.6.2
+
+Write-Info "Installing Recipes.Bff packages..."
+dotnet add ./src/Recipes.Bff/Recipes.Bff.csproj package Yarp.ReverseProxy --version 2.3.0
+
+Write-Info "Restoring all packages..."
+dotnet restore
+
+Write-Success "NuGet packages installed!"
+
+# ============================================================================
+# STEP 7: Install Angular Packages
+# ============================================================================
+Write-Step "STEP 7: Installing Angular Packages"
+
+Set-Location "src\recipes-ui"
+Write-Info "Running npm install..."
+npm install
+
+Write-Success "Angular packages installed!"
+
+# Go back to API folder for database setup
+Set-Location "..\Recipes.Api"
+
+# ============================================================================
+# STEP 8: Start SQL Server and Run Migrations
+# ============================================================================
+Write-Step "STEP 8: Setting up Database"
+
+Write-Info "Starting SQL Server and running migrations with start-db.ps1..."
+if (Test-Path "start-db.ps1") {
+    & .\start-db.ps1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Success "SQL Server started and migrations applied!"
+    } else {
+        Write-Warning "Database setup encountered issues. Check the output above."
+    }
+} else {
+    Write-Warning "start-db.ps1 not found. You may need to set up the database manually."
+    Write-Info "Expected location: $(Get-Location)\start-db.ps1"
+}
+
+# ============================================================================
+# COMPLETION
+# ============================================================================
+Write-Step "SETUP COMPLETE!"
+
+Write-Host @"
+
+[SUCCESS] Setup Complete!
+
+All prerequisites installed
+Repository cloned (sparse checkout)
+LocalStack running at http://localhost:4566
+Secrets configured in LocalStack
+NuGet packages installed
+Angular packages installed
+Database migration created
+SQL Server running at localhost,14333
+
+NEXT STEPS:
+1. Open VS Code in the Recipes folder (with Recipes.sln)
+   Location: $(Get-Location | Split-Path -Parent | Split-Path -Parent)
+
+2. Run the backend (API + BFF):
+   - Press Ctrl+Shift+D
+   - Select "API + BFF" 
+   - Press F5 or click green play button
+   - Open Swagger: http://localhost:5000/swagger
+
+3. Run the frontend:
+   - Open new terminal (Ctrl+`)
+   - cd src/recipes-ui
+   - ng s
+   - Open http://localhost:4200
+
+To verify setup:
+  .\verify-setup.ps1
+
+To stop services:
+  docker compose down
+
+"@ -ForegroundColor Green
+
+Write-Info "Setup log saved to: setup-log.txt"
