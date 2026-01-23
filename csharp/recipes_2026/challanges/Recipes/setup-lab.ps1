@@ -398,22 +398,15 @@ $secretsOk = $true
 $secretsOk = $secretsOk -and (Set-Secret "recipes/dev/sa-password" "StrongP4ssword123")
 $secretsOk = $secretsOk -and (Set-Secret "recipes/dev/app-db-connection" "Server=localhost,14333;Database=Recipes;User Id=recipes_app;Password=StrongP4ssword123;TrustServerCertificate=true;")
 
-# Create JWT config with proper JSON handling
+# Create JWT config - don't verify, .NET will parse it correctly
 Write-Info "Configuring secret: recipes/dev/jwt-config"
 aws --endpoint-url=$endpoint secretsmanager delete-secret --secret-id recipes/dev/jwt-config --force-delete-without-recovery 2>&1 | Out-Null
 Start-Sleep -Seconds 1
 
-# Use ConvertTo-Json to ensure proper formatting
-$jwtConfig = @{
-    Secret = "ThisIsAStrongJwtSecretKey1234567"
-    Issuer = "recipes-api"
-    Audience = "recipes-client"
-} | ConvertTo-Json -Compress
-
-$result = aws --endpoint-url=$endpoint secretsmanager create-secret --name recipes/dev/jwt-config --secret-string $jwtConfig 2>&1
+# Use escaped quotes for proper JSON
+$result = aws --endpoint-url=$endpoint secretsmanager create-secret --name recipes/dev/jwt-config --secret-string "{`"Secret`":`"ThisIsAStrongJwtSecretKey1234567`",`"Issuer`":`"recipes-api`",`"Audience`":`"recipes-client`"}" 2>&1
 if ($LASTEXITCODE -eq 0) {
     Write-Success "Secret 'recipes/dev/jwt-config' created"
-    $secretsOk = $secretsOk -and $true
 } else {
     Write-ErrorMsg "Failed to create jwt-config secret"
     Write-Host "  Error: $result" -ForegroundColor Gray
