@@ -167,33 +167,56 @@ if (-not $SkipPrerequisites) {
         Write-Success "Git already installed ($gitVersion)"
     }
 
-    # Check Docker Desktop
+    # Check Docker Desktop (MUST be pre-installed)
+    Write-Info "Checking Docker Desktop..."
     if (-not (Test-Command "docker")) {
-        Write-ErrorMsg "Docker Desktop is not installed!"
-        Write-Host "`nPlease install Docker Desktop:" -ForegroundColor Yellow
-        Write-Host "1. Download from: https://www.docker.com/products/docker-desktop" -ForegroundColor Yellow
-        Write-Host "2. Install and restart your computer" -ForegroundColor Yellow
-        Write-Host "3. Start Docker Desktop and wait for the whale icon" -ForegroundColor Yellow
-        Write-Host "4. Rerun this script`n" -ForegroundColor Yellow
+        Write-Host "`n" -ForegroundColor Red
+        Write-Host "========================================" -ForegroundColor Red
+        Write-Host "   DOCKER DESKTOP NOT FOUND" -ForegroundColor Red
+        Write-Host "========================================" -ForegroundColor Red
+        Write-Host "`nDocker Desktop must be installed BEFORE running this script." -ForegroundColor Yellow
+        Write-Host "`nPlease follow these steps:" -ForegroundColor Cyan
+        Write-Host "`n1. Download Docker Desktop:" -ForegroundColor White
+        Write-Host "   https://www.docker.com/products/docker-desktop" -ForegroundColor Gray
+        Write-Host "`n2. Install Docker Desktop" -ForegroundColor White
+        Write-Host "`n3. RESTART YOUR COMPUTER (required!)" -ForegroundColor Yellow
+        Write-Host "`n4. Start Docker Desktop" -ForegroundColor White
+        Write-Host "   - Look for the whale icon in system tray" -ForegroundColor Gray
+        Write-Host "   - Wait until it says 'Docker Desktop is running'" -ForegroundColor Gray
+        Write-Host "`n5. Rerun this script: .\setup-lab.ps1`n" -ForegroundColor White
+        Write-Host "========================================`n" -ForegroundColor Red
         exit 1
-    } else {
-        try {
-            docker ps 2>&1 | Out-Null
-            if ($LASTEXITCODE -ne 0) {
-                Write-ErrorMsg "Docker Desktop is installed but not running!"
-                Write-Host "`nPlease:" -ForegroundColor Yellow
-                Write-Host "1. Start Docker Desktop" -ForegroundColor Yellow
-                Write-Host "2. Wait for the whale icon in system tray" -ForegroundColor Yellow
-                Write-Host "3. Verify: docker ps" -ForegroundColor Yellow
-                Write-Host "4. Rerun this script`n" -ForegroundColor Yellow
-                exit 1
-            }
-            Write-Success "Docker Desktop is running"
-        } catch {
-            Write-ErrorMsg "Cannot connect to Docker!"
-            Write-Host "Please start Docker Desktop and wait for it to be ready." -ForegroundColor Yellow
+    }
+    
+    # Docker is installed - check if it's running
+    try {
+        docker ps 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "`n" -ForegroundColor Yellow
+            Write-Host "========================================" -ForegroundColor Yellow
+            Write-Host "   DOCKER DESKTOP NOT RUNNING" -ForegroundColor Yellow
+            Write-Host "========================================" -ForegroundColor Yellow
+            Write-Host "`nDocker Desktop is installed but not running." -ForegroundColor Yellow
+            Write-Host "`nPlease follow these steps:" -ForegroundColor Cyan
+            Write-Host "`n1. Start Docker Desktop" -ForegroundColor White
+            Write-Host "   - Search for 'Docker Desktop' in Start menu" -ForegroundColor Gray
+            Write-Host "   - Click to start it" -ForegroundColor Gray
+            Write-Host "`n2. Wait for the whale icon" -ForegroundColor White
+            Write-Host "   - Look in system tray (bottom-right)" -ForegroundColor Gray
+            Write-Host "   - Icon should be solid (not animated)" -ForegroundColor Gray
+            Write-Host "`n3. Verify it's ready:" -ForegroundColor White
+            Write-Host "   docker ps" -ForegroundColor Gray
+            Write-Host "   (Should show column headers, not an error)" -ForegroundColor Gray
+            Write-Host "`n4. Rerun this script: .\setup-lab.ps1`n" -ForegroundColor White
+            Write-Host "========================================`n" -ForegroundColor Yellow
             exit 1
         }
+        Write-Success "Docker Desktop is running"
+    } catch {
+        Write-ErrorMsg "Cannot connect to Docker!"
+        Write-Host "Please start Docker Desktop and wait for it to be ready." -ForegroundColor Yellow
+        Write-Host "Then rerun: .\setup-lab.ps1`n" -ForegroundColor Yellow
+        exit 1
     }
 
     # Install AWS CLI
