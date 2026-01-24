@@ -523,8 +523,7 @@ if ($script:hasErrors) {
     • cd src/recipes-ui
     • ng s
     • Open http://localhost:4200
-
- Verify Setup: .\verify-setup.ps1
+ 
  Stop Services: docker compose down
 
 "@ -ForegroundColor Green
