@@ -1,3 +1,5 @@
+# Go to the new version (https://github.com/SecureFromScratch/Recipes-Workshop/blob/main/README.md)
+
 ## Installation 
 
 For automatic installation
