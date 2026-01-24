@@ -97,7 +97,26 @@ if ($historyCheck -match "cnt") {
 
 Push-Location $ProjectPath
 try {
-    Write-Host "Running dotnet ef database update..."
+    # Check if Migrations folder exists
+    if (Test-Path "Migrations") {
+        Write-Host "Found existing Migrations folder - removing old migrations..." -ForegroundColor Yellow
+        Remove-Item -Recurse -Force "Migrations"
+        Write-Host "Old migrations removed." -ForegroundColor Green
+    }
+    
+    # Create fresh migration
+    Write-Host "Creating fresh migration..."
+    dotnet ef migrations add InitialCreate 2>&1 | Out-Null
+    
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "Migration created successfully!" -ForegroundColor Green
+    } else {
+        Write-Host "Failed to create migration!" -ForegroundColor Red
+        throw "Migration creation failed"
+    }
+    
+    # Apply migration
+    Write-Host "Applying migration to database..."
     dotnet ef database update --connection $saConnectionString
     
     if ($LASTEXITCODE -ne 0) {
@@ -130,19 +149,7 @@ try {
             -S localhost -U sa -P $saPassword -d Recipes -C `
             -Q "SELECT name FROM sys.tables ORDER BY name"
         
-        Write-Host "`nTrying migration again with verbose output..." -ForegroundColor Yellow
-        dotnet ef database update --connection $saConnectionString --verbose
-        
-        # Check again
-        $tablesResult2 = docker exec recipes-sqlserver /opt/mssql-tools18/bin/sqlcmd `
-            -S localhost -U sa -P $saPassword -d Recipes -C -h-1 `
-            -Q "SET NOCOUNT ON; SELECT COUNT(*) FROM sys.tables WHERE name IN ('Users', 'Recipes')" 2>&1 | Where-Object { $_ -match '^\s*\d+\s*$' }
-        
-        if ($tablesResult2 -match '^\s*2\s*$') {
-            Write-Host "SUCCESS: Tables created on retry!" -ForegroundColor Green
-        } else {
-            throw "FATAL: Migrations did not create tables even after retry. Check the verbose output above."
-        }
+        throw "FATAL: Migrations did not create tables. Check if DbContext and entity models are configured correctly."
     }
     
 } finally {
