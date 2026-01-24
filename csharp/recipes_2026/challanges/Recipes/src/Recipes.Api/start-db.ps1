@@ -126,13 +126,13 @@ try {
     
     Write-Host "Migration command completed - verifying tables were created..."
     
-    # CRITICAL: Verify tables actually exist
+    # CRITICAL: Verify tables actually exist (check for actual table names)
     $tablesResult = docker exec recipes-sqlserver /opt/mssql-tools18/bin/sqlcmd `
         -S localhost -U sa -P $saPassword -d Recipes -C -h-1 `
         -Q "SET NOCOUNT ON; SELECT COUNT(*) FROM sys.tables WHERE name IN ('Users', 'Recipe')" 2>&1 | Where-Object { $_ -match '^\s*\d+\s*$' }
     
     if ($tablesResult -match '^\s*2\s*$') {
-        Write-Host "SUCCESS: Tables verified (Users and Recipes exist)!" -ForegroundColor Green
+        Write-Host "SUCCESS: Tables verified (Users and Recipe exist)!" -ForegroundColor Green
         
         # Show what was created
         Write-Host "`nCreated tables:" -ForegroundColor Cyan
