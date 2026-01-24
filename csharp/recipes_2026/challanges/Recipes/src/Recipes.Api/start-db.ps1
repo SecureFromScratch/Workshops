@@ -129,7 +129,7 @@ try {
     # CRITICAL: Verify tables actually exist
     $tablesResult = docker exec recipes-sqlserver /opt/mssql-tools18/bin/sqlcmd `
         -S localhost -U sa -P $saPassword -d Recipes -C -h-1 `
-        -Q "SET NOCOUNT ON; SELECT COUNT(*) FROM sys.tables WHERE name IN ('Users', 'Recipes')" 2>&1 | Where-Object { $_ -match '^\s*\d+\s*$' }
+        -Q "SET NOCOUNT ON; SELECT COUNT(*) FROM sys.tables WHERE name IN ('Users', 'Recipe')" 2>&1 | Where-Object { $_ -match '^\s*\d+\s*$' }
     
     if ($tablesResult -match '^\s*2\s*$') {
         Write-Host "SUCCESS: Tables verified (Users and Recipes exist)!" -ForegroundColor Green
