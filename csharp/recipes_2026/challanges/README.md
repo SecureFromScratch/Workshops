@@ -1,5 +1,18 @@
 ## Installation 
-Please follow the instructions below to install the lab.
+
+For automatic installation
+1. follow the [PREREQUISITES](./Recipes/PREREQUISITES.md)
+2. Download [setup-lab](./Recipes/setup-lab.ps1)
+3. Right-click PowerShell -> Run as Administrator
+4. Navigate to your Download folder
+5. Run:
+``` powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+.\setup-lab.ps1
+```
+
+----
+For manual installation follow the instructions below to install the lab.
 Detailed explanations are linked to each step.
 ### 1. Install .net8
 
