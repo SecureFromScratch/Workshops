@@ -1,0 +1,192 @@
+:root {
+    --hero-bg: rgba(0,0,0,0.55);
+    --hero-fg: #fff;
+    --hero-accent: #ffd54f;
+    --hero-stroke: rgba(255,255,255,0.16);
+    --hero-muted: rgba(255,255,255,0.72);
+    --hero-panel: rgba(0,0,0,0.45);
+    --hero-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* Match index.html look */
+body.theme-hero {
+    margin: 0;
+    color: var(--hero-fg);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+
+    /* Two layers: dark overlay + image */
+    background:
+        linear-gradient(rgba(0,0,0,0.78), rgba(0,0,0,0.78)),
+        url("./images/anonbuy-cover-16x10.png");
+    background-position: center center, center center;
+    background-repeat: no-repeat, no-repeat;
+    background-size: cover, contain;
+    background-attachment: fixed, fixed;
+}
+
+
+/* Override styles.css defaults for this page */
+body.theme-hero header { position: static; background: transparent; border: 0; padding: 0; backdrop-filter: none; }
+body.theme-hero main { padding: 0; max-width: none; margin: 0; }
+
+/* Same centered wrapper pattern as connect.css */
+.wrap.items-wrap {
+    min-height: 100vh;
+    display: grid;
+    place-items: start center;
+    padding: 2rem;
+    backdrop-filter: blur(2px);
+}
+
+.topbar {
+    width: min(1200px, 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.topbar .title {
+    margin: 0;
+    font-size: 1.6rem;
+    letter-spacing: 0.02em;
+}
+
+/* Glass container for both panes */
+.glass {
+    width: min(1200px, 100%);
+    background: var(--hero-panel);
+    border: 1px solid var(--hero-stroke);
+    border-radius: 16px;
+    box-shadow: var(--hero-shadow);
+    padding: 16px;
+}
+
+/* Keep your existing 2-column layout but nicer sizing */
+.layout {
+    grid-template-columns: 1fr 360px;
+    gap: 16px;
+}
+
+@media (max-width: 980px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Search input style like connect page */
+body.theme-hero .input {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--hero-stroke);
+    box-shadow: none;
+}
+
+body.theme-hero .input input {
+    color: var(--hero-fg);
+}
+
+body.theme-hero .input input::placeholder {
+    color: rgba(255,255,255,0.55);
+}
+
+/* Items cards become dark-glass */
+body.theme-hero .card {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--hero-stroke);
+    box-shadow: none;
+    color: var(--hero-fg);
+    border-radius: 14px;
+    transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+body.theme-hero .card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,213,79,0.35);
+}
+
+body.theme-hero .muted {
+    color: var(--hero-muted);
+}
+
+body.theme-hero .badge {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--hero-stroke);
+    color: rgba(255,255,255,0.9);
+}
+
+body.theme-hero .price {
+    color: var(--hero-accent);
+}
+
+/* Cart panel matches cards (overrides cart.css white box + green buttons) */
+body.theme-hero #cart-pane {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--hero-stroke);
+    box-shadow: none;
+    color: var(--hero-fg);
+    top: 16px;
+}
+
+body.theme-hero .cart-meta { color: var(--hero-muted); }
+
+body.theme-hero .cart-thumb {
+    background: rgba(255,255,255,0.08);
+}
+
+/* Inputs & buttons match connect page */
+body.theme-hero .field input,
+body.theme-hero #coupon-code,
+body.theme-hero #wallet-merge-code,
+body.theme-hero .qty-input {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--hero-stroke);
+    color: var(--hero-fg);
+}
+
+body.theme-hero .button {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--hero-stroke);
+    color: var(--hero-fg);
+}
+
+body.theme-hero .button.primary {
+    background: var(--hero-accent);
+    border: 0;
+    color: #000;
+    font-weight: 700;
+}
+
+body.theme-hero .button:disabled { opacity: 0.55; }
+
+/* Coupon pill + icon button look */
+body.theme-hero .coupon-line {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--hero-stroke);
+}
+
+body.theme-hero .icon-btn {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--hero-stroke);
+    color: var(--hero-fg);
+}
+
+body.theme-hero .icon-btn:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+/* Dialog matches theme */
+body.theme-hero #wallet-merge-dialog { border: 0; border-radius: 12px; padding: 0; }
+body.theme-hero #wallet-merge-dialog::backdrop { background: rgba(0,0,0,0.6); }
+
+body.theme-hero .wallet-merge {
+    background: rgba(0,0,0,0.75);
+    border: 1px solid var(--hero-stroke);
+    border-radius: 14px;
+    padding: 16px;
+    color: var(--hero-fg);
+}
+
+body.theme-hero #empty {
+    color: rgba(255,255,255,0.75);
+}

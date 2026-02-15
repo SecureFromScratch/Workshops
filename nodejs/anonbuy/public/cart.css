@@ -12,10 +12,10 @@
 .price.savings { color:#02b900; font-weight:900; }
 .field { display:flex; gap:8px; align-items:center; }
 .field input { padding:6px 8px; border:1px solid #e5e7eb; border-radius:8px; min-width:100px; max-width: 12em }
-.button { padding:8px 12px; border:1px solid #e5e7eb; background:#afa; border-radius:10px; cursor:pointer; }
+/*.button { padding:8px 12px; border:1px solid #e5e7eb; background:#afa; border-radius:10px; cursor:pointer; }
 .button.primary { border-color:#111827; background:#111827; color:#fff; }
 .button:disabled { opacity:.5; cursor:not-allowed; }
-
+*/
 /* Coupons */
 .coupon-list { display: grid; gap: 8px; margin-bottom: 8px; }
 .coupon-line {
